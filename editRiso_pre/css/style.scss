@@ -1,0 +1,11 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+canvas {
+  display: block;
+}
+.p5canvas {
+  -webkit-filter: url("#displacement");
+  filter: url("#displacement");
+}

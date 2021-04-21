@@ -85,7 +85,7 @@ let fontsLoaded = [
   'Modak-Regular',
   'Monoton-Regular',
   'Syncopate-Regular', 'Syncopate-Bold',
-  'NotoSansJP-Thin', 'NotoSansJP-Light', 'NotoSansJP-Regular', 'NotoSansJP-Medium', 'NotoSansJP-Bold', 'NotoSansJP-Black'
+  // 'NotoSansJP-Thin', 'NotoSansJP-Light', 'NotoSansJP-Regular', 'NotoSansJP-Medium', 'NotoSansJP-Bold', 'NotoSansJP-Black'
 ];
 let fonts = [];
 let selectedFont = fontsLoaded[0];
@@ -116,7 +116,16 @@ let icons = {
 let uiSize;
 
 // tool bar
-let tools = ['rect', 'ellipse', 'superellipse', 'polygon', 'edit vertex', 'text', 'image', 'select'];
+let tools = [
+  'rect',
+  'ellipse',
+  'superellipse',
+  'polygon',
+  // 'edit vertex',
+  'text',
+  // 'image',
+  'select'
+];
 let toolBar = true;
 
 let previewCut = true;
@@ -139,6 +148,7 @@ function preload() {
 function setup() {
   selectedFormat = 'postcard';
   let canvas = createCanvas(formats[selectedFormat].width + editorOutsideWidth * 2, formats[selectedFormat].height + editorOutsideHeight * 2);
+  canvas.parent('er-canvas-wrapper');
 
   pixelDensity(1);
   // angleMode(DEGREES);
@@ -455,7 +465,7 @@ function draw() {
       }
     }
   }
-  
+
   // polygon guide
   if (toolMode == 'polygon') {
     for (let i in objects) {
@@ -490,7 +500,7 @@ function draw() {
       }
     }
   }
-  
+
   // vertex edit
   if (toolMode == 'edit vertex') {
     for (let i in objects) {
@@ -712,7 +722,7 @@ function mousePressed() {
       }
     }
   }
-  
+
   if (toolMode == 'eidt vertex') {
     pressedX = mouseX;
     pressedY = mouseY;
@@ -735,7 +745,7 @@ function mouseDragged() {
       b.drag();
     }
   }
-  
+
   if (toolMode == 'edit vertex') {
     for (let p of polygonGuides) {
       p.drag();
@@ -854,7 +864,7 @@ function mouseReleased() {
       b.release();
     }
   }
-  
+
   // edit vertex
   if (toolMode == 'edit vertex') {
     for (let p  of polygonGuides) {
