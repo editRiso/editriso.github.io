@@ -241,8 +241,8 @@ function setup() {
   toolModeSelector.changed(changeToolMode);
 
   // image uploader
-  imageUploader = createFileInput(uploadImage);
-  imageUploader.position(0, 0);
+  // imageUploader = createFileInput(uploadImage);
+  // imageUploader.position(0, 0);
 
   // fonts
   fontSelector = createSelect();
@@ -265,6 +265,14 @@ function setup() {
   textInput = createInput('Type something');
   textInput.position(800 + bleed, 20);
   textInput.input(updateText);
+
+  // tool bar
+  let divToolbar = createDiv().id('er-toolbar');
+  divToolbar.position(20, 20);
+  for (let tool in tools) {
+    let toolbarButton = createDiv(tools[tool]).class('er-toolbar__button--' + tools[tool]);
+    toolbarButton.parent('er-toolbar');
+  }
 }
 
 function draw() {
