@@ -268,7 +268,6 @@ function setup() {
 
   // tool bar
   let divToolbar = createDiv().id('er-toolbar');
-  divToolbar.position(20, 20);
   for (let tool in tools) {
     let toolbarButton = createDiv(tools[tool]).class('er-toolbar__button--' + tools[tool]);
     toolbarButton.parent('er-toolbar');
@@ -541,35 +540,6 @@ function draw() {
   drawTrimmarks(sizeWidth, sizeHeight, bleed);
 
   drawRiso();
-
-  // tool bar
-  if (toolBar == true) {
-    let toolboxMargin = 10;
-    push();
-    rectMode(CORNER);
-    fill(255);
-    noStroke();
-    rect(48, 200 + bleed, 80, (80 - toolboxMargin) * tools.length + toolboxMargin);
-    pop();
-    for (i = 0; i < tools.length; i++) {
-      push();
-      rectMode(CORNER);
-      if (toolMode == tools[i]) {
-        fill(222);
-      } else {
-        fill(255);
-      }
-      stroke(200);
-      translate(48 + toolboxMargin, 200 + bleed);
-      rect(0, (80 - toolboxMargin) * i + toolboxMargin, 80 - toolboxMargin * 2, 80 - toolboxMargin * 2);
-      fill(0);
-      textAlign(CENTER, CENTER);
-      textFont(uiFont);
-      textSize(40);
-      text(icons[tools[i]], 30, (80 - toolboxMargin) * i + toolboxMargin + 30);
-      pop();
-    }
-  }
 
   // preview cut
   if (previewCut == true) {
