@@ -44,18 +44,41 @@ canvas {
   font-feature-settings: 'liga';
 }
 
-#er-toolbar {
+.er-toolbar {
   position: absolute;
-  left: 50px;
-  top: 250px;
-  border: 1px solid #eee;
+  left: 45px;
+  top: 260px;
+  border: 1px solid #ddd;
   background: #fff;
   padding: 10px;
-  width: 100px;
+  box-sizing: border-box;
+  width: 123px;
+}
+
+.er-toolbar__button-wrapper {
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  font-size: 0;
 }
 
 .er-toolbar__button {
   display: inline-block;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
+  box-sizing: border-box;
+  border-left: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+  position: relative;
+  font-size: 20px;
+  overflow: hidden;
+}
+
+.er-toolbar__button::before {
+  position: absolute;
+  font-family: 'Material Icons';
+  font-size: 50px;
+}
+
+.er-toolbar__button--rect {
+  content: '';
 }

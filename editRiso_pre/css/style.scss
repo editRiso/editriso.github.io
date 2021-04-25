@@ -1,3 +1,6 @@
+// colors
+$color-border: #ddd;
+
 html, body {
   margin: 0;
   padding: 0;
@@ -49,23 +52,38 @@ canvas {
 }
 
 // tool bar
-#er-toolbar {
+.er-toolbar {
   position: absolute;
-  left: 50px;
-  top: 250px;
-  border: 1px solid #eee;
+  left: 45px;
+  top: 260px;
+  border: 1px solid $color-border;
   background: #fff;
   padding: 10px;
-  width: 100px;
+  box-sizing: border-box;
+  width: 123px;
   // box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-.er-toolbar {
+  &__button-wrapper {
+    border-right: 1px solid $color-border;
+    border-bottom: 1px solid $color-border;
+    font-size: 0;
+  }
   &__button {
     display: inline-block;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
+    box-sizing: border-box;
+    border-left: 1px solid $color-border;
+    border-top: 1px solid $color-border;
+    position: relative;
+    font-size: 20px;
+    overflow: hidden;
+    &::before {
+      position: absolute;
+      font-family: 'Material Icons';
+      font-size: 50px;
+    }
     &--rect {
-
+      content: '';
     }
   }
 }

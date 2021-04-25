@@ -1,6 +1,5 @@
 let inks = [];
 let colors = [];
-let colorsCutout = [];
 
 let formats = {
   a5: {
@@ -96,25 +95,6 @@ let textString = 'Type something.';
 let objects = [];
 let objectId = 0;
 
-// use icon font for ui
-let icons = {
-  'rect': '\uea53',
-  'ellipse': '\uea56',
-  'superellipse': '\uea56',
-  'polygon': '\ue908',
-  'edit vertex': '\ue908',
-  'text': '\uea60',
-  'image': '\ue927',
-  'select': '\uea03',
-  'download': '\ue9c5',
-  'trash': '\ue9ac',
-  'moveback': '\ue9bf',
-  'movefront': '\ue9c0',
-  'visible': '\ue9ce',
-  'notvisible': '\ue9d1'
-};
-let uiSize;
-
 // tool bar
 let tools = [
   'rect',
@@ -132,7 +112,6 @@ let previewCut = true;
 
 function preload() {
   ciFont = loadFont('fonts/DMSans-Bold.ttf');
-  uiFont = loadFont('fonts/IcoMoon-Free.ttf');
   monoFont = loadFont('fonts/RobotoMono-VariableFont_wght.ttf');
 
   for (let font in fontsLoaded) {
@@ -160,7 +139,6 @@ function setup() {
   inks = ['green', 'mediumblue', 'brightred', 'slate'];
   for (let i = 0; i < inks.length; i++) {
     colors[inks[i]] = new Riso(inks[i]);
-    colorsCutout[inks[i]] = new Riso(inks[i]);
   }
 
   // default ink number
@@ -232,18 +210,6 @@ function setup() {
   vertexTypeStrokeSelector.style('width', '200px');
   vertexTypeStrokeSelector.changed(selectVertexTypeStroke);
 
-  // tool mode select
-  toolModeSelector = createSelect();
-  toolModeSelector.position(200 + bleed, 20);
-  for (let i = 0; i < tools.length; i++) {
-    toolModeSelector.option(tools[i]);
-  }
-  toolModeSelector.changed(changeToolMode);
-
-  // image uploader
-  // imageUploader = createFileInput(uploadImage);
-  // imageUploader.position(0, 0);
-
   // fonts
   fontSelector = createSelect();
   fontSelector.position(400 + bleed, 20);
@@ -267,10 +233,15 @@ function setup() {
   textInput.input(updateText);
 
   // tool bar
-  let divToolbar = createDiv().id('er-toolbar');
+  let divToolbar = createDiv().id('toolbar').class('er-toolbar');
+  let divToolbarButtonWrapper = createDiv().id('toolbar__button-wrapper').class('er-toolbar__button-wrapper').parent('toolbar');
   for (let tool in tools) {
-    let toolbarButton = createDiv(tools[tool]).class('er-toolbar__button--' + tools[tool]);
-    toolbarButton.parent('er-toolbar');
+    let toolbarButton = createDiv(tools[tool]).addClass('er-toolbar__button').addClass('er-toolbar__button--' + tools[tool]);
+    toolbarButton.parent('toolbar__button-wrapper');
+    toolbarButton.mousePressed(function() {
+      changeToolMode(tools[tool]);
+      this.addClass('is-active');
+    });
   }
 }
 
@@ -281,9 +252,6 @@ function draw() {
   setSize(size);
   background(245);
   clearRiso();
-
-  // ui icon size
-  uiSize = 40;
 
   strokeWeightVal = strokeWeightSlider.value();
   superEllipseCornerVal = superEllipseCornerSlider.value();
@@ -361,12 +329,6 @@ function draw() {
   }
 
   // show objects as they are
-
-  // image load
-  // loadImage(tmpImg, function(loadedImage) {
-  //   img = loadedImage;
-  // });
-
   for (let i in objects) {
     switch (objects[i].type) {
       case 'rect':
@@ -529,8 +491,8 @@ function draw() {
   fill(255);
   textAlign(CENTER, CENTER);
   textSize(40);
-  textFont(uiFont);
-  text(icons.download, width - 80, height - 85)
+  textFont();
+  // text(icons.download, width - 80, height - 85)
   pop();
 
   //  cutouts
@@ -600,7 +562,7 @@ function selectInkStroke() {
 }
 
 // change tool mode
-function changeToolMode() {
+function changeToolMode(tool) {
   if (tmpPolygon.id != null) {
     if (tmpPolygon.isClosed == false) {
       print('is not closed');
@@ -624,12 +586,11 @@ function changeToolMode() {
     }
   }
   print(objectId);
-  let form = toolModeSelector.value();
-  toolMode = form;
+  toolMode = tool;
   print('tool mode just changed to: ' + toolMode);
   tmpPolygon.id = null;
   tmpPolygon.vertexes = [];
-  if (form == 'select') {
+  if (toolMode == 'select') {
     for (let i in objects) {
       generateBoundingbox(objects[i]);
     }
