@@ -60,7 +60,7 @@ canvas {
   background: #fff;
   padding: 10px;
   box-sizing: border-box;
-  width: 123px;
+  width: 124px;
   // box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   &__button-wrapper {
     border-right: 1px solid $color-border;
@@ -75,15 +75,48 @@ canvas {
     border-left: 1px solid $color-border;
     border-top: 1px solid $color-border;
     position: relative;
-    font-size: 20px;
+    font-size: 10px;
+    text-align: center;
     overflow: hidden;
+    cursor: pointer;
     &::before {
       position: absolute;
-      font-family: 'Material Icons';
-      font-size: 50px;
+      display: block;
+      font-family: 'IcoMoon-Free';
+      font-size: 24px;
+      width: 50px;
+      text-align: center;
+      line-height: 56px;
     }
     &--rect {
-      content: '';
+      &::before {
+        content: '\ea53';
+      }
+    }
+    &--ellipse {
+      &::before {
+        content: '\ea56';
+      }
+    }
+    &--superellipse {
+      &::before {
+        content: '\ea56';
+      }
+    }
+    &--polygon {
+      &::before {
+        content: '\e908';
+      }
+    }
+    &--text {
+      &::before {
+        content: '\ea60';
+      }
+    }
+    &--select {
+      &::before {
+        content: '\ea03';
+      }
     }
   }
 }
