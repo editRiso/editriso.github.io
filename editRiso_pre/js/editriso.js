@@ -5,7 +5,12 @@ for (c in RISOCOLORS) {
 console.log(risoColors);
 
 let risoInks = []; // risoinks
-let inkslot = ['BLUE', 'RED', 'YELLOW', 'BLACK']; // slot A-D selected from risoinks
+let inkslot = {
+  A: 'BLUE',
+  B: 'RED',
+  C: 'YELLOW',
+  D: 'BLACK'
+}
 let colors = []; //
 
 let formats = {
@@ -143,23 +148,23 @@ function setup() {
   frameRate(10);
 
   // preparing riso objects
-  for (let i = 0; i < inkslot.length; i++) {
-    colors[inkslot[i]] = new Riso(inkslot[i]);
+  for (let slot in inkslot) {
+    colors[inkslot[slot]] = new Riso(inkslot[slot]);
   }
 
   // default ink number
-  targetInkFill = inkslot[0];
-  targetInkStroke = inkslot[1];
+  targetInkFill = inkslot.A;
+  targetInkStroke = inkslot.B;
 
   // ink selector
-  inkFillSelector = createSelect();
+  inkFillSelector = createSelect().id('inkFillSelector');
   inkFillSelector.position(200 + bleed, height - 20);
   for (let ink in inkslot) {
     inkFillSelector.option(inkslot[ink]);
   }
   inkFillSelector.option('transparent');
   inkFillSelector.changed(selectInkFill);
-  inkStrokeSelector = createSelect();
+  inkStrokeSelector = createSelect().id('inkStrokeSelector');
   inkStrokeSelector.position(350 + bleed, height - 20);
   for (let ink in inkslot) {
     inkStrokeSelector.option(inkslot[ink]);
@@ -541,28 +546,47 @@ function selectFormat() {
 // ベタ書きじゃなくスマートにやりたい
 function selectInkslotA() {
   let form = inkslotSelectA.value();
-  inkslot[0] = form;
-  colors[inkslot[0]] = new Riso(inkslot[0]);
+  inkslot.A = form;
+  colors[inkslot.A] = new Riso(inkslot.A);
+  refleshInkSetting();
 }
 function selectInkslotB() {
   let form = inkslotSelectB.value();
-  inkslot[1] = form;
-  colors[inkslot[1]] = new Riso(inkslot[1]);
+  inkslot.B = form;
+  colors[inkslot.B] = new Riso(inkslot.B);
+  refleshInkSetting();
 }
 function selectInkslotC() {
   let form = inkslotSelectC.value();
-  inkslot[2] = form;
-  colors[inkslot[2]] = new Riso(inkslot[2]);
+  inkslot.C = form;
+  colors[inkslot.C] = new Riso(inkslot.C);
+  refleshInkSetting();
 }
 function selectInkslotD() {
   let form = inkslotSelectD.value();
-  inkslot[3] = form;
-  colors[inkslot[3]] = new Riso(inkslot[3]);
+  inkslot.D = form;
+  colors[inkslot.D] = new Riso(inkslot.D);
+  refleshInkSetting();
+}
+function refleshInkSetting() {
+  let fillOptions = document.getElementById('inkFillSelector').options;
+  let strokeOptions = document.getElementById('inkStrokeSelector').options;
+  for (let i = 0;i < 4;i++) {
+    fillOptions.remove(i);
+    strokeOptions.remove(i);
+  }
+  for (let slot in inkslot) {
+    inkFillSelector.option(inkslot[slot]);
+    inkStrokeSelector.option(inkslot[slot]);
+  }
+  inkFillSelector.option('transparent');
+  inkStrokeSelector.option('transparent');
 }
 
 // ink select
 function selectInkFill() {
   let form = inkFillSelector.value();
+  console.log(form);
   if (form == 'transparent') {
     print('fill: transparent');
     targetInkFill = 'transparent';
@@ -1427,97 +1451,97 @@ polygonGuide.prototype.release = function() {
 
 // draw trimmarks
 function drawTrimmarks(sizeWidth, sizeHeight, bleed) {
-  for (let i = 0; i < inkslot.length; i++) {
+  for (let slot in inkslot) {
     // service id
-    colors[inkslot[i]].push();
-    colors[inkslot[i]].translate(width / 2, height / 2);
-    colors[inkslot[i]].fill(255);
-    colors[inkslot[i]].noStroke();
-    colors[inkslot[i]].textAlign(LEFT, BASELINE);
-    colors[inkslot[i]].textFont(ciFont);
-    colors[inkslot[i]].textSize(48);
-    colors[inkslot[i]].text('editRiso.js', -sizeWidth / 2 + bleed, -sizeHeight / 2 - bleed * 2);
-    colors[inkslot[i]].textAlign(RIGHT, BASELINE);
-    colors[inkslot[i]].textFont(monoFont);
-    colors[inkslot[i]].textSize(bleed / 2);
-    colors[inkslot[i]].text('powered by p5.riso.js', sizeWidth / 2 - bleed, -sizeHeight / 2 - bleed * 2);
-    colors[inkslot[i]].pop();
+    colors[inkslot[slot]].push();
+    colors[inkslot[slot]].translate(width / 2, height / 2);
+    colors[inkslot[slot]].fill(255);
+    colors[inkslot[slot]].noStroke();
+    colors[inkslot[slot]].textAlign(LEFT, BASELINE);
+    colors[inkslot[slot]].textFont(ciFont);
+    colors[inkslot[slot]].textSize(48);
+    colors[inkslot[slot]].text('editRiso.js', -sizeWidth / 2 + bleed, -sizeHeight / 2 - bleed * 2);
+    colors[inkslot[slot]].textAlign(RIGHT, BASELINE);
+    colors[inkslot[slot]].textFont(monoFont);
+    colors[inkslot[slot]].textSize(bleed / 2);
+    colors[inkslot[slot]].text('powered by p5.riso.js', sizeWidth / 2 - bleed, -sizeHeight / 2 - bleed * 2);
+    colors[inkslot[slot]].pop();
 
     // trimmark common setting
-    colors[inkslot[i]].push();
-    colors[inkslot[i]].translate(width / 2, height / 2);
-    colors[inkslot[i]].stroke(255);
-    colors[inkslot[i]].noFill();
-    colors[inkslot[i]].strokeWeight(1);
+    colors[inkslot[slot]].push();
+    colors[inkslot[slot]].translate(width / 2, height / 2);
+    colors[inkslot[slot]].stroke(255);
+    colors[inkslot[slot]].noFill();
+    colors[inkslot[slot]].strokeWeight(1);
 
     // left top
-    colors[inkslot[i]].line(-sizeWidth / 2 - 118, -sizeHeight / 2 - bleed, -sizeWidth / 2, -sizeHeight / 2 - bleed);
-    colors[inkslot[i]].line(-sizeWidth / 2 - 118 - bleed, -sizeHeight / 2, -sizeWidth / 2 - bleed, -sizeHeight / 2);
-    colors[inkslot[i]].line(-sizeWidth / 2 - bleed, -sizeHeight / 2 - 118, -sizeWidth / 2 - bleed, -sizeHeight / 2);
-    colors[inkslot[i]].line(-sizeWidth / 2, -sizeHeight / 2 - 118 - bleed, -sizeWidth / 2, -sizeHeight / 2 - bleed);
+    colors[inkslot[slot]].line(-sizeWidth / 2 - 118, -sizeHeight / 2 - bleed, -sizeWidth / 2, -sizeHeight / 2 - bleed);
+    colors[inkslot[slot]].line(-sizeWidth / 2 - 118 - bleed, -sizeHeight / 2, -sizeWidth / 2 - bleed, -sizeHeight / 2);
+    colors[inkslot[slot]].line(-sizeWidth / 2 - bleed, -sizeHeight / 2 - 118, -sizeWidth / 2 - bleed, -sizeHeight / 2);
+    colors[inkslot[slot]].line(-sizeWidth / 2, -sizeHeight / 2 - 118 - bleed, -sizeWidth / 2, -sizeHeight / 2 - bleed);
 
     // center top
-    colors[inkslot[i]].line(0, -sizeHeight / 2 - 118 - bleed, 0, -sizeHeight / 2 - bleed);
-    colors[inkslot[i]].line(-118, -sizeHeight / 2 - 59 - bleed, 118, -sizeHeight / 2 - 59 - bleed);
-    colors[inkslot[i]].ellipseMode(CENTER);
-    colors[inkslot[i]].ellipse(0, -sizeHeight / 2 - 59 - bleed, 59, 59);
+    colors[inkslot[slot]].line(0, -sizeHeight / 2 - 118 - bleed, 0, -sizeHeight / 2 - bleed);
+    colors[inkslot[slot]].line(-118, -sizeHeight / 2 - 59 - bleed, 118, -sizeHeight / 2 - 59 - bleed);
+    colors[inkslot[slot]].ellipseMode(CENTER);
+    colors[inkslot[slot]].ellipse(0, -sizeHeight / 2 - 59 - bleed, 59, 59);
 
     // right top
-    colors[inkslot[i]].line(sizeWidth / 2 + 118, -sizeHeight / 2 - bleed, sizeWidth / 2, -sizeHeight / 2 - bleed);
-    colors[inkslot[i]].line(sizeWidth / 2 + 118 + bleed, -sizeHeight / 2, sizeWidth / 2 + bleed, -sizeHeight / 2);
-    colors[inkslot[i]].line(sizeWidth / 2 + bleed, -sizeHeight / 2 - 118, sizeWidth / 2 + bleed, -sizeHeight / 2);
-    colors[inkslot[i]].line(sizeWidth / 2, -sizeHeight / 2 - 118 - bleed, sizeWidth / 2, -sizeHeight / 2 - bleed);
+    colors[inkslot[slot]].line(sizeWidth / 2 + 118, -sizeHeight / 2 - bleed, sizeWidth / 2, -sizeHeight / 2 - bleed);
+    colors[inkslot[slot]].line(sizeWidth / 2 + 118 + bleed, -sizeHeight / 2, sizeWidth / 2 + bleed, -sizeHeight / 2);
+    colors[inkslot[slot]].line(sizeWidth / 2 + bleed, -sizeHeight / 2 - 118, sizeWidth / 2 + bleed, -sizeHeight / 2);
+    colors[inkslot[slot]].line(sizeWidth / 2, -sizeHeight / 2 - 118 - bleed, sizeWidth / 2, -sizeHeight / 2 - bleed);
 
     // left middle
-    colors[inkslot[i]].line(-sizeWidth / 2 - 118 - bleed, 0, -sizeWidth / 2 - bleed, 0);
-    colors[inkslot[i]].line(-sizeWidth / 2 - 59 - bleed, -118, -sizeWidth / 2 - 59 - bleed, 118);
-    colors[inkslot[i]].ellipse(-sizeWidth / 2 - 59 - bleed, 0, 59, 59);
+    colors[inkslot[slot]].line(-sizeWidth / 2 - 118 - bleed, 0, -sizeWidth / 2 - bleed, 0);
+    colors[inkslot[slot]].line(-sizeWidth / 2 - 59 - bleed, -118, -sizeWidth / 2 - 59 - bleed, 118);
+    colors[inkslot[slot]].ellipse(-sizeWidth / 2 - 59 - bleed, 0, 59, 59);
 
     // right middle
-    colors[inkslot[i]].line(sizeWidth / 2 + 118 + bleed, 0, sizeWidth / 2 + bleed, 0);
-    colors[inkslot[i]].line(sizeWidth / 2 + 59 + bleed, -118, sizeWidth / 2 + 59 + bleed, 118);
-    colors[inkslot[i]].ellipse(sizeWidth / 2 + 59 + bleed, 0, 59, 59);
+    colors[inkslot[slot]].line(sizeWidth / 2 + 118 + bleed, 0, sizeWidth / 2 + bleed, 0);
+    colors[inkslot[slot]].line(sizeWidth / 2 + 59 + bleed, -118, sizeWidth / 2 + 59 + bleed, 118);
+    colors[inkslot[slot]].ellipse(sizeWidth / 2 + 59 + bleed, 0, 59, 59);
 
     // left bottom
-    colors[inkslot[i]].line(-sizeWidth / 2 - 118, sizeHeight / 2 + bleed, -sizeWidth / 2, sizeHeight / 2 + bleed);
-    colors[inkslot[i]].line(-sizeWidth / 2 - 118 - bleed, sizeHeight / 2, -sizeWidth / 2 - bleed, sizeHeight / 2);
-    colors[inkslot[i]].line(-sizeWidth / 2 - bleed, sizeHeight / 2 + 118, -sizeWidth / 2 - bleed, sizeHeight / 2);
-    colors[inkslot[i]].line(-sizeWidth / 2, sizeHeight / 2 + 118 + bleed, -sizeWidth / 2, sizeHeight / 2 + bleed);
+    colors[inkslot[slot]].line(-sizeWidth / 2 - 118, sizeHeight / 2 + bleed, -sizeWidth / 2, sizeHeight / 2 + bleed);
+    colors[inkslot[slot]].line(-sizeWidth / 2 - 118 - bleed, sizeHeight / 2, -sizeWidth / 2 - bleed, sizeHeight / 2);
+    colors[inkslot[slot]].line(-sizeWidth / 2 - bleed, sizeHeight / 2 + 118, -sizeWidth / 2 - bleed, sizeHeight / 2);
+    colors[inkslot[slot]].line(-sizeWidth / 2, sizeHeight / 2 + 118 + bleed, -sizeWidth / 2, sizeHeight / 2 + bleed);
 
     // center bottom
-    colors[inkslot[i]].line(0, sizeHeight / 2 + 118 + bleed, 0, sizeHeight / 2 + bleed);
-    colors[inkslot[i]].line(-118, sizeHeight / 2 + 59 + bleed, 118, sizeHeight / 2 + 59 + bleed);
-    colors[inkslot[i]].ellipse(0, sizeHeight / 2 + 59 + bleed, 59, 59);
+    colors[inkslot[slot]].line(0, sizeHeight / 2 + 118 + bleed, 0, sizeHeight / 2 + bleed);
+    colors[inkslot[slot]].line(-118, sizeHeight / 2 + 59 + bleed, 118, sizeHeight / 2 + 59 + bleed);
+    colors[inkslot[slot]].ellipse(0, sizeHeight / 2 + 59 + bleed, 59, 59);
 
     // right bottom
-    colors[inkslot[i]].line(sizeWidth / 2 + 118, sizeHeight / 2 + bleed, sizeWidth / 2, sizeHeight / 2 + bleed);
-    colors[inkslot[i]].line(sizeWidth / 2 + 118 + bleed, sizeHeight / 2, sizeWidth / 2 + bleed, sizeHeight / 2);
-    colors[inkslot[i]].line(sizeWidth / 2 + bleed, sizeHeight / 2 + 118, sizeWidth / 2 + bleed, sizeHeight / 2);
-    colors[inkslot[i]].line(sizeWidth / 2, +sizeHeight / 2 + 118 + bleed, sizeWidth / 2, sizeHeight / 2 + bleed);
-    colors[inkslot[i]].pop();
+    colors[inkslot[slot]].line(sizeWidth / 2 + 118, sizeHeight / 2 + bleed, sizeWidth / 2, sizeHeight / 2 + bleed);
+    colors[inkslot[slot]].line(sizeWidth / 2 + 118 + bleed, sizeHeight / 2, sizeWidth / 2 + bleed, sizeHeight / 2);
+    colors[inkslot[slot]].line(sizeWidth / 2 + bleed, sizeHeight / 2 + 118, sizeWidth / 2 + bleed, sizeHeight / 2);
+    colors[inkslot[slot]].line(sizeWidth / 2, +sizeHeight / 2 + 118 + bleed, sizeWidth / 2, sizeHeight / 2 + bleed);
+    colors[inkslot[slot]].pop();
 
     // colors
-    colors[inkslot[i]].push();
-    colors[inkslot[i]].translate(width / 2, height / 2);
-    colors[inkslot[i]].fill(255);
-    colors[inkslot[i]].noStroke();
-    colors[inkslot[i]].rect(-sizeWidth / 2 + bleed, sizeHeight / 2 + bleed * 2 + bleed * 0.5 * i, bleed * 0.5, bleed * 0.5);
-    colors[inkslot[i]].textAlign(LEFT, TOP);
-    colors[inkslot[i]].textFont(monoFont);
-    colors[inkslot[i]].textSize(bleed / 2);
-    colors[inkslot[i]].text(inkslot[i], -sizeWidth / 2 + bleed * 1.75, sizeHeight / 2 + bleed * 1.9 + bleed * 0.5 * i);
-    colors[inkslot[i]].pop();
+    colors[inkslot[slot]].push();
+    colors[inkslot[slot]].translate(width / 2, height / 2);
+    colors[inkslot[slot]].fill(255);
+    colors[inkslot[slot]].noStroke();
+    colors[inkslot[slot]].rect(-sizeWidth / 2 + bleed, sizeHeight / 2 + bleed * 2 + bleed * 0.5 * i, bleed * 0.5, bleed * 0.5);
+    colors[inkslot[slot]].textAlign(LEFT, TOP);
+    colors[inkslot[slot]].textFont(monoFont);
+    colors[inkslot[slot]].textSize(bleed / 2);
+    colors[inkslot[slot]].text(inkslot[slot], -sizeWidth / 2 + bleed * 1.75, sizeHeight / 2 + bleed * 1.9 + bleed * 0.5 * i);
+    colors[inkslot[slot]].pop();
 
     // size
-    colors[inkslot[i]].push();
-    colors[inkslot[i]].translate(width / 2, height / 2);
-    colors[inkslot[i]].fill(255);
-    colors[inkslot[i]].noStroke();
-    colors[inkslot[i]].textAlign(RIGHT, TOP);
-    colors[inkslot[i]].textFont(monoFont);
-    colors[inkslot[i]].textSize(bleed / 2);
-    colors[inkslot[i]].text(formats[selectedFormat].name + ' ' + formats[selectedFormat].printWidth + 'mm * ' + formats[selectedFormat].printHeight + 'mm ' + '(300dpi)', sizeWidth / 2 - bleed, sizeHeight / 2 + bleed * 2);
-    colors[inkslot[i]].pop();
+    colors[inkslot[slot]].push();
+    colors[inkslot[slot]].translate(width / 2, height / 2);
+    colors[inkslot[slot]].fill(255);
+    colors[inkslot[slot]].noStroke();
+    colors[inkslot[slot]].textAlign(RIGHT, TOP);
+    colors[inkslot[slot]].textFont(monoFont);
+    colors[inkslot[slot]].textSize(bleed / 2);
+    colors[inkslot[slot]].text(formats[selectedFormat].name + ' ' + formats[selectedFormat].printWidth + 'mm * ' + formats[selectedFormat].printHeight + 'mm ' + '(300dpi)', sizeWidth / 2 - bleed, sizeHeight / 2 + bleed * 2);
+    colors[inkslot[slot]].pop();
   }
 
 }
