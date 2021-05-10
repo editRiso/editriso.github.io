@@ -571,8 +571,10 @@ function selectInkslotD() {
 function refleshInkSetting() {
   let fillOptions = document.getElementById('inkFillSelector').options;
   let strokeOptions = document.getElementById('inkStrokeSelector').options;
-  for (let i = 0;i < 4;i++) {
+  for (let i = 0;i < fillOptions.length;i++) {
     fillOptions.remove(i);
+  }
+  for (let i = 0;i < strokeOptions.length;i++) {
     strokeOptions.remove(i);
   }
   for (let slot in inkslot) {
@@ -581,6 +583,12 @@ function refleshInkSetting() {
   }
   inkFillSelector.option('transparent');
   inkStrokeSelector.option('transparent');
+  for (let i = 0;i < fillOptions.length;i++) {
+    fillOptions[i].value = fillOptions[i].innerHTML;
+  }
+  for (let i = 0;i < strokeOptions.length;i++) {
+    strokeOptions[i].value = strokeOptions[i].innerHTML;
+  }
 }
 
 // ink select
