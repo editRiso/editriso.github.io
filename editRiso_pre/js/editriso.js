@@ -548,47 +548,51 @@ function selectInkslotA() {
   let form = inkslotSelectA.value();
   inkslot.A = form;
   colors[inkslot.A] = new Riso(inkslot.A);
-  refleshInkSetting();
+  refleshInkSetting('A');
 }
 function selectInkslotB() {
   let form = inkslotSelectB.value();
   inkslot.B = form;
   colors[inkslot.B] = new Riso(inkslot.B);
-  refleshInkSetting();
+  refleshInkSetting('B');
 }
 function selectInkslotC() {
   let form = inkslotSelectC.value();
   inkslot.C = form;
   colors[inkslot.C] = new Riso(inkslot.C);
-  refleshInkSetting();
+  refleshInkSetting('C');
 }
 function selectInkslotD() {
   let form = inkslotSelectD.value();
   inkslot.D = form;
   colors[inkslot.D] = new Riso(inkslot.D);
-  refleshInkSetting();
+  refleshInkSetting('D');
 }
-function refleshInkSetting() {
+function refleshInkSetting(slot) {
+  console.log(inkslot);
+  let inkNum;
   let fillOptions = document.getElementById('inkFillSelector').options;
   let strokeOptions = document.getElementById('inkStrokeSelector').options;
-  for (let i = 0;i < fillOptions.length;i++) {
-    fillOptions.remove(i);
+  switch (slot) {
+    case 'A':
+      inkNum = 0;
+      break;
+    case 'B':
+      inkNum = 1;
+      break;
+    case 'C':
+      inkNum = 2;
+      break;
+    case 'D':
+      inkNum = 3;
+      break;
   }
-  for (let i = 0;i < strokeOptions.length;i++) {
-    strokeOptions.remove(i);
-  }
-  for (let slot in inkslot) {
-    inkFillSelector.option(inkslot[slot]);
-    inkStrokeSelector.option(inkslot[slot]);
-  }
-  inkFillSelector.option('transparent');
-  inkStrokeSelector.option('transparent');
-  for (let i = 0;i < fillOptions.length;i++) {
-    fillOptions[i].value = fillOptions[i].innerHTML;
-  }
-  for (let i = 0;i < strokeOptions.length;i++) {
-    strokeOptions[i].value = strokeOptions[i].innerHTML;
-  }
+  console.log(inkNum);
+  console.log(fillOptions[inkNum]);
+  fillOptions[inkNum].value = inkslot[slot];
+  fillOptions[inkNum].innerHTML = inkslot[slot];
+  strokeOptions[inkNum].value = inkslot[slot];
+  strokeOptions[inkNum].innerHTML = inkslot[slot];
 }
 
 // ink select
