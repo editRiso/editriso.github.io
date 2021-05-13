@@ -4,6 +4,8 @@ for (c in RISOCOLORS) {
 }
 console.log(risoColors);
 
+let inkslotOptions = [];
+let fillOptions, strokeOptions;
 let risoInks = []; // risoinks
 let inkslot = {
   A: 'BLUE',
@@ -152,11 +154,52 @@ function setup() {
     colors[inkslot[slot]] = new Riso(inkslot[slot]);
   }
 
+  // ink setting
+  divInkSetting = createDiv().id('inksetting').class('er-inksetting');
+  inkslotSelectA = createSelect().id('inkslotselectA').class('er-inkslotselect').parent(divInkSetting);
+  for (i in risoColors) {
+    inkslotSelectA.option(risoColors[i]);
+  }
+  inkslotSelectB = createSelect().id('inkslotselectB').class('er-inkslotselect').parent(divInkSetting);
+  for (i in risoColors) {
+    inkslotSelectB.option(risoColors[i]);
+  }
+  inkslotSelectC = createSelect().id('inkslotselectC').class('er-inkslotselect').parent(divInkSetting);
+  for (i in risoColors) {
+    inkslotSelectC.option(risoColors[i]);
+  }
+  inkslotSelectD = createSelect().id('inkslotselectD').class('er-inkslotselect').parent(divInkSetting);
+  for (i in risoColors) {
+    inkslotSelectD.option(risoColors[i]);
+  }
+  for (slot in inkslot) {
+    inkslotOptions.push({
+      'slot': slot,
+      'options': document.getElementById('inkslotselect' + slot).options
+    });
+  }
+  console.log(inkslotOptions)
+  for (options in inkslotOptions) {
+    let slotSelect = 'inkslotselect' + inkslotOptions[options].slot;
+    let slotSelectOptions = inkslotOptions[options].options;
+    console.log(inkslotOptions[options].slot, slotSelectOptions);
+    for (option in slotSelectOptions) {
+      if (slotSelectOptions[option].value == inkslot[inkslotOptions[options].slot]) {
+        slotSelectOptions[option].selected = true;
+      }
+    }
+  }
+
+  inkslotSelectA.changed(selectInkslotA);
+  inkslotSelectB.changed(selectInkslotB);
+  inkslotSelectC.changed(selectInkslotC);
+  inkslotSelectD.changed(selectInkslotD);
+
   // default ink number
   targetInkFill = inkslot.A;
   targetInkStroke = inkslot.B;
 
-  // ink selector
+  // fill, stroke selector
   inkFillSelector = createSelect().id('inkFillSelector');
   inkFillSelector.position(200 + bleed, height - 20);
   for (let ink in inkslot) {
@@ -168,6 +211,21 @@ function setup() {
   inkStrokeSelector.position(350 + bleed, height - 20);
   for (let ink in inkslot) {
     inkStrokeSelector.option(inkslot[ink]);
+  }
+  fillOptions = document.getElementById('inkFillSelector').options;
+  strokeOptions = document.getElementById('inkStrokeSelector').options;
+  for (option in fillOptions) {
+    if (fillOptions[option].value == targetInkFill) {
+      console.log(fillOptions[option].value + ' is fillcolor');
+      console.log(fillOptions[option].selected);
+    }
+  }
+  for (option in strokeOptions) {
+    if (strokeOptions[option].value == targetInkStroke) {
+      console.log(strokeOptions[option].value + ' is strokecolor');
+      console.log(strokeOptions[option].selected);
+      strokeOptions[option].selected = true;
+    }
   }
   inkStrokeSelector.option('transparent');
   inkStrokeSelector.changed(selectInkStroke);
@@ -254,29 +312,6 @@ function setup() {
       changeToolMode(tools[tool]);
     });
   }
-
-  // ink setting
-  divInkSetting = createDiv().id('inksetting').class('er-inksetting');
-  inkslotSelectA = createSelect().id('inkslotselectA').class('er-inkslotselect').parent(divInkSetting);
-  for (i in risoColors) {
-    inkslotSelectA.option(risoColors[i]);
-  }
-  inkslotSelectB = createSelect().id('inkslotselectB').class('er-inkslotselect').parent(divInkSetting);
-  for (i in risoColors) {
-    inkslotSelectB.option(risoColors[i]);
-  }
-  inkslotSelectC = createSelect().id('inkslotselectC').class('er-inkslotselect').parent(divInkSetting);
-  for (i in risoColors) {
-    inkslotSelectC.option(risoColors[i]);
-  }
-  inkslotSelectD = createSelect().id('inkslotselectD').class('er-inkslotselect').parent(divInkSetting);
-  for (i in risoColors) {
-    inkslotSelectD.option(risoColors[i]);
-  }
-  inkslotSelectA.changed(selectInkslotA);
-  inkslotSelectB.changed(selectInkslotB);
-  inkslotSelectC.changed(selectInkslotC);
-  inkslotSelectD.changed(selectInkslotD);
 }
 
 function draw() {
@@ -571,8 +606,8 @@ function selectInkslotD() {
 function refleshInkSetting(slot) {
   console.log(inkslot);
   let inkNum;
-  let fillOptions = document.getElementById('inkFillSelector').options;
-  let strokeOptions = document.getElementById('inkStrokeSelector').options;
+  fillOptions = document.getElementById('inkFillSelector').options;
+  strokeOptions = document.getElementById('inkStrokeSelector').options;
   switch (slot) {
     case 'A':
       inkNum = 0;
