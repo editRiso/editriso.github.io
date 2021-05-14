@@ -189,7 +189,6 @@ function setup() {
       }
     }
   }
-
   inkslotSelectA.changed(selectInkslotA);
   inkslotSelectB.changed(selectInkslotB);
   inkslotSelectC.changed(selectInkslotC);
@@ -628,6 +627,10 @@ function refleshInkSetting(slot) {
   fillOptions[inkNum].innerHTML = inkslot[slot];
   strokeOptions[inkNum].value = inkslot[slot];
   strokeOptions[inkNum].innerHTML = inkslot[slot];
+  let formFill = inkFillSelector.value();
+  let formStroke = inkStrokeSelector.value();
+  targetInkFill = formFill;
+  targetInkStroke = formStroke;
 }
 
 // ink select
@@ -1572,6 +1575,21 @@ function drawTrimmarks(sizeWidth, sizeHeight, bleed) {
     colors[inkslot[slot]].translate(width / 2, height / 2);
     colors[inkslot[slot]].fill(255);
     colors[inkslot[slot]].noStroke();
+    switch (slot) {
+      case 'A':
+        i = 0;
+        break;
+      case 'B':
+        i = 1;
+        break;
+      case 'C':
+        i = 2;
+        break;
+      case 'D':
+        i = 3;
+        break;
+    }
+    colors[inkslot[slot]].rect(-sizeWidth / 2 + bleed, sizeHeight / 2 + bleed * 2 + bleed * 0.5 * i, bleed * 0.5, bleed * 0.5);
     colors[inkslot[slot]].rect(-sizeWidth / 2 + bleed, sizeHeight / 2 + bleed * 2 + bleed * 0.5 * i, bleed * 0.5, bleed * 0.5);
     colors[inkslot[slot]].textAlign(LEFT, TOP);
     colors[inkslot[slot]].textFont(monoFont);
