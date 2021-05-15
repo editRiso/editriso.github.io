@@ -172,23 +172,7 @@ function setup() {
   for (i in risoColors) {
     inkslotSelectD.option(risoColors[i]);
   }
-  for (slot in inkslot) {
-    inkslotOptions.push({
-      'slot': slot,
-      'options': document.getElementById('inkslotselect' + slot).options
-    });
-  }
-  console.log(inkslotOptions)
-  for (options in inkslotOptions) {
-    let slotSelect = 'inkslotselect' + inkslotOptions[options].slot;
-    let slotSelectOptions = inkslotOptions[options].options;
-    console.log(inkslotOptions[options].slot, slotSelectOptions);
-    for (option in slotSelectOptions) {
-      if (slotSelectOptions[option].value == inkslot[inkslotOptions[options].slot]) {
-        slotSelectOptions[option].selected = true;
-      }
-    }
-  }
+  updateSlotSelect();
   inkslotSelectA.changed(selectInkslotA);
   inkslotSelectB.changed(selectInkslotB);
   inkslotSelectC.changed(selectInkslotC);
@@ -631,6 +615,33 @@ function refleshInkSetting(slot) {
   let formStroke = inkStrokeSelector.value();
   targetInkFill = formFill;
   targetInkStroke = formStroke;
+  updateSlotSelect();
+}
+
+function updateSlotSelect() {
+  inkslotOptions = [];
+  for (slot in inkslot) {
+    inkslotOptions.push({
+      'slot': slot,
+      'options': document.getElementById('inkslotselect' + slot).options
+    });
+  }
+  for (options in inkslotOptions) {
+    let slotSelect = 'inkslotselect' + inkslotOptions[options].slot;
+    let slotSelectOptions = inkslotOptions[options].options;
+    console.log(inkslotOptions[options].slot, slotSelectOptions);
+    for (option in slotSelectOptions) {
+      if (slotSelectOptions[option].value == inkslot[inkslotOptions[options].slot]) {
+        slotSelectOptions[option].selected = true;
+      }
+      slotSelectOptions[option].disabled = false;
+      for (slot in inkslot) {
+        if (slotSelectOptions[option].value == inkslot[slot]) {
+          slotSelectOptions[option].disabled = true;
+        }
+      }
+    }
+  }
 }
 
 // ink select
