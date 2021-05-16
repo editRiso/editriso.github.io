@@ -179,33 +179,33 @@ function setup() {
   inkslotSelectD.changed(selectInkslotD);
 
   // default ink number
-  targetInkFill = inkslot.A;
-  targetInkStroke = inkslot.B;
+  targetInkFill = 'A';
+  targetInkStroke = 'B';
 
   // fill, stroke selector
   inkFillSelector = createSelect().id('inkFillSelector');
   inkFillSelector.position(200 + bleed, height - 20);
   for (let ink in inkslot) {
-    inkFillSelector.option(inkslot[ink]);
+    inkFillSelector.option(inkslot[ink], ink);
   }
   inkFillSelector.option('transparent');
   inkFillSelector.changed(selectInkFill);
   inkStrokeSelector = createSelect().id('inkStrokeSelector');
   inkStrokeSelector.position(350 + bleed, height - 20);
   for (let ink in inkslot) {
-    inkStrokeSelector.option(inkslot[ink]);
+    inkStrokeSelector.option(inkslot[ink], ink);
   }
   fillOptions = document.getElementById('inkFillSelector').options;
   strokeOptions = document.getElementById('inkStrokeSelector').options;
   for (option in fillOptions) {
-    if (fillOptions[option].value == targetInkFill) {
-      console.log(fillOptions[option].value + ' is fillcolor');
+    if (fillOptions[option].innerHTML == inkslot[targetInkFill]) {
+      console.log(fillOptions[option].innerHTML + ' is fillcolor');
       console.log(fillOptions[option].selected);
     }
   }
   for (option in strokeOptions) {
-    if (strokeOptions[option].value == targetInkStroke) {
-      console.log(strokeOptions[option].value + ' is strokecolor');
+    if (strokeOptions[option].innerHTML == inkslot[targetInkStroke]) {
+      console.log(strokeOptions[option].innerHTML + ' is strokecolor');
       console.log(strokeOptions[option].selected);
       strokeOptions[option].selected = true;
     }
@@ -587,6 +587,8 @@ function selectInkslotD() {
   refleshInkSetting('D');
 }
 function refleshInkSetting(slot) {
+  let preInkFill = targetInkFill;
+  let preInkStroke = targetInkStroke;
   console.log(inkslot);
   let inkNum;
   fillOptions = document.getElementById('inkFillSelector').options;
@@ -607,14 +609,14 @@ function refleshInkSetting(slot) {
   }
   console.log(inkNum);
   console.log(fillOptions[inkNum]);
-  fillOptions[inkNum].value = inkslot[slot];
+  fillOptions[inkNum].value = slot;
   fillOptions[inkNum].innerHTML = inkslot[slot];
-  strokeOptions[inkNum].value = inkslot[slot];
+  strokeOptions[inkNum].value = slot;
   strokeOptions[inkNum].innerHTML = inkslot[slot];
   let formFill = inkFillSelector.value();
   let formStroke = inkStrokeSelector.value();
-  targetInkFill = formFill;
-  targetInkStroke = formStroke;
+  targetInkFill = preInkFill;
+  targetInkStroke = preInkStroke;
   updateSlotSelect();
 }
 
@@ -955,110 +957,110 @@ function uploadImage(file) {
 let drawRect = function(targetColor, drawMode, posX, posY, width, height, strokeWeight, angle) {
   push();
   if (drawMode == fill) {
-    colors[targetColor].fill(255);
-    colors[targetColor].noStroke();
+    colors[inkslot[targetColor]].fill(255);
+    colors[inkslot[targetColor]].noStroke();
   } else {
-    colors[targetColor].noFill();
-    colors[targetColor].stroke(255);
-    colors[targetColor].strokeWeight(strokeWeight);
+    colors[inkslot[targetColor]].noFill();
+    colors[inkslot[targetColor]].stroke(255);
+    colors[inkslot[targetColor]].strokeWeight(strokeWeight);
   }
-  colors[targetColor].translate(posX + width / 2, posY + height / 2);
-  colors[targetColor].rotate(angle);
-  colors[targetColor].rect(-width / 2, -height / 2, width, height);
-  colors[targetColor].rotate(-angle);
-  colors[targetColor].translate(-posX - width / 2, -posY - height / 2);
+  colors[inkslot[targetColor]].translate(posX + width / 2, posY + height / 2);
+  colors[inkslot[targetColor]].rotate(angle);
+  colors[inkslot[targetColor]].rect(-width / 2, -height / 2, width, height);
+  colors[inkslot[targetColor]].rotate(-angle);
+  colors[inkslot[targetColor]].translate(-posX - width / 2, -posY - height / 2);
   pop();
 }
 
 let drawEllipse = function(targetColor, drawMode, posX, posY, width, height, strokeWeight, angle) {
   push();
   if (drawMode == fill) {
-    colors[targetColor].fill(255);
-    colors[targetColor].noStroke();
+    colors[inkslot[targetColor]].fill(255);
+    colors[inkslot[targetColor]].noStroke();
   } else {
-    colors[targetColor].noFill();
-    colors[targetColor].stroke(255);
-    colors[targetColor].strokeWeight(strokeWeight);
+    colors[inkslot[targetColor]].noFill();
+    colors[inkslot[targetColor]].stroke(255);
+    colors[inkslot[targetColor]].strokeWeight(strokeWeight);
   }
-  colors[targetColor].translate(posX + width / 2, posY + height / 2);
-  colors[targetColor].rotate(angle);
-  colors[targetColor].ellipse(-width / 2, -height / 2, width, height);
-  colors[targetColor].rotate(-angle);
-  colors[targetColor].translate(-posX - width / 2, -posY - height / 2);
+  colors[inkslot[targetColor]].translate(posX + width / 2, posY + height / 2);
+  colors[inkslot[targetColor]].rotate(angle);
+  colors[inkslot[targetColor]].ellipse(-width / 2, -height / 2, width, height);
+  colors[inkslot[targetColor]].rotate(-angle);
+  colors[inkslot[targetColor]].translate(-posX - width / 2, -posY - height / 2);
   pop();
 }
 
 let drawSuperellipse = function(targetColor, drawMode, posX, posY, width, height, strokeWeight, cornerVal, angle) {
   push();
   if (drawMode == fill) {
-    colors[targetColor].fill(255);
-    colors[targetColor].noStroke();
+    colors[inkslot[targetColor]].fill(255);
+    colors[inkslot[targetColor]].noStroke();
   } else {
-    colors[targetColor].noFill();
-    colors[targetColor].stroke(255);
-    colors[targetColor].strokeWeight(strokeWeight);
+    colors[inkslot[targetColor]].noFill();
+    colors[inkslot[targetColor]].stroke(255);
+    colors[inkslot[targetColor]].strokeWeight(strokeWeight);
   }
-  colors[targetColor].beginShape();
+  colors[inkslot[targetColor]].beginShape();
   for (let seAngle = 0; seAngle < TWO_PI; seAngle += 0.1) {
-    colors[targetColor].vertex(posX + pow(abs(cos(seAngle)), 2 / cornerVal) * (width / 2) * sgn(cos(seAngle)), posY + pow(abs(sin(seAngle)), 2 / cornerVal) * (height / 2) * sgn(sin(seAngle)));
+    colors[inkslot[targetColor]].vertex(posX + pow(abs(cos(seAngle)), 2 / cornerVal) * (width / 2) * sgn(cos(seAngle)), posY + pow(abs(sin(seAngle)), 2 / cornerVal) * (height / 2) * sgn(sin(seAngle)));
   }
-  colors[targetColor].endShape(CLOSE);
+  colors[inkslot[targetColor]].endShape(CLOSE);
   pop();
 }
 
 let drawPolygon = function(targetColor, drawMode, posX, posY, vertexes, isClosed, strokeWeight, vertexType, curveTightness, angle) {
   push();
   if (drawMode == fill) {
-    colors[targetColor].fill(255);
-    colors[targetColor].noStroke();
+    colors[inkslot[targetColor]].fill(255);
+    colors[inkslot[targetColor]].noStroke();
   } else {
-    colors[targetColor].noFill();
-    colors[targetColor].stroke(255);
-    colors[targetColor].strokeWeight(strokeWeight);
+    colors[inkslot[targetColor]].noFill();
+    colors[inkslot[targetColor]].stroke(255);
+    colors[inkslot[targetColor]].strokeWeight(strokeWeight);
   }
-  colors[targetColor].curveTightness(curveTightness);
-  colors[targetColor].beginShape();
+  colors[inkslot[targetColor]].curveTightness(curveTightness);
+  colors[inkslot[targetColor]].beginShape();
   if (vertexType == 'curve') {
-    colors[targetColor].curveVertex(vertexes[vertexes.length - 1].x + editorOutsideWidth, vertexes[vertexes.length - 1].y + editorOutsideHeight);
+    colors[inkslot[targetColor]].curveVertex(vertexes[vertexes.length - 1].x + editorOutsideWidth, vertexes[vertexes.length - 1].y + editorOutsideHeight);
     for (let i = 0; i < vertexes.length; i++) {
-      colors[targetColor].curveVertex(vertexes[i].x + editorOutsideWidth, vertexes[i].y + editorOutsideHeight);
+      colors[inkslot[targetColor]].curveVertex(vertexes[i].x + editorOutsideWidth, vertexes[i].y + editorOutsideHeight);
     }
     if (isClosed) {
-      colors[targetColor].curveVertex(vertexes[0].x + editorOutsideWidth, vertexes[0].y + editorOutsideHeight);
-      colors[targetColor].curveVertex(vertexes[1].x + editorOutsideWidth, vertexes[1].y + editorOutsideHeight);
+      colors[inkslot[targetColor]].curveVertex(vertexes[0].x + editorOutsideWidth, vertexes[0].y + editorOutsideHeight);
+      colors[inkslot[targetColor]].curveVertex(vertexes[1].x + editorOutsideWidth, vertexes[1].y + editorOutsideHeight);
     } else {
-      colors[targetColor].curveVertex(vertexes[vertexes.length - 1].x + editorOutsideWidth, vertexes[vertexes.length - 1].y + editorOutsideHeight);
+      colors[inkslot[targetColor]].curveVertex(vertexes[vertexes.length - 1].x + editorOutsideWidth, vertexes[vertexes.length - 1].y + editorOutsideHeight);
     }
   } else {
-    colors[targetColor].vertex(vertexes[vertexes.length - 1].x + editorOutsideWidth, vertexes[vertexes.length - 1].y + editorOutsideHeight);
+    colors[inkslot[targetColor]].vertex(vertexes[vertexes.length - 1].x + editorOutsideWidth, vertexes[vertexes.length - 1].y + editorOutsideHeight);
     for (let i = 0; i < vertexes.length; i++) {
-      colors[targetColor].vertex(vertexes[i].x + editorOutsideWidth, vertexes[i].y + editorOutsideHeight);
+      colors[inkslot[targetColor]].vertex(vertexes[i].x + editorOutsideWidth, vertexes[i].y + editorOutsideHeight);
     }
     if (isClosed) {
-      colors[targetColor].vertex(vertexes[0].x + editorOutsideWidth, vertexes[0].y + editorOutsideHeight);
-      colors[targetColor].vertex(vertexes[1].x + editorOutsideWidth, vertexes[1].y + editorOutsideHeight);
+      colors[inkslot[targetColor]].vertex(vertexes[0].x + editorOutsideWidth, vertexes[0].y + editorOutsideHeight);
+      colors[inkslot[targetColor]].vertex(vertexes[1].x + editorOutsideWidth, vertexes[1].y + editorOutsideHeight);
     } else {
-      colors[targetColor].vertex(vertexes[vertexes.length - 1].x + editorOutsideWidth, vertexes[vertexes.length - 1].y + editorOutsideHeight);
+      colors[inkslot[targetColor]].vertex(vertexes[vertexes.length - 1].x + editorOutsideWidth, vertexes[vertexes.length - 1].y + editorOutsideHeight);
     }
   }
-  colors[targetColor].endShape();
+  colors[inkslot[targetColor]].endShape();
   pop();
 }
 
 let drawText = function(targetColor, drawMode, posX, posY, width, height, strokeWeight, fontFace, fontSize, content) {
   push();
   if (drawMode == fill) {
-    colors[targetColor].fill(255);
-    colors[targetColor].noStroke();
+    colors[inkslot[targetColor]].fill(255);
+    colors[inkslot[targetColor]].noStroke();
   } else {
-    colors[targetColor].noFill();
-    colors[targetColor].stroke(255);
-    colors[targetColor].strokeWeight(strokeWeight);
+    colors[inkslot[targetColor]].noFill();
+    colors[inkslot[targetColor]].stroke(255);
+    colors[inkslot[targetColor]].strokeWeight(strokeWeight);
   }
-  colors[targetColor].textAlign(LEFT, TOP);
-  colors[targetColor].textFont(fontFace);
-  colors[targetColor].textSize(fontSize);
-  colors[targetColor].text(content, posX, posY);
+  colors[inkslot[targetColor]].textAlign(LEFT, TOP);
+  colors[inkslot[targetColor]].textFont(fontFace);
+  colors[inkslot[targetColor]].textSize(fontSize);
+  colors[inkslot[targetColor]].text(content, posX, posY);
   pop();
 }
 
