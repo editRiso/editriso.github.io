@@ -291,7 +291,7 @@ function setup() {
     toolbarButton = createDiv(tools[tool]).addClass('er-toolbar__button').addClass('er-toolbar__button--' + tools[tool]);
     toolbarButton.parent('toolbar__button-wrapper');
     toolbarButton.mousePressed(function() {
-      changeActive(tools[tool]);
+      changeActiveTool(tools[tool]);
       changeToolMode(tools[tool]);
     });
   }
@@ -530,17 +530,17 @@ function draw() {
 }
 
 // functions for toolbar
-function changeActive(tool) {
+function changeActiveTool(tool) {
   let buttons = document.getElementsByClassName('er-toolbar__button');
-  console.log(buttons);
-  for (b in buttons) {
-    console.log(buttons[b].classList);
-    // if (buttons[b].classList.contains('is-active')) {
-    //   console.log('is-active');
-    // } else {
-    //   console.log('is-not-active');
-    // }
+  for (let i = 0;i < buttons.length;i++) {
+    if (buttons[i].classList.contains('is-active')) {
+      buttons[i].classList.remove('is-active');
+    }
   }
+  let target = document.getElementsByClassName('er-toolbar__button--' + tool);
+  target[0].classList.add('is-active');
+  console.log(target);
+  console.log(tool);
 }
 
 // format select

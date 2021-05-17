@@ -108,3 +108,8 @@ canvas {
 .er-toolbar__button--select::before {
   content: '\ea03';
 }
+
+.er-toolbar__button.is-active {
+  background: #333;
+  color: #fff;
+}

@@ -1,5 +1,6 @@
 // colors
 $color-border: #ddd;
+$color-active: #333;
 
 html, body {
   margin: 0;
@@ -117,6 +118,10 @@ canvas {
       &::before {
         content: '\ea03';
       }
+    }
+    &.is-active {
+      background: $color-active;
+      color: #fff;
     }
   }
 }
