@@ -529,18 +529,21 @@ function draw() {
   }
 }
 
-// functions for toolbar
-function changeActiveTool(tool) {
-  let buttons = document.getElementsByClassName('er-toolbar__button');
+//
+function handleActive(className, target) {
+  let buttons = document.getElementsByClassName(className);
   for (let i = 0;i < buttons.length;i++) {
     if (buttons[i].classList.contains('is-active')) {
       buttons[i].classList.remove('is-active');
     }
   }
-  let target = document.getElementsByClassName('er-toolbar__button--' + tool);
-  target[0].classList.add('is-active');
-  console.log(target);
-  console.log(tool);
+  let button = document.getElementsByClassName(className + '--' + target);
+  button[0].classList.add('is-active');
+}
+
+// functions for toolbar
+function changeActiveTool(tool) {
+  handleActive('er-toolbar__button', tool);
 }
 
 // format select
