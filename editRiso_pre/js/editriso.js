@@ -213,6 +213,10 @@ function setup() {
   inkStrokeSelector.option('transparent');
   inkStrokeSelector.changed(selectInkStroke);
 
+  divPresentColorSelector = createDiv().id('present-color-selector').class('er-present-color-selector');
+  generateColorSelector('generalFill', 'present-color-selector');
+  generateColorSelector('generalStroke', 'present-color-selector');
+
   // default stroke weight
   strokeWeightVal = 1;
 
@@ -646,6 +650,15 @@ function updateSlotSelect() {
         }
       }
     }
+  }
+}
+
+// generate color selector
+function generateColorSelector(id, parent) {
+  divColorSelector = createDiv().id(id).class('er-color-selector').parent(parent);
+  colorList = createElement('ul').id('ul-' + id).parent(id);
+  for (let ink in inkslot) {
+    colorListItem = createElement('li', inkslot[ink]).id('li-' + id + '-' + ink).parent('ul-' + id);
   }
 }
 
