@@ -214,8 +214,8 @@ function setup() {
   inkStrokeSelector.changed(selectInkStroke);
 
   divPresentColorSelector = createDiv().id('present-color-selector').class('er-present-color-selector');
-  generateColorSelector('generalFill', 'present-color-selector');
-  generateColorSelector('generalStroke', 'present-color-selector');
+  generateColorSelector('generalFill', 'present-color-selector', 'targetInkFill');
+  generateColorSelector('generalStroke', 'present-color-selector', 'targetInkStroke');
 
   // default stroke weight
   strokeWeightVal = 1;
@@ -654,11 +654,21 @@ function updateSlotSelect() {
 }
 
 // generate color selector
-function generateColorSelector(id, parent) {
+function generateColorSelector(id, parent, target) {
   divColorSelector = createDiv().id(id).class('er-color-selector').parent(parent);
   colorList = createElement('ul').id('ul-' + id).parent(id);
   for (let ink in inkslot) {
     colorListItem = createElement('li', inkslot[ink]).id('li-' + id + '-' + ink).parent('ul-' + id);
+    colorListItem.mousePressed(function() {
+      switch(target) {
+        case 'targetInkFill':
+          targetInkFill = ink;
+          break;
+        case 'targetInkStroke':
+          targetInkStroke = ink;
+          break;
+      }
+    });
   }
 }
 
