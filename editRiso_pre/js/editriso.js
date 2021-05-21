@@ -594,36 +594,10 @@ function selectInkslotD() {
   refleshInkSetting('D');
 }
 function refleshInkSetting(slot) {
-  let preInkFill = targetInkFill;
-  let preInkStroke = targetInkStroke;
-  console.log(inkslot);
-  let inkNum;
-  fillOptions = document.getElementById('inkFillSelector').options;
-  strokeOptions = document.getElementById('inkStrokeSelector').options;
-  switch (slot) {
-    case 'A':
-      inkNum = 0;
-      break;
-    case 'B':
-      inkNum = 1;
-      break;
-    case 'C':
-      inkNum = 2;
-      break;
-    case 'D':
-      inkNum = 3;
-      break;
-  }
-  console.log(inkNum);
-  console.log(fillOptions[inkNum]);
-  fillOptions[inkNum].value = slot;
-  fillOptions[inkNum].innerHTML = inkslot[slot];
-  strokeOptions[inkNum].value = slot;
-  strokeOptions[inkNum].innerHTML = inkslot[slot];
-  let formFill = inkFillSelector.value();
-  let formStroke = inkStrokeSelector.value();
-  targetInkFill = preInkFill;
-  targetInkStroke = preInkStroke;
+  let targetOptionFill = document.getElementById('li-generalFill-' + slot);
+  let targetOptionStroke = document.getElementById('li-generalStroke-' + slot);
+  targetOptionFill.innerHTML = inkslot[slot]
+  targetOptionStroke.innerHTML = inkslot[slot];
   updateSlotSelect();
 }
 
@@ -654,11 +628,22 @@ function updateSlotSelect() {
 }
 
 // generate color selector
+// for fill and stroke
+// 全slotのチップを常に表示する
 function generateColorSelector(id, parent, target) {
   divColorSelector = createDiv().id(id).class('er-color-selector').parent(parent);
-  colorList = createElement('ul').id('ul-' + id).parent(id);
+  colorList = createElement('ul').id('ul-' + id).class('er-color-selector__list').parent(id);
   for (let ink in inkslot) {
-    colorListItem = createElement('li', inkslot[ink]).id('li-' + id + '-' + ink).parent('ul-' + id);
+    let bgValue;
+    console.log(inkslot[ink]);
+    // 特定の文字が特定のオブジェクトにあるか探す方法しらべる
+    for (let color in RISOCOLORS) {
+      if (RISOCOLORS[color].name == inkslot[ink]) {
+        bgValue = 'rgba(' + RISOCOLORS[color].color[0] + ', ' + RISOCOLORS[color].color[1] + ', ' + RISOCOLORS[color].color[2] + ', 1)';
+      }
+    }
+    console.log(bgValue);
+    colorListItem = createElement('li', inkslot[ink]).id('li-' + id + '-' + ink).addClass('er-color-selector__list-item').style('background', bgValue).parent('ul-' + id);
     colorListItem.mousePressed(function() {
       switch(target) {
         case 'targetInkFill':
