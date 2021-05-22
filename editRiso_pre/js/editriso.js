@@ -11,7 +11,8 @@ let inkslot = {
   A: 'BLUE',
   B: 'RED',
   C: 'YELLOW',
-  D: 'BLACK'
+  D: 'BLACK',
+  // E: 'TRANSPARENT'
 }
 let colors = []; //
 
@@ -213,7 +214,7 @@ function setup() {
   inkStrokeSelector.option('transparent');
   inkStrokeSelector.changed(selectInkStroke);
 
-  divPresentColorSelector = createDiv().id('present-color-selector').class('er-present-color-selector');
+  divPresentColorSelector = createDiv().id('present-color-selector').class('er-color-selector');
   generateColorSelector('generalFill', 'present-color-selector', 'targetInkFill');
   generateColorSelector('generalStroke', 'present-color-selector', 'targetInkStroke');
 
@@ -596,8 +597,16 @@ function selectInkslotD() {
 function refleshInkSetting(slot) {
   let targetOptionFill = document.getElementById('li-generalFill-' + slot);
   let targetOptionStroke = document.getElementById('li-generalStroke-' + slot);
-  targetOptionFill.innerHTML = inkslot[slot]
+  let bgValue;
+  for (let color in RISOCOLORS) {
+    if (RISOCOLORS[color].name == inkslot[slot]) {
+      bgValue = 'rgba(' + RISOCOLORS[color].color[0] + ', ' + RISOCOLORS[color].color[1] + ', ' + RISOCOLORS[color].color[2] + ', 1)';
+    }
+  }
+  targetOptionFill.innerHTML = inkslot[slot];
+  targetOptionFill.style.background = bgValue;
   targetOptionStroke.innerHTML = inkslot[slot];
+  targetOptionStroke.style.background = bgValue;
   updateSlotSelect();
 }
 
@@ -636,14 +645,13 @@ function generateColorSelector(id, parent, target) {
   for (let ink in inkslot) {
     let bgValue;
     console.log(inkslot[ink]);
-    // 特定の文字が特定のオブジェクトにあるか探す方法しらべる
     for (let color in RISOCOLORS) {
       if (RISOCOLORS[color].name == inkslot[ink]) {
         bgValue = 'rgba(' + RISOCOLORS[color].color[0] + ', ' + RISOCOLORS[color].color[1] + ', ' + RISOCOLORS[color].color[2] + ', 1)';
       }
     }
     console.log(bgValue);
-    colorListItem = createElement('li', inkslot[ink]).id('li-' + id + '-' + ink).addClass('er-color-selector__list-item').style('background', bgValue).parent('ul-' + id);
+    colorListItem = createElement('li', inkslot[ink]).id('li-' + id + '-' + ink).addClass('er-color-selector__list-item').addClass('er-color-selector__list-item--' + target + '-' + ink).style('background', bgValue).parent('ul-' + id);
     colorListItem.mousePressed(function() {
       switch(target) {
         case 'targetInkFill':
@@ -653,6 +661,7 @@ function generateColorSelector(id, parent, target) {
           targetInkStroke = ink;
           break;
       }
+      handleActive('er-color-selector__list-item', target + '-' + ink);
     });
   }
 }

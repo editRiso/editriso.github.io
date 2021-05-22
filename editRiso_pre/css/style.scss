@@ -125,3 +125,11 @@ canvas {
     }
   }
 }
+.er-color-selector {
+  &__list-item {
+    cursor: pointer;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+  }
+}

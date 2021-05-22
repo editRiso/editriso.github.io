@@ -113,3 +113,10 @@ canvas {
   background: #333;
   color: #fff;
 }
+
+.er-color-selector__list-item {
+  cursor: pointer;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+}
