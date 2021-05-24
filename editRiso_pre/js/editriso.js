@@ -122,7 +122,6 @@ let tools = [
   'select'
 ];
 let toolBar = true;
-
 let previewCut = true;
 
 function preload() {
@@ -153,6 +152,19 @@ function setup() {
   // preparing riso objects
   for (let slot in inkslot) {
     colors[inkslot[slot]] = new Riso(inkslot[slot]);
+  }
+
+  // tool bar
+  divToolbar = createDiv().id('toolbar').class('er-toolbar');
+  titleTools = createElement('h2', 'Tool mode').class('er-toolbar-title').parent('toolbar');
+  divToolbarButtonWrapper = createDiv().id('toolbar__tool-button-wrapper').class('er-toolbar__tool-button-wrapper').parent('toolbar');
+  for (let tool in tools) {
+    toolbarButton = createDiv(tools[tool]).addClass('er-toolbar__button').addClass('er-toolbar__button--' + tools[tool]);
+    toolbarButton.parent('toolbar__tool-button-wrapper');
+    toolbarButton.mousePressed(function() {
+      changeActiveTool(tools[tool]);
+      changeToolMode(tools[tool]);
+    });
   }
 
   // ink setting
@@ -214,9 +226,13 @@ function setup() {
   inkStrokeSelector.option('transparent');
   inkStrokeSelector.changed(selectInkStroke);
 
-  divPresentColorSelector = createDiv().id('present-color-selector').class('er-color-selector');
-  generateColorSelector('generalFill', 'present-color-selector', 'targetInkFill');
-  generateColorSelector('generalStroke', 'present-color-selector', 'targetInkStroke');
+  titlePresentColorSelector = createElement('h2', 'Color').id('present-color-title--fill').class('er-toolbar-title').parent('toolbar');
+  divPresentColorSelectorFill = createDiv().id('present-color-selector--fill').class('er-color-selector').parent('toolbar');
+  titlePresentColorSelectorFill = createElement('h3', 'Fill:').class('er-toolbar-title').addClass('er-toolbar-title--small').parent('present-color-selector--fill');
+  generateColorSelector('presentFill', 'present-color-selector--fill', 'targetInkFill');
+  divPresentColorSelectorStroke = createDiv().id('present-color-selector--stroke').class('er-color-selector').parent('toolbar');
+  titlePresentColorSelectorStroke = createElement('h3', 'Stroke:').class('er-toolbar-title').addClass('er-toolbar-title--small').parent('present-color-selector--stroke');
+  generateColorSelector('presentStroke', 'present-color-selector--stroke', 'targetInkStroke');
 
   // default stroke weight
   strokeWeightVal = 1;
@@ -288,18 +304,6 @@ function setup() {
   textInput = createInput('Type something');
   textInput.position(800 + bleed, 20);
   textInput.input(updateText);
-
-  // tool bar
-  divToolbar = createDiv().id('toolbar').class('er-toolbar');
-  divToolbarButtonWrapper = createDiv().id('toolbar__button-wrapper').class('er-toolbar__button-wrapper').parent('toolbar');
-  for (let tool in tools) {
-    toolbarButton = createDiv(tools[tool]).addClass('er-toolbar__button').addClass('er-toolbar__button--' + tools[tool]);
-    toolbarButton.parent('toolbar__button-wrapper');
-    toolbarButton.mousePressed(function() {
-      changeActiveTool(tools[tool]);
-      changeToolMode(tools[tool]);
-    });
-  }
 }
 
 function draw() {
@@ -640,7 +644,7 @@ function updateSlotSelect() {
 // for fill and stroke
 // 全slotのチップを常に表示する
 function generateColorSelector(id, parent, target) {
-  divColorSelector = createDiv().id(id).class('er-color-selector').parent(parent);
+  divColorSelector = createDiv().id(id).parent(parent);
   colorList = createElement('ul').id('ul-' + id).class('er-color-selector__list').parent(id);
   for (let ink in inkslot) {
     let bgValue;

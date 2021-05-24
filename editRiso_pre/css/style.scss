@@ -26,6 +26,14 @@ canvas {
        url(icon-fonts/MaterialIcons-Regular.woff) format('woff'),
        url(icon-fonts/MaterialIcons-Regular.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Mono'),
+       local('RobotoMono-VariableFont_wght'),
+       url(fonts/RobotoMono-VariableFont_wght.ttf) format('truetype');
+}
 
 .material-icons {
   font-family: 'Material Icons';
@@ -63,23 +71,31 @@ canvas {
   box-sizing: border-box;
   width: 124px;
   // box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  &__button-wrapper {
-    border-right: 1px solid $color-border;
-    border-bottom: 1px solid $color-border;
+  &__tool-button-wrapper {
+    border: 1px solid $color-border;
+    border-bottom: none;
     font-size: 0;
+    box-sizing: border-box;
+    margin-bottom: 10px;
   }
   &__button {
+    font-family: 'Roboto Mono';
     display: inline-block;
     width: 50px;
     height: 50px;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
-    border-left: 1px solid $color-border;
-    border-top: 1px solid $color-border;
+    border-right: 1px solid $color-border;
+    border-bottom: 1px solid $color-border;
     position: relative;
     font-size: 10px;
     text-align: center;
     overflow: hidden;
     cursor: pointer;
+    &:nth-child(2n) {
+      border-right: none;
+    }
     &::before {
       position: absolute;
       display: block;
@@ -125,11 +141,49 @@ canvas {
     }
   }
 }
+.er-toolbar-title {
+  font-family: 'Roboto Mono';
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 0 0.5em 0;
+  &--small {
+    font-size: 12px;
+    font-weight: normal;
+  }
+}
 .er-color-selector {
+  margin: 0;
+  padding: 5px;
+  border: 1px solid $color-border;
+  &__list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
   &__list-item {
     cursor: pointer;
     display: inline-block;
-    width: 40px;
-    height: 40px;
+    position: relative;
+    width: calc(33.3%);
+    height: auto;
+    margin: 0;
+    padding: 0;
+    padding-top: 33.3%;
+    font-size: 0px;
+    line-height: 1;
+    vertical-align: bottom;
+    &.is-active {
+      &::after {
+        display: block;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        font-family: 'IcoMoon-Free';
+        font-size: 20px;
+        line-height: 1;
+        content: '\ea10';
+        color: #fff;
+      }
+    }
   }
 }
