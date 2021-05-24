@@ -599,8 +599,8 @@ function selectInkslotD() {
   refleshInkSetting('D');
 }
 function refleshInkSetting(slot) {
-  let targetOptionFill = document.getElementById('li-generalFill-' + slot);
-  let targetOptionStroke = document.getElementById('li-generalStroke-' + slot);
+  let targetOptionFill = document.getElementById('li-presentFill-' + slot);
+  let targetOptionStroke = document.getElementById('li-presentStroke-' + slot);
   let bgValue;
   for (let color in RISOCOLORS) {
     if (RISOCOLORS[color].name == inkslot[slot]) {
