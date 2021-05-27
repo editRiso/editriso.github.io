@@ -160,11 +160,13 @@ function setup() {
   divToolbarButtonWrapper = createDiv().id('toolbar__tool-button-wrapper').class('er-toolbar__tool-button-wrapper').parent('toolbar');
   for (let tool in tools) {
     toolbarButton = createDiv(tools[tool]).addClass('er-toolbar__button').addClass('er-toolbar__button--' + tools[tool]);
+    if (tools[tool] == toolMode) {
+      toolbarButton.addClass('is-active');
+    }
     toolbarButton.parent('toolbar__tool-button-wrapper');
-    toolbarButton.mousePressed(function() {
-      changeActiveTool(tools[tool]);
-      changeToolMode(tools[tool]);
-    });
+    console.log(toolbarButton);
+    toolbarButton.elt.addEventListener('click', function(){changeToolMode(tools[tool])});
+    toolbarButton.elt.addEventListener('click', function(){handleActive('toolbar__tool-button-wrapper', this)});
   }
 
   // ink setting
@@ -194,37 +196,6 @@ function setup() {
   // default ink number
   targetInkFill = 'A';
   targetInkStroke = 'B';
-
-  // fill, stroke selector
-  inkFillSelector = createSelect().id('inkFillSelector');
-  inkFillSelector.position(200 + bleed, height - 20);
-  for (let ink in inkslot) {
-    inkFillSelector.option(inkslot[ink], ink);
-  }
-  inkFillSelector.option('transparent');
-  inkFillSelector.changed(selectInkFill);
-  inkStrokeSelector = createSelect().id('inkStrokeSelector');
-  inkStrokeSelector.position(350 + bleed, height - 20);
-  for (let ink in inkslot) {
-    inkStrokeSelector.option(inkslot[ink], ink);
-  }
-  fillOptions = document.getElementById('inkFillSelector').options;
-  strokeOptions = document.getElementById('inkStrokeSelector').options;
-  for (option in fillOptions) {
-    if (fillOptions[option].innerHTML == inkslot[targetInkFill]) {
-      console.log(fillOptions[option].innerHTML + ' is fillcolor');
-      console.log(fillOptions[option].selected);
-    }
-  }
-  for (option in strokeOptions) {
-    if (strokeOptions[option].innerHTML == inkslot[targetInkStroke]) {
-      console.log(strokeOptions[option].innerHTML + ' is strokecolor');
-      console.log(strokeOptions[option].selected);
-      strokeOptions[option].selected = true;
-    }
-  }
-  inkStrokeSelector.option('transparent');
-  inkStrokeSelector.changed(selectInkStroke);
 
   titlePresentColorSelector = createElement('h2', 'Color').id('present-color-title--fill').class('er-toolbar-title').parent('toolbar');
   divPresentColorSelectorFill = createDiv().id('present-color-selector--fill').class('er-color-selector').parent('toolbar');
@@ -539,20 +510,15 @@ function draw() {
 }
 
 //
-function handleActive(className, target) {
-  let buttons = document.getElementsByClassName(className);
+function handleActive(id, target) {
+  let buttons = document.getElementById(id).children;
+  console.log(buttons);
   for (let i = 0;i < buttons.length;i++) {
     if (buttons[i].classList.contains('is-active')) {
       buttons[i].classList.remove('is-active');
     }
   }
-  let button = document.getElementsByClassName(className + '--' + target);
-  button[0].classList.add('is-active');
-}
-
-// functions for toolbar
-function changeActiveTool(tool) {
-  handleActive('er-toolbar__button', tool);
+  target.classList.add('is-active');
 }
 
 // format select
@@ -656,7 +622,20 @@ function generateColorSelector(id, parent, target) {
     }
     console.log(bgValue);
     colorListItem = createElement('li', inkslot[ink]).id('li-' + id + '-' + ink).addClass('er-color-selector__list-item').addClass('er-color-selector__list-item--' + target + '-' + ink).style('background', bgValue).parent('ul-' + id);
-    colorListItem.mousePressed(function() {
+    switch(target) {
+      case 'targetInkFill':
+        if (ink == targetInkFill) {
+          colorListItem.addClass('is-active');
+        }
+        break;
+      case 'targetInkStroke':
+        if (ink == targetInkStroke) {
+          colorListItem.addClass('is-active');
+        }
+        break;
+    }
+    colorListItem.elt.addEventListener('click', function() {handleActive('ul-' + id, this)});
+    colorListItem.elt.addEventListener('click', function() {
       switch(target) {
         case 'targetInkFill':
           targetInkFill = ink;
@@ -665,32 +644,7 @@ function generateColorSelector(id, parent, target) {
           targetInkStroke = ink;
           break;
       }
-      handleActive('er-color-selector__list-item', target + '-' + ink);
     });
-  }
-}
-
-// ink select
-function selectInkFill() {
-  let form = inkFillSelector.value();
-  console.log(form);
-  if (form == 'transparent') {
-    print('fill: transparent');
-    targetInkFill = 'transparent';
-  } else {
-    print('fill: ' + form);
-    targetInkFill = form;
-  }
-}
-
-function selectInkStroke() {
-  let form = inkStrokeSelector.value();
-  if (form == 'transparent') {
-    print('stroke: transparent');
-    targetInkStroke = 'transparent';
-  } else {
-    print('stroke: ' + form);
-    targetInkStroke = form;
   }
 }
 
@@ -718,9 +672,8 @@ function changeToolMode(tool) {
       print('is closed');
     }
   }
-  print(objectId);
   toolMode = tool;
-  print('tool mode just changed to: ' + toolMode);
+  print('tool mode: ' + toolMode);
   tmpPolygon.id = null;
   tmpPolygon.vertexes = [];
   if (toolMode == 'select') {
@@ -1547,7 +1500,7 @@ function drawTrimmarks(sizeWidth, sizeHeight, bleed) {
     colors[inkslot[slot]].textAlign(LEFT, BASELINE);
     colors[inkslot[slot]].textFont(ciFont);
     colors[inkslot[slot]].textSize(48);
-    colors[inkslot[slot]].text('editRiso.js', -sizeWidth / 2 + bleed, -sizeHeight / 2 - bleed * 2);
+    colors[inkslot[slot]].text('EditRiso', -sizeWidth / 2 + bleed, -sizeHeight / 2 - bleed * 2);
     colors[inkslot[slot]].textAlign(RIGHT, BASELINE);
     colors[inkslot[slot]].textFont(monoFont);
     colors[inkslot[slot]].textSize(bleed / 2);
