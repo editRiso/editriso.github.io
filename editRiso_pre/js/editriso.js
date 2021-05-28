@@ -11,8 +11,7 @@ let inkslot = {
   A: 'BLUE',
   B: 'RED',
   C: 'YELLOW',
-  D: 'BLACK',
-  // E: 'TRANSPARENT'
+  D: 'BLACK'
 }
 let colors = []; //
 
@@ -170,7 +169,11 @@ function setup() {
   }
 
   // ink setting
-  divInkSetting = createDiv().id('inksetting').class('er-inksetting');
+  titleInkSetting = createElement('h2', 'RISO inks').class('er-toolbar-title').parent('toolbar');
+  divInkSetting = createDiv().id('inksetting').class('er-inksetting').parent('toolbar');
+  for (let ink in inkslot) {
+    inkslotSelect = createDiv().id('inkslot-select-' + ink).class('er-inksetting__ink-display').parent('inksetting');
+  }
   inkslotSelectA = createSelect().id('inkslotselectA').class('er-inkslotselect').parent(divInkSetting);
   for (i in risoColors) {
     inkslotSelectA.option(risoColors[i]);
