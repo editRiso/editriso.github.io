@@ -171,8 +171,38 @@ function setup() {
   // ink setting
   titleInkSetting = createElement('h2', 'RISO inks').class('er-toolbar-title').parent('toolbar');
   divInkSetting = createDiv().id('inksetting').class('er-inksetting').parent('toolbar');
-  for (let ink in inkslot) {
-    inkslotSelect = createDiv().id('inkslot-select-' + ink).class('er-inksetting__ink-display').parent('inksetting');
+  for (let slot in inkslot) {
+    let bgValueDisplay;
+    for (let color in RISOCOLORS) {
+      if (RISOCOLORS[color].name == inkslot[slot]) {
+        bgValueDisplay = 'rgba(' + RISOCOLORS[color].color[0] + ', ' + RISOCOLORS[color].color[1] + ', ' + RISOCOLORS[color].color[2] + ', 1)';
+      }
+    }
+    inkDisplay = createDiv().id('ink-display-' + slot).class('er-inksetting__ink-display').style('background', bgValueDisplay).parent('inksetting');
+    inkDisplayLabel = createElement('span', slot).class('er-inksetting__ink-label').parent('ink-display-' + slot);
+    inkDisplayName = createElement('span', inkslot[slot]).class('er-inksetting__ink-name').parent('ink-display-' + slot);
+    inkSelect = createElement('div').id('ink-select-' + slot).class('er-inksetting__ink-select').parent('ink-display-' + slot);
+    inkSelectName = createElement('h4', inkslot[slot]).id('ink-name-' + slot).class('er-inksetting__ink-select-name').parent('ink-select-' + slot);
+    inkSelectList = createElement('ul').id('ink-select-list-' + slot).class('er-inksetting__ink-select-list').parent('ink-select-' + slot);
+    for (let color in RISOCOLORS) {
+      let bgValueSelectItem;
+      bgValueSelectItem = 'rgba(' + RISOCOLORS[color].color[0] + ', ' + RISOCOLORS[color].color[1] + ', ' + RISOCOLORS[color].color[2] + ', 1)';
+      inkSelectItem = createElement('li', RISOCOLORS[color].name).id('ink-select-item-' + slot + '-' + RISOCOLORS[color].name).class('er-inksetting__ink-select-item').style('background', bgValueSelectItem).parent('ink-select-list-' + slot);
+      if (RISOCOLORS[color].name == inkslot[slot]) {
+        inkSelectItem.addClass('is-active');
+      }
+    }
+    inkDisplay.elt.addEventListener('click', function() {
+      let targets = document.getElementsByClassName('er-inksetting__ink-select');
+      for (i = 0;i < targets.length;i++) {
+        if (targets[i].classList.contains('is-shown')) {
+          targets[i].classList.remove('is-shown');
+        }
+      }
+      let target = document.getElementById('ink-select-' + slot);
+      console.log(target);
+      target.classList.add('is-shown');
+    });
   }
   inkslotSelectA = createSelect().id('inkslotselectA').class('er-inkslotselect').parent(divInkSetting);
   for (i in risoColors) {

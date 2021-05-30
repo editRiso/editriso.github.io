@@ -142,6 +142,89 @@ canvas {
   font-weight: normal;
 }
 
+.er-inksetting__ink-display {
+  width: 100%;
+  height: 32px;
+  position: relative;
+  font-family: 'Roboto Mono';
+  font-weight: bold;
+}
+
+.er-inksetting__ink-label {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 100%;
+  border: 1px solid #ddd;
+  margin: 0.5em 0.25em;
+}
+
+.er-inksetting__ink-name {
+  display: inline-block;
+  font-size: 10px;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+.er-inksetting__ink-select {
+  display: none;
+  position: absolute;
+  width: 320px;
+  top: 0;
+  left: 120px;
+  padding: 10px;
+  margin: 0;
+  z-index: 10;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+.er-inksetting__ink-select.is-shown {
+  display: block;
+}
+
+.er-inksetting__ink-select-name {
+  font-size: 12px;
+  font-weight: normal;
+  margin: 0 0 10px 0;
+}
+
+.er-inksetting__ink-select-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.er-inksetting__ink-select-item {
+  display: inline-block;
+  box-sizing: border-box;
+  position: relative;
+  width: 10%;
+  height: auto;
+  padding: 0;
+  padding-top: 10%;
+  margin: 0;
+  font-size: 0;
+  vertical-align: bottom;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.er-inksetting__ink-select-item.is-active::after {
+  display: block;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  font-family: 'IcoMoon-Free';
+  font-size: 20px;
+  line-height: 1;
+  content: '\ea10';
+  color: #fff;
+}
+
 .er-color-selector {
   margin: 0;
   padding: 5px;
