@@ -191,6 +191,11 @@ function setup() {
       if (RISOCOLORS[color].name == inkslot[slot]) {
         inkSelectItem.addClass('is-active');
       }
+      inkSelectItem.elt.addEventListener('click', function() {
+        selectInkslot(slot, RISOCOLORS[color].name);
+        refleshInkSetting(slot);
+        handleActive('ink-select-list-' + slot, this);
+      });
     }
     inkDisplay.elt.addEventListener('click', function() {
       let targets = document.getElementsByClassName('er-inksetting__ink-select');
@@ -204,27 +209,7 @@ function setup() {
       target.classList.add('is-shown');
     });
   }
-  inkslotSelectA = createSelect().id('inkslotselectA').class('er-inkslotselect').parent(divInkSetting);
-  for (i in risoColors) {
-    inkslotSelectA.option(risoColors[i]);
-  }
-  inkslotSelectB = createSelect().id('inkslotselectB').class('er-inkslotselect').parent(divInkSetting);
-  for (i in risoColors) {
-    inkslotSelectB.option(risoColors[i]);
-  }
-  inkslotSelectC = createSelect().id('inkslotselectC').class('er-inkslotselect').parent(divInkSetting);
-  for (i in risoColors) {
-    inkslotSelectC.option(risoColors[i]);
-  }
-  inkslotSelectD = createSelect().id('inkslotselectD').class('er-inkslotselect').parent(divInkSetting);
-  for (i in risoColors) {
-    inkslotSelectD.option(risoColors[i]);
-  }
   updateSlotSelect();
-  inkslotSelectA.changed(selectInkslotA);
-  inkslotSelectB.changed(selectInkslotB);
-  inkslotSelectC.changed(selectInkslotC);
-  inkslotSelectD.changed(selectInkslotD);
 
   // default ink number
   targetInkFill = 'A';
@@ -572,34 +557,15 @@ function selectFormat() {
 }
 
 // ink slot select
-// ベタ書きじゃなくスマートにやりたい
-function selectInkslotA() {
-  let form = inkslotSelectA.value();
-  inkslot.A = form;
-  colors[inkslot.A] = new Riso(inkslot.A);
-  refleshInkSetting('A');
-}
-function selectInkslotB() {
-  let form = inkslotSelectB.value();
-  inkslot.B = form;
-  colors[inkslot.B] = new Riso(inkslot.B);
-  refleshInkSetting('B');
-}
-function selectInkslotC() {
-  let form = inkslotSelectC.value();
-  inkslot.C = form;
-  colors[inkslot.C] = new Riso(inkslot.C);
-  refleshInkSetting('C');
-}
-function selectInkslotD() {
-  let form = inkslotSelectD.value();
-  inkslot.D = form;
-  colors[inkslot.D] = new Riso(inkslot.D);
-  refleshInkSetting('D');
+function selectInkslot(slot, value) {
+  inkslot[slot] = value;
+  colors[inkslot[slot]] = new Riso(inkslot[slot]);
 }
 function refleshInkSetting(slot) {
   let targetOptionFill = document.getElementById('li-presentFill-' + slot);
   let targetOptionStroke = document.getElementById('li-presentStroke-' + slot);
+  let targetInkDisplay = document.getElementById('ink-display-' + slot);
+  let targetInkName = document.getElementById('ink-name-' + slot);
   let bgValue;
   for (let color in RISOCOLORS) {
     if (RISOCOLORS[color].name == inkslot[slot]) {
@@ -610,30 +576,17 @@ function refleshInkSetting(slot) {
   targetOptionFill.style.background = bgValue;
   targetOptionStroke.innerHTML = inkslot[slot];
   targetOptionStroke.style.background = bgValue;
+  targetInkDisplay.children[1].innerHTML = inkslot[slot];
+  targetInkDisplay.style.background = bgValue;
+  targetInkName.innerHTML = inkslot[slot];
   updateSlotSelect();
 }
-
 function updateSlotSelect() {
-  inkslotOptions = [];
-  for (slot in inkslot) {
-    inkslotOptions.push({
-      'slot': slot,
-      'options': document.getElementById('inkslotselect' + slot).options
-    });
-  }
-  for (options in inkslotOptions) {
-    let slotSelect = 'inkslotselect' + inkslotOptions[options].slot;
-    let slotSelectOptions = inkslotOptions[options].options;
-    console.log(inkslotOptions[options].slot, slotSelectOptions);
-    for (option in slotSelectOptions) {
-      if (slotSelectOptions[option].value == inkslot[inkslotOptions[options].slot]) {
-        slotSelectOptions[option].selected = true;
-      }
-      slotSelectOptions[option].disabled = false;
-      for (slot in inkslot) {
-        if (slotSelectOptions[option].value == inkslot[slot]) {
-          slotSelectOptions[option].disabled = true;
-        }
+  for (let slot in inkslot) {
+    for (let color in RISOCOLORS) {
+      if (inkslot[slot] == RISOCOLORS[color].name) {
+        let target = document.getElementById('ink-select-item-' + slot + '-' + RISOCOLORS[color].name);
+        target.classList.add('is-disabled');
       }
     }
   }
