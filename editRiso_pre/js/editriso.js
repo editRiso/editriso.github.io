@@ -181,8 +181,17 @@ function setup() {
     inkDisplay = createDiv().id('ink-display-' + slot).class('er-inksetting__ink-display').style('background', bgValueDisplay).parent('inksetting');
     inkDisplayLabel = createElement('span', slot).class('er-inksetting__ink-label').parent('ink-display-' + slot);
     inkDisplayName = createElement('span', inkslot[slot]).class('er-inksetting__ink-name').parent('ink-display-' + slot);
+    inkSwitchButton = createDiv().class('er-inksetting__ink-switch-button').parent('ink-display-' + slot).elt.addEventListener('click', function() {
+      let target = document.getElementById('ink-select-' + slot);
+      target.classList.add('is-shown');
+    });;
     inkSelect = createElement('div').id('ink-select-' + slot).class('er-inksetting__ink-select').parent('ink-display-' + slot);
     inkSelectName = createElement('h4', inkslot[slot]).id('ink-name-' + slot).class('er-inksetting__ink-select-name').parent('ink-select-' + slot);
+    inkSelectClose = createDiv().class('er-inksetting__close-button').parent('ink-select-' + slot).elt.addEventListener('click', function() {
+      let target = document.getElementById('ink-select-' + slot);
+      console.log(target.classList);
+      target.classList.remove('is-shown');
+    });
     inkSelectList = createElement('ul').id('ink-select-list-' + slot).class('er-inksetting__ink-select-list').parent('ink-select-' + slot);
     for (let color in RISOCOLORS) {
       let bgValueSelectItem;
@@ -192,22 +201,14 @@ function setup() {
         inkSelectItem.addClass('is-active');
       }
       inkSelectItem.elt.addEventListener('click', function() {
-        selectInkslot(slot, RISOCOLORS[color].name);
-        refleshInkSetting(slot);
-        handleActive('ink-select-list-' + slot, this);
+        if(this.classList.contains('is-disabled') == false) {
+          console.log('not disabled!');
+          selectInkslot(slot, RISOCOLORS[color].name);
+          refleshInkSetting(slot);
+          handleActive('ink-select-list-' + slot, this);
+        }
       });
     }
-    inkDisplay.elt.addEventListener('click', function() {
-      let targets = document.getElementsByClassName('er-inksetting__ink-select');
-      for (i = 0;i < targets.length;i++) {
-        if (targets[i].classList.contains('is-shown')) {
-          targets[i].classList.remove('is-shown');
-        }
-      }
-      let target = document.getElementById('ink-select-' + slot);
-      console.log(target);
-      target.classList.add('is-shown');
-    });
   }
   updateSlotSelect();
 
@@ -583,12 +584,16 @@ function refleshInkSetting(slot) {
 }
 function updateSlotSelect() {
   for (let slot in inkslot) {
-    for (let color in RISOCOLORS) {
-      if (inkslot[slot] == RISOCOLORS[color].name) {
-        let target = document.getElementById('ink-select-item-' + slot + '-' + RISOCOLORS[color].name);
-        target.classList.add('is-disabled');
+    let targetItems = document.getElementById('ink-select-list-' + slot).children;
+      for (let i = 0;i < targetItems.length;i++) {
+        targetItems[i].classList.remove('is-disabled');
+        for (let slot in inkslot) {
+          targetItems[i].classList.remove('is-ink-' + slot);
+          if (targetItems[i].innerHTML == inkslot[slot]) {
+            targetItems[i].classList.add('is-disabled', 'is-ink-' + slot);
+          }
+        }
       }
-    }
   }
 }
 

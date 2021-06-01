@@ -151,22 +151,10 @@ canvas {
   height: 32px;
   position: relative;
   font-family: 'Roboto Mono';
-  font-weight: bold;
+  font-weight: normal;
   border: 1px solid #ddd;
   border-bottom: none;
   vertical-align: middle;
-  cursor: pointer;
-}
-
-.er-inksetting__ink-display::after {
-  font-family: 'IcoMoon-Free';
-  font-size: 12px;
-  content: '\ea2e';
-  position: absolute;
-  right: 5px;
-  top: 10px;
-  color: #fff;
-  text-shadow: 1px 1px 0 #000;
 }
 
 .er-inksetting__ink-label {
@@ -175,10 +163,11 @@ canvas {
   height: 16px;
   background: #fff;
   font-size: 12px;
+  font-weight: bold;
   text-align: center;
   border-radius: 100%;
   border: 1px solid #ddd;
-  margin: 0.55em 0.25em;
+  margin: 0.55em 0.3em;
 }
 
 .er-inksetting__ink-name {
@@ -193,6 +182,49 @@ canvas {
   white-space: nowrap;
 }
 
+.er-inksetting__ink-switch-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.er-inksetting__ink-switch-button::after {
+  font-family: 'IcoMoon-Free';
+  font-size: 12px;
+  content: '\ea2e';
+  position: absolute;
+  right: 5px;
+  top: 10px;
+  color: #fff;
+  text-shadow: 1px 1px 0 #000;
+}
+
+.er-inksetting__close-button {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.er-inksetting__close-button:hover::after {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.er-inksetting__close-button::after {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-family: 'IcoMoon-Free';
+  font-size: 20px;
+  color: #ddd;
+  content: '\ea0d';
+}
+
 .er-inksetting__ink-select {
   display: none;
   position: absolute;
@@ -205,6 +237,7 @@ canvas {
   background: #fff;
   border: 1px solid #ddd;
   box-sizing: border-box;
+  cursor: default;
 }
 
 .er-inksetting__ink-select::before {
@@ -272,6 +305,86 @@ canvas {
   line-height: 1;
   content: '\ea10';
   color: #fff;
+}
+
+.er-inksetting__ink-select-item.is-disabled {
+  cursor: not-allowed;
+}
+
+.er-inksetting__ink-select-item.is-ink-A::after {
+  display: block;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 16px;
+  height: 16px;
+  content: 'A';
+  color: #000;
+  background: #fff;
+  font-family: 'Roboto Mono';
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 100%;
+  border: 1px solid #ddd;
+}
+
+.er-inksetting__ink-select-item.is-ink-B::after {
+  display: block;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 16px;
+  height: 16px;
+  content: 'B';
+  color: #000;
+  background: #fff;
+  font-family: 'Roboto Mono';
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 100%;
+  border: 1px solid #ddd;
+}
+
+.er-inksetting__ink-select-item.is-ink-C::after {
+  display: block;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 16px;
+  height: 16px;
+  content: 'C';
+  color: #000;
+  background: #fff;
+  font-family: 'Roboto Mono';
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 100%;
+  border: 1px solid #ddd;
+}
+
+.er-inksetting__ink-select-item.is-ink-D::after {
+  display: block;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 16px;
+  height: 16px;
+  content: 'D';
+  color: #000;
+  background: #fff;
+  font-family: 'Roboto Mono';
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 100%;
+  border: 1px solid #ddd;
 }
 
 .er-color-selector {

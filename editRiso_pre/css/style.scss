@@ -159,10 +159,40 @@ canvas {
     height: 32px;
     position: relative;
     font-family: 'Roboto Mono';
-    font-weight: bold;
+    font-weight: normal;
     border: 1px solid $color-border;
     border-bottom: none;
     vertical-align: middle;
+  }
+  &__ink-label {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 100%;
+    border: 1px solid $color-border;
+    margin: 0.55em 0.3em;
+  }
+  &__ink-name {
+    display: inline-block;
+    font-size: 10px;
+    color: #fff;
+    text-shadow: 1px 1px 0 #000;
+    max-width: 58%;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  &__ink-switch-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 32px;
+    height: 32px;
     cursor: pointer;
     &::after {
       font-family: 'IcoMoon-Free';
@@ -175,27 +205,27 @@ canvas {
       text-shadow: 1px 1px 0 #000;
     }
   }
-  &__ink-label {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    background: #fff;
-    font-size: 12px;
-    text-align: center;
-    border-radius: 100%;
-    border: 1px solid $color-border;
-    margin: 0.55em 0.25em;
-  }
-  &__ink-name {
-    display: inline-block;
-    font-size: 10px;
-    color: #fff;
-    text-shadow: 1px 1px 0 #000;
-    max-width: 58%;
-    vertical-align: middle;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+  &__close-button {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    &:hover {
+      &::after {
+        color: rgba(0, 0, 0, 0.3);
+      }
+    }
+    &::after {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      font-family: 'IcoMoon-Free';
+      font-size: 20px;
+      color: $color-border;
+      content: '\ea0d';
+    }
   }
   &__ink-select {
     display: none;
@@ -209,6 +239,7 @@ canvas {
     background: #fff;
     border: 1px solid $color-border;
     box-sizing: border-box;
+    cursor: default;
     &::before {
       content: '';
       position: absolute;
@@ -269,6 +300,89 @@ canvas {
         line-height: 1;
         content: '\ea10';
         color: #fff;
+      }
+    }
+    &.is-disabled {
+      cursor: not-allowed;
+    }
+    &.is-ink-A {
+      &::after {
+        display: block;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        width: 16px;
+        height: 16px;
+        content: 'A';
+        color: #000;
+        background: #fff;
+        font-family: 'Roboto Mono';
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 100%;
+        border: 1px solid $color-border;
+      }
+    }
+    &.is-ink-B {
+      &::after {
+        display: block;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        width: 16px;
+        height: 16px;
+        content: 'B';
+        color: #000;
+        background: #fff;
+        font-family: 'Roboto Mono';
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 100%;
+        border: 1px solid $color-border;
+      }
+    }
+    &.is-ink-C {
+      &::after {
+        display: block;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        width: 16px;
+        height: 16px;
+        content: 'C';
+        color: #000;
+        background: #fff;
+        font-family: 'Roboto Mono';
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 100%;
+        border: 1px solid $color-border;
+      }
+    }
+    &.is-ink-D {
+      &::after {
+        display: block;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        width: 16px;
+        height: 16px;
+        content: 'D';
+        color: #000;
+        background: #fff;
+        font-family: 'Roboto Mono';
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 100%;
+        border: 1px solid $color-border;
       }
     }
   }
