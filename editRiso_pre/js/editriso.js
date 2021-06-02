@@ -51,6 +51,7 @@ let selectedFormat;
 let toolMode = 'rect';
 let targetInkFillNum;
 let targetInkStrokeNum;
+let isSettingState = false;
 
 let startPoint = {};
 let tmpPx, tmpPy, tmpWidth, tmpHeight;
@@ -184,6 +185,7 @@ function setup() {
     inkSwitchButton = createDiv().class('er-inksetting__ink-switch-button').parent('ink-display-' + slot).elt.addEventListener('click', function() {
       let target = document.getElementById('ink-select-' + slot);
       target.classList.add('is-shown');
+      isSettingState = true;
     });;
     inkSelect = createElement('div').id('ink-select-' + slot).class('er-inksetting__ink-select').parent('ink-display-' + slot);
     inkSelectName = createElement('h4', inkslot[slot]).id('ink-name-' + slot).class('er-inksetting__ink-select-name').parent('ink-select-' + slot);
@@ -191,6 +193,7 @@ function setup() {
       let target = document.getElementById('ink-select-' + slot);
       console.log(target.classList);
       target.classList.remove('is-shown');
+      isSettingState = false;
     });
     inkSelectList = createElement('ul').id('ink-select-list-' + slot).class('er-inksetting__ink-select-list').parent('ink-select-' + slot);
     for (let color in RISOCOLORS) {
@@ -364,6 +367,8 @@ function draw() {
         case 'polygon':
           break;
         case 'text':
+          break;
+        default:
           break;
       }
     }
@@ -721,7 +726,6 @@ function updateText() {
 }
 
 function mousePressed() {
-
   print('tool mode: ' + toolMode);
 
   startPoint.x = mouseX;
@@ -770,7 +774,10 @@ function mouseDragged() {
 }
 
 function mouseReleased() {
-  if (mouseX > editorOutsideWidth - bleed && mouseY > editorOutsideHeight - bleed && mouseX < width - editorOutsideWidth + bleed && mouseY < height - editorOutsideHeight + bleed) {
+  if (
+    (mouseX > editorOutsideWidth - bleed && mouseY > editorOutsideHeight - bleed && mouseX < width - editorOutsideWidth + bleed && mouseY < height - editorOutsideHeight + bleed)
+    && !isSettingState
+  ) {
     if (toolMode == 'select') {
       // add object to objects
     } else if (toolMode == 'edit vertex') {
