@@ -183,7 +183,11 @@ function setup() {
     inkDisplayLabel = createElement('span', slot).class('er-inksetting__ink-label').parent('ink-display-' + slot);
     inkDisplayName = createElement('span', inkslot[slot]).class('er-inksetting__ink-name').parent('ink-display-' + slot);
     inkSwitchButton = createDiv().class('er-inksetting__ink-switch-button').parent('ink-display-' + slot).elt.addEventListener('click', function() {
+      let selects = document.getElementsByClassName('er-inksetting__ink-select');
       let target = document.getElementById('ink-select-' + slot);
+      for (i = 0;i < selects.length;i++) {
+        selects[i].classList.remove('is-shown');
+      }
       target.classList.add('is-shown');
       isSettingState = true;
     });;
