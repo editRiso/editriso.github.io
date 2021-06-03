@@ -6,14 +6,15 @@ console.log(risoColors);
 
 let inkslotOptions = [];
 let fillOptions, strokeOptions;
-let risoInks = []; // risoinks
+let risoInks = [];
 let inkslot = {
   A: 'BLUE',
   B: 'RED',
   C: 'YELLOW',
   D: 'BLACK'
 }
-let colors = []; //
+let colors = [];
+let cutouts = [];
 
 let formats = {
   a5: {
@@ -219,10 +220,9 @@ function setup() {
   }
   updateSlotSelect();
 
-  // default ink number
+  // default fill & stroke
   targetInkFill = 'A';
   targetInkStroke = 'B';
-
   titlePresentColorSelector = createElement('h2', 'Color').id('present-color-title--fill').class('er-toolbar-title').parent('toolbar');
   divPresentColorSelectorFill = createDiv().id('present-color-selector--fill').class('er-color-selector').parent('toolbar');
   titlePresentColorSelectorFill = createElement('h3', 'Fill:').class('er-toolbar-title').addClass('er-toolbar-title--small').parent('present-color-selector--fill');
@@ -230,6 +230,9 @@ function setup() {
   divPresentColorSelectorStroke = createDiv().id('present-color-selector--stroke').class('er-color-selector').parent('toolbar');
   titlePresentColorSelectorStroke = createElement('h3', 'Stroke:').class('er-toolbar-title').addClass('er-toolbar-title--small').parent('present-color-selector--stroke');
   generateColorSelector('presentStroke', 'present-color-selector--stroke', 'targetInkStroke');
+
+  // ink cutouts
+  titleInkCutout = createElement('h2', 'Ink cutouts').id('ink-cutouts-title').class('er-toolbar-title').parent('toolbar');
 
   // default stroke weight
   strokeWeightVal = 1;
@@ -511,11 +514,15 @@ function draw() {
   // text(icons.download, width - 80, height - 85)
   pop();
 
-  //  cutouts
-  // colors[0].cutout(colors[1]);
-
   // draw trimmarks for each color
   drawTrimmarks(sizeWidth, sizeHeight, bleed);
+
+  //  cutouts
+  if (cutouts.length > 0) {
+    for (let cutout in cutouts) {
+      colors[inkslot[cutouts[cutout].master]].cutout(colors[inkslot[cutouts[cutout].slave]]);
+    }
+  }
 
   drawRiso();
 
@@ -614,13 +621,11 @@ function generateColorSelector(id, parent, target) {
   colorList = createElement('ul').id('ul-' + id).class('er-color-selector__list').parent(id);
   for (let ink in inkslot) {
     let bgValue;
-    console.log(inkslot[ink]);
     for (let color in RISOCOLORS) {
       if (RISOCOLORS[color].name == inkslot[ink]) {
         bgValue = 'rgba(' + RISOCOLORS[color].color[0] + ', ' + RISOCOLORS[color].color[1] + ', ' + RISOCOLORS[color].color[2] + ', 1)';
       }
     }
-    console.log(bgValue);
     colorListItem = createElement('li', inkslot[ink]).id('li-' + id + '-' + ink).addClass('er-color-selector__list-item').addClass('er-color-selector__list-item--' + target + '-' + ink).style('background', bgValue).parent('ul-' + id);
     switch(target) {
       case 'targetInkFill':
@@ -646,6 +651,11 @@ function generateColorSelector(id, parent, target) {
       }
     });
   }
+  let parentList = document.getElementById('ul-' + id);
+  let addTransparent = document.createElement('li');
+  parentList.appendChild(addTransparent);
+  addTransparent.setAttribute('id', 'li-' + id + '-transparent');
+  addTransparent.setAttribute('class', 'er-color-selector__list-item ' + 'er-color-selector__list-item--' + target + '-transparent');
 }
 
 // change tool mode
