@@ -415,14 +415,34 @@ canvas {
   box-sizing: border-box;
 }
 
+.er-color-selector__list-item--targetInkFill-transparent, .er-color-selector__list-item--targetInkStroke-transparent {
+  background-color: #f9f9f9;
+  background-size: auto auto;
+  background-image: repeating-linear-gradient(135deg, transparent, transparent 46%, red 46%, red 54%);
+}
+
+.er-color-selector__list-item.is-active::before {
+  display: block;
+  position: absolute;
+  content: '';
+  background: transparent;
+  width: 94%;
+  height: 94%;
+  left: 5%;
+  top: 5%;
+  box-sizing: border-box;
+  border: 2px solid #000;
+}
+
 .er-color-selector__list-item.is-active::after {
   display: block;
   position: absolute;
-  left: 5px;
-  top: 5px;
-  font-family: 'IcoMoon-Free';
-  font-size: 20px;
-  line-height: 1;
-  content: '\ea10';
-  color: #fff;
+  content: '';
+  background: transparent;
+  width: 94%;
+  height: 94%;
+  left: 3%;
+  top: 3%;
+  box-sizing: border-box;
+  border: 2px solid #fff;
 }

@@ -233,6 +233,15 @@ function setup() {
 
   // ink cutouts
   titleInkCutout = createElement('h2', 'Ink cutouts').id('ink-cutouts-title').class('er-toolbar-title').parent('toolbar');
+  for (let masterInk in inkslot) {
+    divCutoutsSetting = createDiv().id('cutouts-setting-' + masterInk).class('er-cutouts-setting').parent('toolbar');
+    divMasterInk = createDiv(masterInk).id('cutouts-master-' + masterInk).class('er-cutouts-setting__master').parent('cutouts-setting-' + masterInk);
+    divSlaveInkList = createElement('ul').id('cutouts-slave-list-' + masterInk).class('er-cutouts-setting__list').parent('cutouts-setting-' + masterInk);
+    for (let subInk in inkslot) {
+      if (!(masterInk == subInk))
+      divSlaveSlot = createElement('li', subInk).id('cutouts-slave-item-' + subInk).class('er-cutouts-setting__item').parent('cutouts-slave-list-' + masterInk);
+    }
+  }
 
   // default stroke weight
   strokeWeightVal = 1;
@@ -656,6 +665,17 @@ function generateColorSelector(id, parent, target) {
   parentList.appendChild(addTransparent);
   addTransparent.setAttribute('id', 'li-' + id + '-transparent');
   addTransparent.setAttribute('class', 'er-color-selector__list-item ' + 'er-color-selector__list-item--' + target + '-transparent');
+  addTransparent.addEventListener('click', function() {
+    handleActive('ul-' + id, this);
+    switch(target) {
+      case 'targetInkFill':
+        targetInkFill = 'transparent';
+        break;
+      case 'targetInkStroke':
+        targetInkStroke = 'transparent';
+        break;
+    }
+  });
 }
 
 // change tool mode

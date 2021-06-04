@@ -411,17 +411,43 @@ canvas {
     vertical-align: bottom;
     border: 1px solid $color-border;
     box-sizing: border-box;
+    &--targetInkFill-transparent,
+    &--targetInkStroke-transparent {
+      background-color: #f9f9f9;
+      background-size: auto auto;
+      background-image: repeating-linear-gradient(135deg, transparent, transparent 46%, rgba(255, 0, 0, 1) 46%, rgba(255, 0, 0, 1) 54%);
+    }
     &.is-active {
+      &::before {
+        display: block;
+        position: absolute;
+        content: '';
+        background: transparent;
+        // left: 6px;
+        // top: 7px;
+        // font-family: 'IcoMoon-Free';
+        // font-size: 16px;
+        // line-height: 1;
+        // content: '\ea10';
+        // color: #fff;
+        width: 94%;
+        height: 94%;
+        left: 5%;
+        top: 5%;
+        box-sizing: border-box;
+        border: 2px solid #000;
+      }
       &::after {
         display: block;
         position: absolute;
-        left: 5px;
-        top: 5px;
-        font-family: 'IcoMoon-Free';
-        font-size: 20px;
-        line-height: 1;
-        content: '\ea10';
-        color: #fff;
+        content: '';
+        background: transparent;
+        width: 94%;
+        height: 94%;
+        left: 3%;
+        top: 3%;
+        box-sizing: border-box;
+        border: 2px solid #fff;
       }
     }
   }
