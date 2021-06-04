@@ -234,12 +234,45 @@ function setup() {
   // ink cutouts
   titleInkCutout = createElement('h2', 'Ink cutouts').id('ink-cutouts-title').class('er-toolbar-title').parent('toolbar');
   for (let masterInk in inkslot) {
+    let bgValueMaster;
+    for (let color in RISOCOLORS) {
+      if (RISOCOLORS[color].name == inkslot[masterInk]) {
+        bgValueMaster = 'rgba(' + RISOCOLORS[color].color[0] + ', ' + RISOCOLORS[color].color[1] + ', ' + RISOCOLORS[color].color[2] + ', 1)';
+      }
+    }
     divCutoutsSetting = createDiv().id('cutouts-setting-' + masterInk).class('er-cutouts-setting').parent('toolbar');
-    divMasterInk = createDiv(masterInk).id('cutouts-master-' + masterInk).class('er-cutouts-setting__master').parent('cutouts-setting-' + masterInk);
+    divMasterInk = createDiv('<span>' + masterInk + '</span>').id('cutouts-master-' + masterInk).class('er-cutouts-setting__master').style('background', bgValueMaster).parent('cutouts-setting-' + masterInk);
     divSlaveInkList = createElement('ul').id('cutouts-slave-list-' + masterInk).class('er-cutouts-setting__list').parent('cutouts-setting-' + masterInk);
-    for (let subInk in inkslot) {
-      if (!(masterInk == subInk))
-      divSlaveSlot = createElement('li', subInk).id('cutouts-slave-item-' + subInk).class('er-cutouts-setting__item').parent('cutouts-slave-list-' + masterInk);
+    for (let slaveInk in inkslot) {
+      let bgValueSlave;
+      for (let color in RISOCOLORS) {
+        if (RISOCOLORS[color].name == inkslot[slaveInk]) {
+          bgValueSlave = 'rgba(' + RISOCOLORS[color].color[0] + ', ' + RISOCOLORS[color].color[1] + ', ' + RISOCOLORS[color].color[2] + ', 1)';
+        }
+      }
+      if (!(masterInk == slaveInk)) {
+        divSlaveSlot = createElement('li').id('cutouts-slave-item-' + masterInk + '-' + slaveInk).class('er-cutouts-setting__item is-disabled').parent('cutouts-slave-list-' + masterInk);
+        divSlaveSlotInner = createElement('span', slaveInk).style('background', bgValueSlave).parent('cutouts-slave-item-' + masterInk + '-' + slaveInk);
+        divSlaveSlot.elt.addEventListener('click', function() {
+          if (this.classList.contains('is-disabled')) {
+            this.classList.remove('is-disabled');
+            cutouts.push({
+              id: masterInk + '-' + slaveInk,
+              master: masterInk,
+              slave: slaveInk
+            });
+            console.log(cutouts);
+          } else {
+            this.classList.add('is-disabled');
+            for (let cutout in cutouts) {
+              if (cutouts[cutout].id == masterInk + '-' + slaveInk) {
+                cutouts.pop([cutout]);
+              }
+            }
+            console.log(cutouts);
+          }
+        });
+      }
     }
   }
 
