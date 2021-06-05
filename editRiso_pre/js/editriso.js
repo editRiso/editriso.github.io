@@ -14,6 +14,7 @@ let inkslot = {
   D: 'BLACK'
 }
 let colors = [];
+let trimColors = [];
 let cutouts = [];
 
 let formats = {
@@ -153,6 +154,7 @@ function setup() {
   // preparing riso objects
   for (let slot in inkslot) {
     colors[inkslot[slot]] = new Riso(inkslot[slot]);
+    trimColors[inkslot[slot]] = new Riso(inkslot[slot]);
   }
 
   // tool bar
@@ -266,7 +268,7 @@ function setup() {
             this.classList.add('is-disabled');
             for (let cutout in cutouts) {
               if (cutouts[cutout].id == masterInk + '-' + slaveInk) {
-                cutouts.pop([cutout]);
+                cutouts.splice(cutout);
               }
             }
             console.log(cutouts);
@@ -619,12 +621,14 @@ function selectFormat() {
 function selectInkslot(slot, value) {
   inkslot[slot] = value;
   colors[inkslot[slot]] = new Riso(inkslot[slot]);
+  trimColors[inkslot[slot]] = new Riso(inkslot[slot]);
 }
 function refleshInkSetting(slot) {
   let targetOptionFill = document.getElementById('li-presentFill-' + slot);
   let targetOptionStroke = document.getElementById('li-presentStroke-' + slot);
   let targetInkDisplay = document.getElementById('ink-display-' + slot);
   let targetInkName = document.getElementById('ink-name-' + slot);
+  let targetCutoutsMaster = document.getElementById('cutouts-master-' + slot);
   let bgValue;
   for (let color in RISOCOLORS) {
     if (RISOCOLORS[color].name == inkslot[slot]) {
@@ -638,6 +642,13 @@ function refleshInkSetting(slot) {
   targetInkDisplay.children[1].innerHTML = inkslot[slot];
   targetInkDisplay.style.background = bgValue;
   targetInkName.innerHTML = inkslot[slot];
+  targetCutoutsMaster.style.background = bgValue;
+  for (let masterSlot in inkslot) {
+    if (!(masterSlot == slot)) {
+      let targetCutoutsSlave = document.getElementById('cutouts-slave-item-' + masterSlot + '-' + slot);
+      targetCutoutsSlave.children[0].style.background = bgValue;
+    }
+  }
   updateSlotSelect();
 }
 function updateSlotSelect() {
@@ -1558,78 +1569,78 @@ polygonGuide.prototype.release = function() {
 function drawTrimmarks(sizeWidth, sizeHeight, bleed) {
   for (let slot in inkslot) {
     // service id
-    colors[inkslot[slot]].push();
-    colors[inkslot[slot]].translate(width / 2, height / 2);
-    colors[inkslot[slot]].fill(255);
-    colors[inkslot[slot]].noStroke();
-    colors[inkslot[slot]].textAlign(LEFT, BASELINE);
-    colors[inkslot[slot]].textFont(ciFont);
-    colors[inkslot[slot]].textSize(48);
-    colors[inkslot[slot]].text('EditRiso', -sizeWidth / 2 + bleed, -sizeHeight / 2 - bleed * 2);
-    colors[inkslot[slot]].textAlign(RIGHT, BASELINE);
-    colors[inkslot[slot]].textFont(monoFont);
-    colors[inkslot[slot]].textSize(bleed / 2);
-    colors[inkslot[slot]].text('powered by p5.riso.js', sizeWidth / 2 - bleed, -sizeHeight / 2 - bleed * 2);
-    colors[inkslot[slot]].pop();
+    trimColors[inkslot[slot]].push();
+    trimColors[inkslot[slot]].translate(width / 2, height / 2);
+    trimColors[inkslot[slot]].fill(255);
+    trimColors[inkslot[slot]].noStroke();
+    trimColors[inkslot[slot]].textAlign(LEFT, BASELINE);
+    trimColors[inkslot[slot]].textFont(ciFont);
+    trimColors[inkslot[slot]].textSize(48);
+    trimColors[inkslot[slot]].text('EditRiso', -sizeWidth / 2 + bleed, -sizeHeight / 2 - bleed * 2);
+    trimColors[inkslot[slot]].textAlign(RIGHT, BASELINE);
+    trimColors[inkslot[slot]].textFont(monoFont);
+    trimColors[inkslot[slot]].textSize(bleed / 2);
+    trimColors[inkslot[slot]].text('powered by p5.riso.js', sizeWidth / 2 - bleed, -sizeHeight / 2 - bleed * 2);
+    trimColors[inkslot[slot]].pop();
 
     // trimmark common setting
-    colors[inkslot[slot]].push();
-    colors[inkslot[slot]].translate(width / 2, height / 2);
-    colors[inkslot[slot]].stroke(255);
-    colors[inkslot[slot]].noFill();
-    colors[inkslot[slot]].strokeWeight(1);
+    trimColors[inkslot[slot]].push();
+    trimColors[inkslot[slot]].translate(width / 2, height / 2);
+    trimColors[inkslot[slot]].stroke(255);
+    trimColors[inkslot[slot]].noFill();
+    trimColors[inkslot[slot]].strokeWeight(1);
 
     // left top
-    colors[inkslot[slot]].line(-sizeWidth / 2 - 118, -sizeHeight / 2 - bleed, -sizeWidth / 2, -sizeHeight / 2 - bleed);
-    colors[inkslot[slot]].line(-sizeWidth / 2 - 118 - bleed, -sizeHeight / 2, -sizeWidth / 2 - bleed, -sizeHeight / 2);
-    colors[inkslot[slot]].line(-sizeWidth / 2 - bleed, -sizeHeight / 2 - 118, -sizeWidth / 2 - bleed, -sizeHeight / 2);
-    colors[inkslot[slot]].line(-sizeWidth / 2, -sizeHeight / 2 - 118 - bleed, -sizeWidth / 2, -sizeHeight / 2 - bleed);
+    trimColors[inkslot[slot]].line(-sizeWidth / 2 - 118, -sizeHeight / 2 - bleed, -sizeWidth / 2, -sizeHeight / 2 - bleed);
+    trimColors[inkslot[slot]].line(-sizeWidth / 2 - 118 - bleed, -sizeHeight / 2, -sizeWidth / 2 - bleed, -sizeHeight / 2);
+    trimColors[inkslot[slot]].line(-sizeWidth / 2 - bleed, -sizeHeight / 2 - 118, -sizeWidth / 2 - bleed, -sizeHeight / 2);
+    trimColors[inkslot[slot]].line(-sizeWidth / 2, -sizeHeight / 2 - 118 - bleed, -sizeWidth / 2, -sizeHeight / 2 - bleed);
 
     // center top
-    colors[inkslot[slot]].line(0, -sizeHeight / 2 - 118 - bleed, 0, -sizeHeight / 2 - bleed);
-    colors[inkslot[slot]].line(-118, -sizeHeight / 2 - 59 - bleed, 118, -sizeHeight / 2 - 59 - bleed);
-    colors[inkslot[slot]].ellipseMode(CENTER);
-    colors[inkslot[slot]].ellipse(0, -sizeHeight / 2 - 59 - bleed, 59, 59);
+    trimColors[inkslot[slot]].line(0, -sizeHeight / 2 - 118 - bleed, 0, -sizeHeight / 2 - bleed);
+    trimColors[inkslot[slot]].line(-118, -sizeHeight / 2 - 59 - bleed, 118, -sizeHeight / 2 - 59 - bleed);
+    trimColors[inkslot[slot]].ellipseMode(CENTER);
+    trimColors[inkslot[slot]].ellipse(0, -sizeHeight / 2 - 59 - bleed, 59, 59);
 
     // right top
-    colors[inkslot[slot]].line(sizeWidth / 2 + 118, -sizeHeight / 2 - bleed, sizeWidth / 2, -sizeHeight / 2 - bleed);
-    colors[inkslot[slot]].line(sizeWidth / 2 + 118 + bleed, -sizeHeight / 2, sizeWidth / 2 + bleed, -sizeHeight / 2);
-    colors[inkslot[slot]].line(sizeWidth / 2 + bleed, -sizeHeight / 2 - 118, sizeWidth / 2 + bleed, -sizeHeight / 2);
-    colors[inkslot[slot]].line(sizeWidth / 2, -sizeHeight / 2 - 118 - bleed, sizeWidth / 2, -sizeHeight / 2 - bleed);
+    trimColors[inkslot[slot]].line(sizeWidth / 2 + 118, -sizeHeight / 2 - bleed, sizeWidth / 2, -sizeHeight / 2 - bleed);
+    trimColors[inkslot[slot]].line(sizeWidth / 2 + 118 + bleed, -sizeHeight / 2, sizeWidth / 2 + bleed, -sizeHeight / 2);
+    trimColors[inkslot[slot]].line(sizeWidth / 2 + bleed, -sizeHeight / 2 - 118, sizeWidth / 2 + bleed, -sizeHeight / 2);
+    trimColors[inkslot[slot]].line(sizeWidth / 2, -sizeHeight / 2 - 118 - bleed, sizeWidth / 2, -sizeHeight / 2 - bleed);
 
     // left middle
-    colors[inkslot[slot]].line(-sizeWidth / 2 - 118 - bleed, 0, -sizeWidth / 2 - bleed, 0);
-    colors[inkslot[slot]].line(-sizeWidth / 2 - 59 - bleed, -118, -sizeWidth / 2 - 59 - bleed, 118);
-    colors[inkslot[slot]].ellipse(-sizeWidth / 2 - 59 - bleed, 0, 59, 59);
+    trimColors[inkslot[slot]].line(-sizeWidth / 2 - 118 - bleed, 0, -sizeWidth / 2 - bleed, 0);
+    trimColors[inkslot[slot]].line(-sizeWidth / 2 - 59 - bleed, -118, -sizeWidth / 2 - 59 - bleed, 118);
+    trimColors[inkslot[slot]].ellipse(-sizeWidth / 2 - 59 - bleed, 0, 59, 59);
 
     // right middle
-    colors[inkslot[slot]].line(sizeWidth / 2 + 118 + bleed, 0, sizeWidth / 2 + bleed, 0);
-    colors[inkslot[slot]].line(sizeWidth / 2 + 59 + bleed, -118, sizeWidth / 2 + 59 + bleed, 118);
-    colors[inkslot[slot]].ellipse(sizeWidth / 2 + 59 + bleed, 0, 59, 59);
+    trimColors[inkslot[slot]].line(sizeWidth / 2 + 118 + bleed, 0, sizeWidth / 2 + bleed, 0);
+    trimColors[inkslot[slot]].line(sizeWidth / 2 + 59 + bleed, -118, sizeWidth / 2 + 59 + bleed, 118);
+    trimColors[inkslot[slot]].ellipse(sizeWidth / 2 + 59 + bleed, 0, 59, 59);
 
     // left bottom
-    colors[inkslot[slot]].line(-sizeWidth / 2 - 118, sizeHeight / 2 + bleed, -sizeWidth / 2, sizeHeight / 2 + bleed);
-    colors[inkslot[slot]].line(-sizeWidth / 2 - 118 - bleed, sizeHeight / 2, -sizeWidth / 2 - bleed, sizeHeight / 2);
-    colors[inkslot[slot]].line(-sizeWidth / 2 - bleed, sizeHeight / 2 + 118, -sizeWidth / 2 - bleed, sizeHeight / 2);
-    colors[inkslot[slot]].line(-sizeWidth / 2, sizeHeight / 2 + 118 + bleed, -sizeWidth / 2, sizeHeight / 2 + bleed);
+    trimColors[inkslot[slot]].line(-sizeWidth / 2 - 118, sizeHeight / 2 + bleed, -sizeWidth / 2, sizeHeight / 2 + bleed);
+    trimColors[inkslot[slot]].line(-sizeWidth / 2 - 118 - bleed, sizeHeight / 2, -sizeWidth / 2 - bleed, sizeHeight / 2);
+    trimColors[inkslot[slot]].line(-sizeWidth / 2 - bleed, sizeHeight / 2 + 118, -sizeWidth / 2 - bleed, sizeHeight / 2);
+    trimColors[inkslot[slot]].line(-sizeWidth / 2, sizeHeight / 2 + 118 + bleed, -sizeWidth / 2, sizeHeight / 2 + bleed);
 
     // center bottom
-    colors[inkslot[slot]].line(0, sizeHeight / 2 + 118 + bleed, 0, sizeHeight / 2 + bleed);
-    colors[inkslot[slot]].line(-118, sizeHeight / 2 + 59 + bleed, 118, sizeHeight / 2 + 59 + bleed);
-    colors[inkslot[slot]].ellipse(0, sizeHeight / 2 + 59 + bleed, 59, 59);
+    trimColors[inkslot[slot]].line(0, sizeHeight / 2 + 118 + bleed, 0, sizeHeight / 2 + bleed);
+    trimColors[inkslot[slot]].line(-118, sizeHeight / 2 + 59 + bleed, 118, sizeHeight / 2 + 59 + bleed);
+    trimColors[inkslot[slot]].ellipse(0, sizeHeight / 2 + 59 + bleed, 59, 59);
 
     // right bottom
-    colors[inkslot[slot]].line(sizeWidth / 2 + 118, sizeHeight / 2 + bleed, sizeWidth / 2, sizeHeight / 2 + bleed);
-    colors[inkslot[slot]].line(sizeWidth / 2 + 118 + bleed, sizeHeight / 2, sizeWidth / 2 + bleed, sizeHeight / 2);
-    colors[inkslot[slot]].line(sizeWidth / 2 + bleed, sizeHeight / 2 + 118, sizeWidth / 2 + bleed, sizeHeight / 2);
-    colors[inkslot[slot]].line(sizeWidth / 2, +sizeHeight / 2 + 118 + bleed, sizeWidth / 2, sizeHeight / 2 + bleed);
-    colors[inkslot[slot]].pop();
+    trimColors[inkslot[slot]].line(sizeWidth / 2 + 118, sizeHeight / 2 + bleed, sizeWidth / 2, sizeHeight / 2 + bleed);
+    trimColors[inkslot[slot]].line(sizeWidth / 2 + 118 + bleed, sizeHeight / 2, sizeWidth / 2 + bleed, sizeHeight / 2);
+    trimColors[inkslot[slot]].line(sizeWidth / 2 + bleed, sizeHeight / 2 + 118, sizeWidth / 2 + bleed, sizeHeight / 2);
+    trimColors[inkslot[slot]].line(sizeWidth / 2, +sizeHeight / 2 + 118 + bleed, sizeWidth / 2, sizeHeight / 2 + bleed);
+    trimColors[inkslot[slot]].pop();
 
-    // colors
-    colors[inkslot[slot]].push();
-    colors[inkslot[slot]].translate(width / 2, height / 2);
-    colors[inkslot[slot]].fill(255);
-    colors[inkslot[slot]].noStroke();
+    // trimColors
+    trimColors[inkslot[slot]].push();
+    trimColors[inkslot[slot]].translate(width / 2, height / 2);
+    trimColors[inkslot[slot]].fill(255);
+    trimColors[inkslot[slot]].noStroke();
     switch (slot) {
       case 'A':
         i = 0;
@@ -1644,24 +1655,24 @@ function drawTrimmarks(sizeWidth, sizeHeight, bleed) {
         i = 3;
         break;
     }
-    colors[inkslot[slot]].rect(-sizeWidth / 2 + bleed, sizeHeight / 2 + bleed * 2 + bleed * 0.5 * i, bleed * 0.5, bleed * 0.5);
-    colors[inkslot[slot]].rect(-sizeWidth / 2 + bleed, sizeHeight / 2 + bleed * 2 + bleed * 0.5 * i, bleed * 0.5, bleed * 0.5);
-    colors[inkslot[slot]].textAlign(LEFT, TOP);
-    colors[inkslot[slot]].textFont(monoFont);
-    colors[inkslot[slot]].textSize(bleed / 2);
-    colors[inkslot[slot]].text(inkslot[slot], -sizeWidth / 2 + bleed * 1.75, sizeHeight / 2 + bleed * 1.9 + bleed * 0.5 * i);
-    colors[inkslot[slot]].pop();
+    trimColors[inkslot[slot]].rect(-sizeWidth / 2 + bleed, sizeHeight / 2 + bleed * 2 + bleed * 0.5 * i, bleed * 0.5, bleed * 0.5);
+    trimColors[inkslot[slot]].rect(-sizeWidth / 2 + bleed, sizeHeight / 2 + bleed * 2 + bleed * 0.5 * i, bleed * 0.5, bleed * 0.5);
+    trimColors[inkslot[slot]].textAlign(LEFT, TOP);
+    trimColors[inkslot[slot]].textFont(monoFont);
+    trimColors[inkslot[slot]].textSize(bleed / 2);
+    trimColors[inkslot[slot]].text(inkslot[slot], -sizeWidth / 2 + bleed * 1.75, sizeHeight / 2 + bleed * 1.9 + bleed * 0.5 * i);
+    trimColors[inkslot[slot]].pop();
 
     // size
-    colors[inkslot[slot]].push();
-    colors[inkslot[slot]].translate(width / 2, height / 2);
-    colors[inkslot[slot]].fill(255);
-    colors[inkslot[slot]].noStroke();
-    colors[inkslot[slot]].textAlign(RIGHT, TOP);
-    colors[inkslot[slot]].textFont(monoFont);
-    colors[inkslot[slot]].textSize(bleed / 2);
-    colors[inkslot[slot]].text(formats[selectedFormat].name + ' ' + formats[selectedFormat].printWidth + 'mm * ' + formats[selectedFormat].printHeight + 'mm ' + '(300dpi)', sizeWidth / 2 - bleed, sizeHeight / 2 + bleed * 2);
-    colors[inkslot[slot]].pop();
+    trimColors[inkslot[slot]].push();
+    trimColors[inkslot[slot]].translate(width / 2, height / 2);
+    trimColors[inkslot[slot]].fill(255);
+    trimColors[inkslot[slot]].noStroke();
+    trimColors[inkslot[slot]].textAlign(RIGHT, TOP);
+    trimColors[inkslot[slot]].textFont(monoFont);
+    trimColors[inkslot[slot]].textSize(bleed / 2);
+    trimColors[inkslot[slot]].text(formats[selectedFormat].name + ' ' + formats[selectedFormat].printWidth + 'mm * ' + formats[selectedFormat].printHeight + 'mm ' + '(300dpi)', sizeWidth / 2 - bleed, sizeHeight / 2 + bleed * 2);
+    trimColors[inkslot[slot]].pop();
   }
 
 }
