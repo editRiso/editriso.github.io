@@ -143,12 +143,19 @@ canvas {
 }
 .er-toolbar-title {
   font-family: 'Roboto Mono';
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
   margin: 0 0 0.5em 0;
+  border-top: 1px solid $color-border;
+  padding-top: 0.5em;
+  &:first-child {
+    border: none;
+  }
   &--small {
     font-size: 12px;
     font-weight: normal;
+    border: none;
+    padding: 0;
   }
 }
 
@@ -454,6 +461,7 @@ canvas {
 }
 
 .er-cutouts-setting {
+  margin-bottom: 10px;
   &__master {
     display: inline-block;
     position: relative;
@@ -522,5 +530,42 @@ canvas {
         background: none !important;
       }
     }
+  }
+}
+
+.er-stroke-weight-setting {
+  &__button {
+    display: inline-block;
+    width: 28px;
+    height: 32px;
+    cursor: pointer;
+    text-align: center;
+    &::after {
+      font-family: 'IcoMoon-Free';
+      font-size: 16px;
+      color: #000;
+      text-align: center;
+      line-height: 32px;
+    }
+    &--minus {
+      &::after {
+        content: '\ea0b';
+      }
+    }
+    &--plus {
+      &::after {
+        content: '\ea0a';
+      }
+    }
+  }
+  &__input {
+    display: inline-block;
+    box-sizing: border-box;
+    width: calc(100% - 56px);
+    height: 32px;
+    font-family: 'Roboto-Mono';
+    font-size: 16px;
+    text-align: center;
+    margin: 0;
   }
 }

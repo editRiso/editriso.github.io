@@ -222,17 +222,6 @@ function setup() {
   }
   updateSlotSelect();
 
-  // default fill & stroke
-  targetInkFill = 'A';
-  targetInkStroke = 'B';
-  titlePresentColorSelector = createElement('h2', 'Color').id('present-color-title--fill').class('er-toolbar-title').parent('toolbar');
-  divPresentColorSelectorFill = createDiv().id('present-color-selector--fill').class('er-color-selector').parent('toolbar');
-  titlePresentColorSelectorFill = createElement('h3', 'Fill:').class('er-toolbar-title').addClass('er-toolbar-title--small').parent('present-color-selector--fill');
-  generateColorSelector('presentFill', 'present-color-selector--fill', 'targetInkFill');
-  divPresentColorSelectorStroke = createDiv().id('present-color-selector--stroke').class('er-color-selector').parent('toolbar');
-  titlePresentColorSelectorStroke = createElement('h3', 'Stroke:').class('er-toolbar-title').addClass('er-toolbar-title--small').parent('present-color-selector--stroke');
-  generateColorSelector('presentStroke', 'present-color-selector--stroke', 'targetInkStroke');
-
   // ink cutouts
   titleInkCutout = createElement('h2', 'Ink cutouts').id('ink-cutouts-title').class('er-toolbar-title').parent('toolbar');
   for (let masterInk in inkslot) {
@@ -242,7 +231,8 @@ function setup() {
         bgValueMaster = 'rgba(' + RISOCOLORS[color].color[0] + ', ' + RISOCOLORS[color].color[1] + ', ' + RISOCOLORS[color].color[2] + ', 1)';
       }
     }
-    divCutoutsSetting = createDiv().id('cutouts-setting-' + masterInk).class('er-cutouts-setting').parent('toolbar');
+    divCutoutsSetting = createDiv().id('cutouts-setting').class('er-cutouts-setting').parent('toolbar');
+    divCutoutsSettingUnit = createDiv().id('cutouts-setting-' + masterInk).class('er-cutouts-setting__unit').parent('cutouts-setting');
     divMasterInk = createDiv('<span>' + masterInk + '</span>').id('cutouts-master-' + masterInk).class('er-cutouts-setting__master').style('background', bgValueMaster).parent('cutouts-setting-' + masterInk);
     divSlaveInkList = createElement('ul').id('cutouts-slave-list-' + masterInk).class('er-cutouts-setting__list').parent('cutouts-setting-' + masterInk);
     for (let slaveInk in inkslot) {
@@ -278,14 +268,28 @@ function setup() {
     }
   }
 
-  // default stroke weight
-  strokeWeightVal = 1;
+  // fill & stroke
+  targetInkFill = 'A';
+  targetInkStroke = 'B';
+  titlePresentColor = createElement('h2', 'Color').class('er-toolbar-title').parent('toolbar');
+  divPresentColorSelectorFill = createDiv().id('present-color-selector--fill').class('er-color-selector').parent('toolbar');
+  titlePresentColorSelectorFill = createElement('h3', 'Fill:').class('er-toolbar-title').addClass('er-toolbar-title--small').parent('present-color-selector--fill');
+  generateColorSelector('presentFill', 'present-color-selector--fill', 'targetInkFill');
+  divPresentColorSelectorStroke = createDiv().id('present-color-selector--stroke').class('er-color-selector').parent('toolbar');
+  titlePresentColorSelectorStroke = createElement('h3', 'Stroke:').class('er-toolbar-title').addClass('er-toolbar-title--small').parent('present-color-selector--stroke');
+  generateColorSelector('presentStroke', 'present-color-selector--stroke', 'targetInkStroke');
 
-  // stroke weight slider
-  strokeWeightSlider = createSlider(0, 100, 1, 1);
-  strokeWeightSlider.position(500 + bleed, height - 20);
-  strokeWeightSlider.style('width', '100px');
-  strokeWeightSlider.changed(strokeWeightChanged);
+  // stroke weight
+  titlePresentStrokeWeight = createElement('h2', 'Stroke weight').class('er-toolbar-title').parent('toolbar');
+  divPresentStrokeWeightSetting = createDiv().id('present-stroke-weight-setting').class('er-stroke-weight-setting').parent('toolbar');
+  divPresentStrokeWeightNumeral = createDiv().id('present-stroke-weight-setting-numeral').class('er-stroke-weight-setting__unit').parent('present-stroke-weight-setting');
+  divPresentStrokeWeightMinus = createDiv().id('present-stroke-weight-minus').class('er-stroke-weight-setting__button er-stroke-weight-setting__button--minus').parent('present-stroke-weight-setting-numeral').elt.addEventListener('click', function() {
+    inputPresentStrokeWeightNumeral.elt.value--;
+  });
+  inputPresentStrokeWeightNumeral = createInput(1).id('present-stroke-weight-numeral').class('er-stroke-weight-setting__input').parent('present-stroke-weight-setting-numeral');
+  divPresentStrokeWeightPlus = createDiv().id('present-stroke-weight-plus').class('er-stroke-weight-setting__button er-stroke-weight-setting__button--plus').parent('present-stroke-weight-setting-numeral').elt.addEventListener('click', function() {
+    inputPresentStrokeWeightNumeral.elt.value++;
+  });;
 
   // default superellipse corner
   superEllipseCornerVal = 2;
@@ -358,7 +362,7 @@ function draw() {
   background(245);
   clearRiso();
 
-  strokeWeightVal = strokeWeightSlider.value();
+  strokeWeightVal = inputPresentStrokeWeightNumeral.value();
   superEllipseCornerVal = superEllipseCornerSlider.value();
   tightnessFill = tightnessFillSlider.value();
   tightnessStroke = tightnessStrokeSlider.value();

@@ -132,14 +132,22 @@ canvas {
 
 .er-toolbar-title {
   font-family: 'Roboto Mono';
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
   margin: 0 0 0.5em 0;
+  border-top: 1px solid #ddd;
+  padding-top: 0.5em;
+}
+
+.er-toolbar-title:first-child {
+  border: none;
 }
 
 .er-toolbar-title--small {
   font-size: 12px;
   font-weight: normal;
+  border: none;
+  padding: 0;
 }
 
 .er-inksetting {
@@ -447,6 +455,10 @@ canvas {
   border: 2px solid #fff;
 }
 
+.er-cutouts-setting {
+  margin-bottom: 10px;
+}
+
 .er-cutouts-setting__master {
   display: inline-block;
   position: relative;
@@ -519,4 +531,39 @@ canvas {
 
 .er-cutouts-setting__item.is-disabled span {
   background: none !important;
+}
+
+.er-stroke-weight-setting__button {
+  display: inline-block;
+  width: 28px;
+  height: 32px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.er-stroke-weight-setting__button::after {
+  font-family: 'IcoMoon-Free';
+  font-size: 16px;
+  color: #000;
+  text-align: center;
+  line-height: 32px;
+}
+
+.er-stroke-weight-setting__button--minus::after {
+  content: '\ea0b';
+}
+
+.er-stroke-weight-setting__button--plus::after {
+  content: '\ea0a';
+}
+
+.er-stroke-weight-setting__input {
+  display: inline-block;
+  box-sizing: border-box;
+  width: calc(100% - 56px);
+  height: 32px;
+  font-family: 'Roboto-Mono';
+  font-size: 16px;
+  text-align: center;
+  margin: 0;
 }
