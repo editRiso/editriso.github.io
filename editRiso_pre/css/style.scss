@@ -534,6 +534,7 @@ canvas {
 }
 
 .er-stroke-weight-setting {
+  margin-bottom: 10px;
   &__button {
     display: inline-block;
     width: 28px;
@@ -567,5 +568,11 @@ canvas {
     font-size: 16px;
     text-align: center;
     margin: 0;
+  }
+}
+
+.er-roundness-setting {
+  &__slider {
+    width: 100%;
   }
 }

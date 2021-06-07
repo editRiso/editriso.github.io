@@ -533,6 +533,10 @@ canvas {
   background: none !important;
 }
 
+.er-stroke-weight-setting {
+  margin-bottom: 10px;
+}
+
 .er-stroke-weight-setting__button {
   display: inline-block;
   width: 28px;
@@ -566,4 +570,8 @@ canvas {
   font-size: 16px;
   text-align: center;
   margin: 0;
+}
+
+.er-roundness-setting__slider {
+  width: 100%;
 }

@@ -292,13 +292,9 @@ function setup() {
   });;
 
   // default superellipse corner
-  superEllipseCornerVal = 2;
-
-  // superellipse corner slider
-  superEllipseCornerSlider = createSlider(0.1, 10, 2, 0.01);
-  superEllipseCornerSlider.position(600 + bleed, height - 20);
-  superEllipseCornerSlider.style('width', '100px');
-  superEllipseCornerSlider.changed(superEllipseCornerChanged);
+  titlePresentRoundness = createElement('h2', 'Roundness').class('er-toolbar-title').parent('toolbar');
+  divPresentRoundnessSetting = createDiv().id('present-roundness-setting').class('er-roundness-setting').parent('toolbar');
+  sliderPresentRoundness = createSlider(0.1, 10, 2, 0.01).id('present-roundness-slider').class('er-roundness-setting__slider').parent('present-roundness-setting');
 
   // default curve tightness
   tightnessVal = 0;
@@ -363,7 +359,7 @@ function draw() {
   clearRiso();
 
   strokeWeightVal = inputPresentStrokeWeightNumeral.value();
-  superEllipseCornerVal = superEllipseCornerSlider.value();
+  superEllipseCornerVal = sliderPresentRoundness.value();
   tightnessFill = tightnessFillSlider.value();
   tightnessStroke = tightnessStrokeSlider.value();
   fontSizeVal = fontSizeSlider.value();
