@@ -2,7 +2,6 @@ const risoColors = [];
 for (c in RISOCOLORS) {
   risoColors.push(RISOCOLORS[c].name);
 }
-console.log(risoColors);
 
 let inkslotOptions = [];
 let fillOptions, strokeOptions;
@@ -167,7 +166,6 @@ function setup() {
       toolbarButton.addClass('is-active');
     }
     toolbarButton.parent('toolbar__tool-button-wrapper');
-    console.log(toolbarButton);
     toolbarButton.elt.addEventListener('click', function(){changeToolMode(tools[tool])});
     toolbarButton.elt.addEventListener('click', function(){handleActive('toolbar__tool-button-wrapper', this)});
   }
@@ -286,15 +284,31 @@ function setup() {
   divPresentStrokeWeightMinus = createDiv().id('present-stroke-weight-minus').class('er-stroke-weight-setting__button er-stroke-weight-setting__button--minus').parent('present-stroke-weight-setting-numeral').elt.addEventListener('click', function() {
     inputPresentStrokeWeightNumeral.elt.value--;
   });
-  inputPresentStrokeWeightNumeral = createInput(1).id('present-stroke-weight-numeral').class('er-stroke-weight-setting__input').parent('present-stroke-weight-setting-numeral');
+  inputPresentStrokeWeightNumeral = createInput('1').id('present-stroke-weight-numeral').class('er-stroke-weight-setting__input').parent('present-stroke-weight-setting-numeral');
   divPresentStrokeWeightPlus = createDiv().id('present-stroke-weight-plus').class('er-stroke-weight-setting__button er-stroke-weight-setting__button--plus').parent('present-stroke-weight-setting-numeral').elt.addEventListener('click', function() {
     inputPresentStrokeWeightNumeral.elt.value++;
   });;
 
   // default superellipse corner
-  titlePresentRoundness = createElement('h2', 'Roundness').class('er-toolbar-title').parent('toolbar');
-  divPresentRoundnessSetting = createDiv().id('present-roundness-setting').class('er-roundness-setting').parent('toolbar');
-  sliderPresentRoundness = createSlider(0.1, 10, 2, 0.01).id('present-roundness-slider').class('er-roundness-setting__slider').parent('present-roundness-setting');
+  titlePresentExpansion = createElement('h2', 'Expansion').class('er-toolbar-title').parent('toolbar');
+  divPresentExpansionSetting = createDiv().id('present-expansion-setting').class('er-expansion-setting').parent('toolbar');
+  sliderPresentExpansion = createSlider(0.2, 5, 2, 0.01).id('present-expansion-slider').class('er-expansion-setting__slider').parent('present-expansion-setting');
+
+  // vertex type
+  titleVertexType = createElement('h2', 'Vertex type').class('er-toolbar-title').parent('toolbar');
+  divPresentVertexFill = createDiv().id('present-vertex-type--Fill').class('er-vertex-type-selector').parent('toolbar');
+  titleVertexFill = createElement('h3', 'Fill:').class('er-toolbar-title er-toolbar-title--small').parent('present-vertex-type--Fill');
+  radioPresentVertexFill = createRadio('vertexTypeFill').parent('present-vertex-type--Fill');
+  radioPresentVertexFill.option('curve');
+  radioPresentVertexFill.option('straight');
+  divPresentVertexStroke = createDiv().id('present-vertex-type--Stroke').class('er-vertex-type-selector').parent('toolbar');
+  titleVertexStroke = createElement('h3', 'Stroke:').class('er-toolbar-title er-toolbar-title--small').parent('present-vertex-type--Stroke');
+  radioPresentVertexStroke = createRadio('vertexTypeStroke').parent('present-vertex-type--Stroke');
+  radioPresentVertexStroke.option('curve');
+  radioPresentVertexStroke.option('straight');
+  radioPresentVertexStroke.style('checked', '0');
+  radioPresentVertexStroke.value('0');
+  console.log(radioPresentVertexStroke.selected());
 
   // default curve tightness
   tightnessVal = 0;
@@ -359,7 +373,7 @@ function draw() {
   clearRiso();
 
   strokeWeightVal = inputPresentStrokeWeightNumeral.value();
-  superEllipseCornerVal = sliderPresentRoundness.value();
+  superEllipseCornerVal = sliderPresentExpansion.value();
   tightnessFill = tightnessFillSlider.value();
   tightnessStroke = tightnessStrokeSlider.value();
   fontSizeVal = fontSizeSlider.value();

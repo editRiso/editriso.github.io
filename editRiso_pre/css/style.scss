@@ -571,8 +571,26 @@ canvas {
   }
 }
 
-.er-roundness-setting {
+.er-expansion-setting {
+  margin-bottom: 10px;
   &__slider {
     width: 100%;
+  }
+}
+.er-vertex-type-selector {
+  margin: 0 0 10px 0;
+  padding: 5px;
+  border: 1px solid $color-border;
+  input {
+    vertical-align: middle;
+  }
+  label {
+    font-family: 'Roboto Mono';
+    font-size: 12px;
+    font-weight: normal;
+    &::after {
+      content: '\A';
+      white-space: pre;
+    }
   }
 }
