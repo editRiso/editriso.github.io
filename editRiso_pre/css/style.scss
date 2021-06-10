@@ -581,16 +581,32 @@ canvas {
   margin: 0 0 10px 0;
   padding: 5px;
   border: 1px solid $color-border;
-  input {
-    vertical-align: middle;
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
   }
-  label {
+  &__item {
     font-family: 'Roboto Mono';
     font-size: 12px;
+    line-height: 24px;
     font-weight: normal;
-    &::after {
-      content: '\A';
-      white-space: pre;
+    cursor: pointer;
+    vertical-align: middle;
+    &::before {
+      font-family: 'IcoMoon-Free';
+      content: '\ea56';
+      font-size: 16px;
+      line-height: 24px;
+      color: $color-border;
+      vertical-align: middle;
+      margin-right: 0.25em;
+    }
+    &.is-active {
+      &::before {
+        content: '\ea55';
+        color: #000;
+      }
     }
   }
 }

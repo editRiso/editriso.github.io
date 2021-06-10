@@ -586,17 +586,32 @@ canvas {
   border: 1px solid #ddd;
 }
 
-.er-vertex-type-selector input {
+.er-vertex-type-selector__list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.er-vertex-type-selector__item {
+  font-family: 'Roboto Mono';
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: normal;
+  cursor: pointer;
   vertical-align: middle;
 }
 
-.er-vertex-type-selector label {
-  font-family: 'Roboto Mono';
-  font-size: 12px;
-  font-weight: normal;
+.er-vertex-type-selector__item::before {
+  font-family: 'IcoMoon-Free';
+  content: '\ea56';
+  font-size: 16px;
+  line-height: 24px;
+  color: #ddd;
+  vertical-align: middle;
+  margin-right: 0.25em;
 }
 
-.er-vertex-type-selector label::after {
-  content: '\A';
-  white-space: pre;
+.er-vertex-type-selector__item.is-active::before {
+  content: '\ea55';
+  color: #000;
 }

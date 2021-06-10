@@ -196,7 +196,6 @@ function setup() {
     inkSelectName = createElement('h4', inkslot[slot]).id('ink-name-' + slot).class('er-inksetting__ink-select-name').parent('ink-select-' + slot);
     inkSelectClose = createDiv().class('er-inksetting__close-button').parent('ink-select-' + slot).elt.addEventListener('click', function() {
       let target = document.getElementById('ink-select-' + slot);
-      console.log(target.classList);
       target.classList.remove('is-shown');
       isSettingState = false;
     });
@@ -210,7 +209,6 @@ function setup() {
       }
       inkSelectItem.elt.addEventListener('click', function() {
         if(this.classList.contains('is-disabled') == false) {
-          console.log('not disabled!');
           selectInkslot(slot, RISOCOLORS[color].name);
           refleshInkSetting(slot);
           handleActive('ink-select-list-' + slot, this);
@@ -295,20 +293,37 @@ function setup() {
   sliderPresentExpansion = createSlider(0.2, 5, 2, 0.01).id('present-expansion-slider').class('er-expansion-setting__slider').parent('present-expansion-setting');
 
   // vertex type
+  // default vertex type
+  vertexTypeFill = 'curve'
+  vertexTypeStroke = 'curve';
+  let vertexTargets = ['Fill', 'Stroke'];
+  let vertexTypes = ['curve', 'straight'];
   titleVertexType = createElement('h2', 'Vertex type').class('er-toolbar-title').parent('toolbar');
-  divPresentVertexFill = createDiv().id('present-vertex-type--Fill').class('er-vertex-type-selector').parent('toolbar');
-  titleVertexFill = createElement('h3', 'Fill:').class('er-toolbar-title er-toolbar-title--small').parent('present-vertex-type--Fill');
-  radioPresentVertexFill = createRadio('vertexTypeFill').parent('present-vertex-type--Fill');
-  radioPresentVertexFill.option('curve');
-  radioPresentVertexFill.option('straight');
-  divPresentVertexStroke = createDiv().id('present-vertex-type--Stroke').class('er-vertex-type-selector').parent('toolbar');
-  titleVertexStroke = createElement('h3', 'Stroke:').class('er-toolbar-title er-toolbar-title--small').parent('present-vertex-type--Stroke');
-  radioPresentVertexStroke = createRadio('vertexTypeStroke').parent('present-vertex-type--Stroke');
-  radioPresentVertexStroke.option('curve');
-  radioPresentVertexStroke.option('straight');
-  radioPresentVertexStroke.style('checked', '0');
-  radioPresentVertexStroke.value('0');
-  console.log(radioPresentVertexStroke.selected());
+  for (let target in vertexTargets) {
+    divPresentVertexType = createDiv().id('present-vertex-type--' + vertexTargets[target]).class('er-vertex-type-selector').parent('toolbar');
+    titleVertexType = createElement('h3', vertexTargets[target] + ':').class('er-toolbar-title er-toolbar-title--small').parent('present-vertex-type--' + vertexTargets[target]);
+    vertexTypeList = createElement('ul').id('present-vertex-type-list-' + vertexTargets[target]).class('er-vertex-type-selector__list').parent('present-vertex-type--' + vertexTargets[target]);
+    for (let type in vertexTypes) {
+      vertexTypeItem = createElement('li', vertexTypes[type]).id('present-vertex-type--' + vertexTargets[target] + '-' + vertexTypes[type]).class('er-vertex-type-selector__item').parent('present-vertex-type-list-' + vertexTargets[target]);
+      if (vertexTypes[type] == 'curve') {
+        vertexTypeItem.addClass('is-active');
+      }
+      vertexTypeItem.elt.addEventListener('click', function() {
+        if(this.classList.contains('is-disabled') == false) {
+          switch (this.parentNode.id) {
+            case 'present-vertex-type-list-Fill':
+              vertexTypeFill = this.innerHTML;
+              break;
+            case 'present-vertex-type-list-Stroke':
+              vertexTypeStroke = this.innerHTML;
+              break;
+          }
+          handleActive('present-vertex-type-list-' + vertexTargets[target], this);
+          console.log(vertexTypeFill, vertexTypeStroke);
+        }
+      });
+    }
+  }
 
   // default curve tightness
   tightnessVal = 0;
@@ -322,24 +337,6 @@ function setup() {
   tightnessStrokeSlider.position(800 + bleed, height - 20);
   tightnessStrokeSlider.style('width', '100px');
   tightnessStrokeSlider.changed(tightnessStrokeChanged);
-
-  // default vertex type
-  vertexTypeFill = 'curve'
-  vertexTypeStroke = 'curve';
-
-  // vertex type radio
-  vertexTypeFillSelector = createSelect();
-  vertexTypeFillSelector.position(1000 + bleed, height - 20);
-  vertexTypeFillSelector.option('curve');
-  vertexTypeFillSelector.option('straight');
-  vertexTypeFillSelector.style('width', '200px');
-  vertexTypeFillSelector.changed(selectVertexTypeFill);
-  vertexTypeStrokeSelector = createSelect();
-  vertexTypeStrokeSelector.position(1200 + bleed, height - 20);
-  vertexTypeStrokeSelector.option('curve');
-  vertexTypeStrokeSelector.option('straight');
-  vertexTypeStrokeSelector.style('width', '200px');
-  vertexTypeStrokeSelector.changed(selectVertexTypeStroke);
 
   // fonts
   fontSelector = createSelect();
@@ -377,8 +374,6 @@ function draw() {
   tightnessFill = tightnessFillSlider.value();
   tightnessStroke = tightnessStrokeSlider.value();
   fontSizeVal = fontSizeSlider.value();
-  vertexTypeFill = vertexTypeFillSelector.value();
-  vertexTypeStroke = vertexTypeStrokeSelector.value();
 
   if (mouseIsPressed) {
     if (mouseX > editorOutsideWidth - bleed && mouseY > editorOutsideHeight - bleed && mouseX < width - editorOutsideWidth + bleed && mouseY < height - editorOutsideHeight + bleed) {
@@ -445,7 +440,7 @@ function draw() {
       drawPolygon(tmpPolygon.inkFill, fill, tmpPolygon.posX + editorOutsideWidth, tmpPolygon.posY + editorOutsideHeight, tmpPolygon.vertexes, tmpPolygon.isClosed, tmpPolygon.strokeWeight, tmpPolygon.vertexTypeFill, tmpPolygon.tightnessFill, 0);
     }
     if (tmpPolygon.inkStroke != 'transparent') {
-      drawPolygon(tmpPolygon.inkStroke, stroke, tmpPolygon.posX + editorOutsideWidth, tmpPolygon.posY + editorOutsideHeight, tmpPolygon.vertexes, tmpPolygon.isClosed, tmpPolygon.strokeWeight, tmpPolygon.vertexTypeFill, tmpPolygon.tightnessStroke, 0);
+      drawPolygon(tmpPolygon.inkStroke, stroke, tmpPolygon.posX + editorOutsideWidth, tmpPolygon.posY + editorOutsideHeight, tmpPolygon.vertexes, tmpPolygon.isClosed, tmpPolygon.strokeWeight, tmpPolygon.vertexTypeStroke, tmpPolygon.tightnessStroke, 0);
     }
   }
 
@@ -481,7 +476,7 @@ function draw() {
           drawPolygon(objects[i].inkFill, fill, objects[i].posX + editorOutsideWidth, objects[i].posY + editorOutsideHeight, objects[i].vertexes, objects[i].isClosed, objects[i].strokeWeight, objects[i].vertexTypeFill, objects[i].tightnessFill, 0);
         }
         if (objects[i].inkStroke != 'transparent') {
-          drawPolygon(objects[i].inkStroke, stroke, objects[i].posX + editorOutsideWidth, objects[i].posY + editorOutsideHeight, objects[i].vertexes, objects[i].isClosed, objects[i].strokeWeight, objects[i].vertexTypeFill, objects[i].tightnessStroke, 0);
+          drawPolygon(objects[i].inkStroke, stroke, objects[i].posX + editorOutsideWidth, objects[i].posY + editorOutsideHeight, objects[i].vertexes, objects[i].isClosed, objects[i].strokeWeight, objects[i].vertexTypeStroke, objects[i].tightnessStroke, 0);
         }
         break;
       case 'image':
@@ -1099,15 +1094,13 @@ let drawPolygon = function(targetColor, drawMode, posX, posY, vertexes, isClosed
       colors[inkslot[targetColor]].curveVertex(vertexes[vertexes.length - 1].x + editorOutsideWidth, vertexes[vertexes.length - 1].y + editorOutsideHeight);
     }
   } else {
-    colors[inkslot[targetColor]].vertex(vertexes[vertexes.length - 1].x + editorOutsideWidth, vertexes[vertexes.length - 1].y + editorOutsideHeight);
+    // colors[inkslot[targetColor]].vertex(vertexes[vertexes.length - 1].x + editorOutsideWidth, vertexes[vertexes.length - 1].y + editorOutsideHeight);
     for (let i = 0; i < vertexes.length; i++) {
       colors[inkslot[targetColor]].vertex(vertexes[i].x + editorOutsideWidth, vertexes[i].y + editorOutsideHeight);
     }
     if (isClosed) {
       colors[inkslot[targetColor]].vertex(vertexes[0].x + editorOutsideWidth, vertexes[0].y + editorOutsideHeight);
-      colors[inkslot[targetColor]].vertex(vertexes[1].x + editorOutsideWidth, vertexes[1].y + editorOutsideHeight);
     } else {
-      colors[inkslot[targetColor]].vertex(vertexes[vertexes.length - 1].x + editorOutsideWidth, vertexes[vertexes.length - 1].y + editorOutsideHeight);
     }
   }
   colors[inkslot[targetColor]].endShape();
