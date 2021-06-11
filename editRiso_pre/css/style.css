@@ -578,6 +578,8 @@ canvas {
 
 .er-expansion-setting__slider {
   width: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 .er-vertex-type-selector {
@@ -614,4 +616,15 @@ canvas {
 .er-vertex-type-selector__item.is-active::before {
   content: '\ea55';
   color: #000;
+}
+
+.er-vertex-type-selector__slider {
+  display: none;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.er-vertex-type-selector__slider.is-shown {
+  display: block;
 }

@@ -575,6 +575,8 @@ canvas {
   margin-bottom: 10px;
   &__slider {
     width: 100%;
+    padding: 0;
+    margin: 0;
   }
 }
 .er-vertex-type-selector {
@@ -607,6 +609,15 @@ canvas {
         content: '\ea55';
         color: #000;
       }
+    }
+  }
+  &__slider {
+    display: none;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    &.is-shown {
+      display: block;
     }
   }
 }

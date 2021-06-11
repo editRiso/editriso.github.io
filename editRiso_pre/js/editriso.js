@@ -294,10 +294,11 @@ function setup() {
 
   // vertex type
   // default vertex type
-  vertexTypeFill = 'curve'
-  vertexTypeStroke = 'curve';
+  vertexTypeFill = 'straight'
+  vertexTypeStroke = 'straight';
+  tightnessVal = 0;
   let vertexTargets = ['Fill', 'Stroke'];
-  let vertexTypes = ['curve', 'straight'];
+  let vertexTypes = ['straight', 'curve'];
   titleVertexType = createElement('h2', 'Vertex type').class('er-toolbar-title').parent('toolbar');
   for (let target in vertexTargets) {
     divPresentVertexType = createDiv().id('present-vertex-type--' + vertexTargets[target]).class('er-vertex-type-selector').parent('toolbar');
@@ -305,11 +306,11 @@ function setup() {
     vertexTypeList = createElement('ul').id('present-vertex-type-list-' + vertexTargets[target]).class('er-vertex-type-selector__list').parent('present-vertex-type--' + vertexTargets[target]);
     for (let type in vertexTypes) {
       vertexTypeItem = createElement('li', vertexTypes[type]).id('present-vertex-type--' + vertexTargets[target] + '-' + vertexTypes[type]).class('er-vertex-type-selector__item').parent('present-vertex-type-list-' + vertexTargets[target]);
-      if (vertexTypes[type] == 'curve') {
+      if (vertexTypes[type] == 'straight') {
         vertexTypeItem.addClass('is-active');
       }
       vertexTypeItem.elt.addEventListener('click', function() {
-        if(this.classList.contains('is-disabled') == false) {
+        if (this.classList.contains('is-disabled') == false) {
           switch (this.parentNode.id) {
             case 'present-vertex-type-list-Fill':
               vertexTypeFill = this.innerHTML;
@@ -319,24 +320,17 @@ function setup() {
               break;
           }
           handleActive('present-vertex-type-list-' + vertexTargets[target], this);
-          console.log(vertexTypeFill, vertexTypeStroke);
+        }
+        let targetSlider = document.getElementById('present-vertex-tightness-' + vertexTargets[target]);
+        if (vertexTypes[type] == 'curve') {
+          targetSlider.classList.add('is-shown');
+        } else {
+          targetSlider.classList.remove('is-shown');
         }
       });
     }
+    sliderVertexTightness = createSlider(-10, 10, 0, 1).id('present-vertex-tightness-' + vertexTargets[target]).class('er-vertex-type-selector__slider').parent('present-vertex-type--' + vertexTargets[target]);
   }
-
-  // default curve tightness
-  tightnessVal = 0;
-
-  // curve tightness slider
-  tightnessFillSlider = createSlider(-10, 10, 0, 1);
-  tightnessFillSlider.position(700 + bleed, height - 20);
-  tightnessFillSlider.style('width', '100px');
-  tightnessFillSlider.changed(tightnessFillChanged);
-  tightnessStrokeSlider = createSlider(-10, 10, 0, 1);
-  tightnessStrokeSlider.position(800 + bleed, height - 20);
-  tightnessStrokeSlider.style('width', '100px');
-  tightnessStrokeSlider.changed(tightnessStrokeChanged);
 
   // fonts
   fontSelector = createSelect();
@@ -371,8 +365,10 @@ function draw() {
 
   strokeWeightVal = inputPresentStrokeWeightNumeral.value();
   superEllipseCornerVal = sliderPresentExpansion.value();
-  tightnessFill = tightnessFillSlider.value();
-  tightnessStroke = tightnessStrokeSlider.value();
+  let sliderVertexTightnessFill = document.getElementById('present-vertex-tightness-Fill');
+  tightnessFill = sliderVertexTightnessFill.value;
+  let sliderVertexTightnessStroke = document.getElementById('present-vertex-tightness-Stroke');
+  tightnessStroke = sliderVertexTightnessStroke.value;
   fontSizeVal = fontSizeSlider.value();
 
   if (mouseIsPressed) {
