@@ -333,12 +333,28 @@ function setup() {
   }
 
   // fonts
-  fontSelector = createSelect();
-  fontSelector.position(400 + bleed, 20);
+  titleFontSelector = createElement('h2', 'Font').class('er-toolbar-title').parent('toolbar');
+  divPresentFontSelector = createDiv().id('present-font-selector').class('er-font-selector').parent('toolbar');
+  presentFontDisplay = createDiv('<span>' + selectedFont + '</span>').id('present-font-display').class('er-font-selector__font-display').style('font-family', selectedFont).parent('present-font-selector');
+  presentFontSwitchButton = createDiv().class('er-font-selector__switch-button').parent('present-font-display').elt.addEventListener('click', function() {
+    let target = document.getElementById('present-font-select');
+    target.classList.add('is-shown');
+    isSettingState = true;
+  });
+  presentFontSelect = createDiv().id('present-font-select').class('er-font-selector__font-select').parent('present-font-display');
+  presentFontSelectClose = createDiv().class('er-font-selector__close-button').parent('present-font-select').elt.addEventListener('click', function() {
+    let target = document.getElementById('present-font-select');
+    target.classList.remove('is-shown');
+    isSettingState = false;
+  });
+  presentFontList = createElement('ul').id('present-font-list').class('er-font-selector__list').parent('present-font-select');
   for (let font in fontsLoaded) {
-    fontSelector.option(fontsLoaded[font]);
+    presentFontItem = createElement('li', fontsLoaded[font]).id('present-font-item-' + font).class('er-font-selector__item').style('font-family', fontsLoaded[font]).parent('present-font-list').elt.addEventListener('click', function() {
+      selectedFont = fontsLoaded[font];
+      presentFontDisplay.style('font-family', selectedFont);
+      presentFontDisplay.elt.children[0].innerHTML = selectedFont;
+    });
   }
-  fontSelector.changed(selectFont);
 
   // default font size
   fontSizeVal = 40;
@@ -763,12 +779,6 @@ function changeToolMode(tool) {
 }
 
 // select font
-function selectFont() {
-  let form = fontSelector.value();
-  print('font: ' + form);
-  selectedFont = form;
-}
-
 function fontSizeChanged() {
   print('font size: ' + fontSizeVal);
 }
