@@ -533,7 +533,8 @@ canvas {
   }
 }
 
-.er-stroke-weight-setting {
+.er-stroke-weight-setting,
+.er-font-size-setting {
   margin-bottom: 10px;
   &__button {
     display: inline-block;
@@ -629,6 +630,7 @@ canvas {
     border: 1px solid $color-border;
     box-sizing: border-box;
     padding: 0 0.25em;
+    margin-bottom: 10px;
     span {
       display: block;
       width: calc(100% - 1.25em);

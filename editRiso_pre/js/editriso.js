@@ -104,7 +104,7 @@ let fontsLoaded = [
 ];
 let fonts = [];
 let selectedFont = fontsLoaded[0];
-let fontSizeVal = 24;
+let fontSizeVal;
 let textString = 'Type something.';
 
 // objects
@@ -356,14 +356,15 @@ function setup() {
     });
   }
 
-  // default font size
-  fontSizeVal = 40;
-
-  // font size slider
-  fontSizeSlider = createSlider(0, 800, 1, 1);
-  fontSizeSlider.position(600 + bleed, 20);
-  fontSizeSlider.style('width', '100px');
-  fontSizeSlider.changed(fontSizeChanged);
+  divPresentFontSizeSetting = createDiv().id('present-font-size-setting').class('er-font-size-setting').parent('toolbar');
+  divPresentFontSizeNumeral = createDiv().id('present-font-size-setting-numeral').class('er-font-size-setting__unit').parent('present-font-size-setting');
+  divPresentFontSizeMinus = createDiv().id('present-font-size-minus').class('er-font-size-setting__button er-font-size-setting__button--minus').parent('present-font-size-setting-numeral').elt.addEventListener('click', function() {
+    inputPresentFontSizeNumeral.elt.value--;
+  });
+  inputPresentFontSizeNumeral = createInput('100').id('present-font-size-numeral').class('er-font-size-setting__input').parent('present-font-size-setting-numeral');
+  divPresentFontSizePlus = createDiv().id('present-font-size-plus').class('er-font-size-setting__button er-font-size-setting__button--plus').parent('present-font-size-setting-numeral').elt.addEventListener('click', function() {
+    inputPresentFontSizeNumeral.elt.value++;
+  });;
 
   // text input
   textInput = createInput('Type something');
@@ -385,7 +386,7 @@ function draw() {
   tightnessFill = sliderVertexTightnessFill.value;
   let sliderVertexTightnessStroke = document.getElementById('present-vertex-tightness-Stroke');
   tightnessStroke = sliderVertexTightnessStroke.value;
-  fontSizeVal = fontSizeSlider.value();
+  fontSizeVal = inputPresentFontSizeNumeral.value();
 
   if (mouseIsPressed) {
     if (mouseX > editorOutsideWidth - bleed && mouseY > editorOutsideHeight - bleed && mouseX < width - editorOutsideWidth + bleed && mouseY < height - editorOutsideHeight + bleed) {
@@ -778,40 +779,6 @@ function changeToolMode(tool) {
   }
 }
 
-// select font
-function fontSizeChanged() {
-  print('font size: ' + fontSizeVal);
-}
-
-function strokeWeightChanged() {
-  print('stroke weight: ' + strokeWeightVal);
-}
-
-function superEllipseCornerChanged() {
-  print('superellipsecorner: ' + superEllipseCornerVal);
-}
-
-function tightnessFillChanged() {
-  print('Fill curve tightness: ' + tightnessFill);
-}
-
-function tightnessStrokeChanged() {
-  print('Stroke curve tightness: ' + tightnessStroke);
-}
-
-// select curve Vertex
-function selectVertexTypeFill() {
-  let form = vertexTypeFillSelector.value();
-  print('vertex type (fill): ' + form);
-  vertexTypeFill = form;
-}
-
-function selectVertexTypeStroke() {
-  let form = vertexTypeStrokeSelector.value();
-  print('vertex type (stroke): ' + form);
-  vertexTypeStroke = form;
-}
-
 // update text
 function updateText() {
   print('you are typing: ', this.value());
@@ -1125,7 +1092,7 @@ let drawText = function(targetColor, drawMode, posX, posY, width, height, stroke
   }
   colors[inkslot[targetColor]].textAlign(LEFT, TOP);
   colors[inkslot[targetColor]].textFont(fontFace);
-  colors[inkslot[targetColor]].textSize(fontSize);
+  colors[inkslot[targetColor]].textSize(Number(fontSize));
   colors[inkslot[targetColor]].text(content, posX, posY);
   pop();
 }
