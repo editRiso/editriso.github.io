@@ -332,8 +332,9 @@ function setup() {
     sliderVertexTightness = createSlider(-10, 10, 0, 1).id('present-vertex-tightness-' + vertexTargets[target]).class('er-vertex-type-selector__slider').parent('present-vertex-type--' + vertexTargets[target]);
   }
 
-  // fonts
-  titleFontSelector = createElement('h2', 'Font').class('er-toolbar-title').parent('toolbar');
+  // text
+  titleFontSelector = createElement('h2', 'Text').class('er-toolbar-title').parent('toolbar');
+  inputPresentTextString = createInput('Type here').id('parent-text-string').class('er-text-string-input').parent('toolbar');
   divPresentFontSelector = createDiv().id('present-font-selector').class('er-font-selector').parent('toolbar');
   presentFontDisplay = createDiv('<span>' + selectedFont + '</span>').id('present-font-display').class('er-font-selector__font-display').style('font-family', selectedFont).parent('present-font-selector');
   presentFontSwitchButton = createDiv().class('er-font-selector__switch-button').parent('present-font-display').elt.addEventListener('click', function() {
@@ -355,7 +356,6 @@ function setup() {
       presentFontDisplay.elt.children[0].innerHTML = selectedFont;
     });
   }
-
   divPresentFontSizeSetting = createDiv().id('present-font-size-setting').class('er-font-size-setting').parent('toolbar');
   divPresentFontSizeNumeral = createDiv().id('present-font-size-setting-numeral').class('er-font-size-setting__unit').parent('present-font-size-setting');
   divPresentFontSizeMinus = createDiv().id('present-font-size-minus').class('er-font-size-setting__button er-font-size-setting__button--minus').parent('present-font-size-setting-numeral').elt.addEventListener('click', function() {
@@ -365,11 +365,6 @@ function setup() {
   divPresentFontSizePlus = createDiv().id('present-font-size-plus').class('er-font-size-setting__button er-font-size-setting__button--plus').parent('present-font-size-setting-numeral').elt.addEventListener('click', function() {
     inputPresentFontSizeNumeral.elt.value++;
   });;
-
-  // text input
-  textInput = createInput('Type something');
-  textInput.position(800 + bleed, 20);
-  textInput.input(updateText);
 }
 
 function draw() {
@@ -387,6 +382,7 @@ function draw() {
   let sliderVertexTightnessStroke = document.getElementById('present-vertex-tightness-Stroke');
   tightnessStroke = sliderVertexTightnessStroke.value;
   fontSizeVal = inputPresentFontSizeNumeral.value();
+  textString = inputPresentTextString.value();
 
   if (mouseIsPressed) {
     if (mouseX > editorOutsideWidth - bleed && mouseY > editorOutsideHeight - bleed && mouseX < width - editorOutsideWidth + bleed && mouseY < height - editorOutsideHeight + bleed) {
@@ -777,12 +773,6 @@ function changeToolMode(tool) {
       generateBoundingbox(objects[i]);
     }
   }
-}
-
-// update text
-function updateText() {
-  print('you are typing: ', this.value());
-  textString = this.value();
 }
 
 function mousePressed() {
