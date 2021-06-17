@@ -739,5 +739,22 @@ canvas {
 }
 .er-text-string-input {
   width: 100%;
+  height: 32px;
+  box-sizing: border-box;
+  font-family: 'Roboto-Mono';
+  font-size: 12px;
+  line-height: 32px;
   margin-bottom: 10px;
+}
+
+// object options
+.er-object-options {
+  position: absolute;
+  right: 45px;
+  top: 260px;
+  border: 1px solid $color-border;
+  background: #fff;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 124px;
 }

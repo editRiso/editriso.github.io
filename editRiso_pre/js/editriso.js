@@ -46,13 +46,14 @@ let editorOutsideHeight = 200;
 let bleed = 35;
 
 let formatSelectBox;
-let size;
+let size, sizeWidth, sizeHeight;
 let selectedFormat;
 
 let toolMode = 'rect';
 let targetInkFillNum;
 let targetInkStrokeNum;
 let isSettingState = false;
+let isObjectOptions = false;
 
 let startPoint = {};
 let tmpPx, tmpPy, tmpWidth, tmpHeight;
@@ -123,6 +124,7 @@ let tools = [
   'select'
 ];
 let toolBar = true;
+let objectOptions = false;
 let previewCut = true;
 
 function preload() {
@@ -365,12 +367,16 @@ function setup() {
   divPresentFontSizePlus = createDiv().id('present-font-size-plus').class('er-font-size-setting__button er-font-size-setting__button--plus').parent('present-font-size-setting-numeral').elt.addEventListener('click', function() {
     inputPresentFontSizeNumeral.elt.value++;
   });;
+
+  // object options
+  divObjectOptions = createDiv().id('object-options').class('er-object-options');
+  titleObjectOptions = createElement('h2', 'Object options').class('er-toolbar-title').parent('object-options');
 }
 
 function draw() {
   size = formats[selectedFormat];
-  let sizeWidth = size.width;
-  let sizeHeight = size.height;
+  sizeWidth = size.width;
+  sizeHeight = size.height;
   setSize(size);
   background(245);
   clearRiso();
@@ -788,6 +794,7 @@ function mousePressed() {
     for (let i = boundingBoxes.length - 1; i >= 0; i--) {
       if (boundingBoxes[i].pressed()) {
         print('boundingBox[' + i + '] is pressed.');
+        displayObjectOptions(i);
         break;
       }
     }
@@ -1461,7 +1468,17 @@ boundingBox.prototype.release = function() {
   this.isDragged = false;
   this.isResized = false;
   this.isRotated = false;
-  print('Setting items for object[' + this.id + '] should appear when it is clicked.');
+}
+
+function displayObjectOptions(id) {
+  if (objectOptions == false) {
+    objectOptions = true;
+  }
+  console.log(titleObjectOptions);
+  titleObjectOptions.elt.innerHTML = objects[id].type;
+  titleObjectId = createElement('h3', 'id: [' + id + ']').class('er-toolbar-title er-toolbar-title--small').parent('object-options');
+  inputObjectX = createInput(objects[id].posX).parent('object-options');
+  inputObjectY = createInput(objects[id].posY).parent('object-options');
 }
 
 // vertex edit button
