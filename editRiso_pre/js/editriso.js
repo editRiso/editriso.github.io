@@ -287,7 +287,7 @@ function setup() {
   inputPresentStrokeWeightNumeral = createInput('1').id('present-stroke-weight-numeral').class('er-stroke-weight-setting__input').parent('present-stroke-weight-setting-numeral');
   divPresentStrokeWeightPlus = createDiv().id('present-stroke-weight-plus').class('er-stroke-weight-setting__button er-stroke-weight-setting__button--plus').parent('present-stroke-weight-setting-numeral').elt.addEventListener('click', function() {
     inputPresentStrokeWeightNumeral.elt.value++;
-  });;
+  });
 
   // default superellipse corner
   titlePresentExpansion = createElement('h2', 'Expansion').class('er-toolbar-title').parent('toolbar');
@@ -372,18 +372,29 @@ function setup() {
   divObjectOptions = createDiv().id('object-options').class('er-object-options');
   titleObjectOptions = createElement('h2', 'Options').id('object-options-title-top').class('er-toolbar-title').parent('object-options');
   titleObjectIdOption = createElement('h3', 'id:').id('object-option-id').class('er-toolbar-title er-toolbar-title--small').parent('object-options');
+
   divObjectPositionOption = createDiv().id('object-option-position').class('er-object-options__block').parent('object-options');
   titleObjectPositionOption = createElement('h2', 'Position').class('er-toolbar-title').parent('object-option-position');
   titleObjectPosXOption = createElement('h3', 'X:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-position');
   inputObjectPosXOption = createInput().id('object-option-posX').class('er-object-options__input').parent('object-option-position');
   titleObjectPosYOption = createElement('h3', 'Y:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-position');
   inputObjectPosYOption = createInput().id('object-option-posY').class('er-object-options__input').parent('object-option-position');
+
   divObjectSizeOption = createDiv().id('object-option-size').class('er-object-options__block').parent('object-options');
   titleObjectSizeOption = createElement('h2', 'Size').class('er-toolbar-title').parent('object-option-size');
   titleObjectSizeWOption = createElement('h3', 'Width:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-size');
   inputObjectSizeWOption = createInput().id('object-option-width').class('er-object-options__input').parent('object-option-size');
   titleObjectSizeHOption = createElement('h3', 'Height:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-size');
   inputObjectSizeHOption = createInput().id('object-option-height').class('er-object-options__input').parent('object-option-size');
+
+  divObjectColorOption =createDiv().id('object-option-color').class('er-object-options__block').parent('object-options');
+  titleObjectColorOption = createElement('h2', 'Color').class('er-toolbar-title').parent('object-option-color');
+  divObjectColorOptionFill = createDiv().id('object-color-option--fill').class('er-color-selector').parent('object-option-color');
+  titleObjectColorOptionFill = createElement('h3', 'Fill:').class('er-toolbar-title er-toolbar-title--small').parent('object-color-option--fill');
+  generateColorSelector('objectFill', 'object-color-option--fill', 'objectInkFill');
+  divObjectColorOptionStroke = createDiv().id('object-color-option--stroke').class('er-color-selector').parent('object-option-color');
+  titleObjectColorOptionStroke = createElement('h3', 'Stroke:').class('er-toolbar-title er-toolbar-title--small').parent('object-color-option--stroke');
+  generateColorSelector('objectStroke', 'object-color-option--stroke', 'objectInkStroke');
 }
 
 function draw() {
@@ -737,6 +748,8 @@ function generateColorSelector(id, parent, target) {
           break;
         case 'targetInkStroke':
           targetInkStroke = ink;
+          break;
+        default:
           break;
       }
     });
