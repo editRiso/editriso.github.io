@@ -1507,6 +1507,10 @@ function displayObjectOptions(id) {
   inputObjectPosYOption.elt.value = objects[id].posY;
   inputObjectSizeWOption.elt.value = objects[id].width;
   inputObjectSizeHOption.elt.value = objects[id].height;
+  let objectFill = document.getElementById('li-objectFill-' + objects[id].inkFill);
+  handleActive('ul-objectFill', objectFill);
+  let objectStroke = document.getElementById('li-objectStroke-' + objects[id].inkStroke);
+  handleActive('ul-objectStroke', objectStroke);
 }
 
 // vertex edit button
