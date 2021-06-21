@@ -377,20 +377,22 @@ function setup() {
   divObjectPositionOption = createDiv().id('object-option-position').class('er-object-options__block').parent('object-options');
   titleObjectPositionOption = createElement('h2', 'Position').class('er-toolbar-title').parent('object-option-position');
   titleObjectPosXOption = createElement('h3', 'X:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-position');
-  inputObjectPosXOption = createInput().id('object-option-posX').class('er-object-options__input').parent('object-option-position');
+  inputObjectPosXOption = createInput(0, 'number').id('object-option-posX').class('er-object-options__input').parent('object-option-position');
   inputObjectPosXOption.changed(function (){
-    console.log(this.elt.value);
     updateObjectOption(targetObject, 'posX', this.elt.value);
   })
   titleObjectPosYOption = createElement('h3', 'Y:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-position');
-  inputObjectPosYOption = createInput().id('object-option-posY').class('er-object-options__input').parent('object-option-position');
+  inputObjectPosYOption = createInput(0, 'number').id('object-option-posY').class('er-object-options__input').parent('object-option-position');
+  inputObjectPosYOption.changed(function (){
+    updateObjectOption(targetObject, 'posY', this.elt.value);
+  })
 
   divObjectSizeOption = createDiv().id('object-option-size').class('er-object-options__block').parent('object-options');
   titleObjectSizeOption = createElement('h2', 'Size').class('er-toolbar-title').parent('object-option-size');
   titleObjectSizeWOption = createElement('h3', 'Width:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-size');
-  inputObjectSizeWOption = createInput().id('object-option-width').class('er-object-options__input').parent('object-option-size');
+  inputObjectSizeWOption = createInput(0, 'number').id('object-option-width').class('er-object-options__input').parent('object-option-size');
   titleObjectSizeHOption = createElement('h3', 'Height:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-size');
-  inputObjectSizeHOption = createInput().id('object-option-height').class('er-object-options__input').parent('object-option-size');
+  inputObjectSizeHOption = createInput(0, 'number').id('object-option-height').class('er-object-options__input').parent('object-option-size');
 
   divObjectColorOption =createDiv().id('object-option-color').class('er-object-options__block').parent('object-options');
   titleObjectColorOption = createElement('h2', 'Color').class('er-toolbar-title').parent('object-option-color');
@@ -753,6 +755,12 @@ function generateColorSelector(id, parent, target) {
           break;
         case 'targetInkStroke':
           targetInkStroke = ink;
+          break;
+        case 'objectInkFill':
+          objects[targetObject].inkFill = ink;
+          break;
+        case 'objectInkStroke':
+          objects[targetObject].inkStroke = ink;
           break;
         default:
           break;
