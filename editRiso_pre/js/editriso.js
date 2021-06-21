@@ -54,6 +54,7 @@ let targetInkFillNum;
 let targetInkStrokeNum;
 let isSettingState = false;
 let isObjectOptions = false;
+let targetObject = null;
 
 let startPoint = {};
 let tmpPx, tmpPy, tmpWidth, tmpHeight;
@@ -371,12 +372,16 @@ function setup() {
   // object options
   divObjectOptions = createDiv().id('object-options').class('er-object-options');
   titleObjectOptions = createElement('h2', 'Options').id('object-options-title-top').class('er-toolbar-title').parent('object-options');
-  titleObjectIdOption = createElement('h3', 'id:').id('object-option-id').class('er-toolbar-title er-toolbar-title--small').parent('object-options');
+  titleObjectTypeOption = createElement('h3', 'Type: ').id('object-option-type').class('er-toolbar-title er-toolbar-title--small').parent('object-options');
 
   divObjectPositionOption = createDiv().id('object-option-position').class('er-object-options__block').parent('object-options');
   titleObjectPositionOption = createElement('h2', 'Position').class('er-toolbar-title').parent('object-option-position');
   titleObjectPosXOption = createElement('h3', 'X:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-position');
   inputObjectPosXOption = createInput().id('object-option-posX').class('er-object-options__input').parent('object-option-position');
+  inputObjectPosXOption.changed(function (){
+    console.log(this.elt.value);
+    updateObjectOption(targetObject, 'posX', this.elt.value);
+  })
   titleObjectPosYOption = createElement('h3', 'Y:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-position');
   inputObjectPosYOption = createInput().id('object-option-posY').class('er-object-options__input').parent('object-option-position');
 
@@ -1497,12 +1502,13 @@ boundingBox.prototype.release = function() {
 }
 
 function displayObjectOptions(id) {
+  targetObject = id;
   if (objectOptions == false) {
     objectOptions = true;
   }
   console.log(titleObjectOptions);
   titleObjectOptions.elt.innerHTML = 'Object [' + objects[id].id + ']';
-  titleObjectIdOption.elt.innerHTML = 'id: ' + id;
+  titleObjectTypeOption.elt.innerHTML = objects[id].type;
   inputObjectPosXOption.elt.value = objects[id].posX;
   inputObjectPosYOption.elt.value = objects[id].posY;
   inputObjectSizeWOption.elt.value = objects[id].width;
@@ -1511,6 +1517,10 @@ function displayObjectOptions(id) {
   handleActive('ul-objectFill', objectFill);
   let objectStroke = document.getElementById('li-objectStroke-' + objects[id].inkStroke);
   handleActive('ul-objectStroke', objectStroke);
+}
+
+function updateObjectOption(targetObject, option, value) {
+  objects[targetObject][option] = value;
 }
 
 // vertex edit button
