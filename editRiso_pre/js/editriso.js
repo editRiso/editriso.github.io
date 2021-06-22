@@ -391,8 +391,14 @@ function setup() {
   titleObjectSizeOption = createElement('h2', 'Size').class('er-toolbar-title').parent('object-option-size');
   titleObjectSizeWOption = createElement('h3', 'Width:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-size');
   inputObjectSizeWOption = createInput(0, 'number').id('object-option-width').class('er-object-options__input').parent('object-option-size');
+  inputObjectSizeWOption.changed(function (){
+    updateObjectOption(targetObject, 'width', this.elt.value);
+  })
   titleObjectSizeHOption = createElement('h3', 'Height:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-size');
   inputObjectSizeHOption = createInput(0, 'number').id('object-option-height').class('er-object-options__input').parent('object-option-size');
+  inputObjectSizeHOption.changed(function (){
+    updateObjectOption(targetObject, 'height', this.elt.value);
+  })
 
   divObjectColorOption =createDiv().id('object-option-color').class('er-object-options__block').parent('object-options');
   titleObjectColorOption = createElement('h2', 'Color').class('er-toolbar-title').parent('object-option-color');
@@ -402,6 +408,29 @@ function setup() {
   divObjectColorOptionStroke = createDiv().id('object-color-option--stroke').class('er-color-selector').parent('object-option-color');
   titleObjectColorOptionStroke = createElement('h3', 'Stroke:').class('er-toolbar-title er-toolbar-title--small').parent('object-color-option--stroke');
   generateColorSelector('objectStroke', 'object-color-option--stroke', 'objectInkStroke');
+
+  divObjectStrokeWeightOption = createDiv().id('object-stroke-weight-setting').class('er-stroke-weight-setting').parent('object-options');
+  titleObjectStrokeWeightOption = createElement('h2', 'Stroke weight').class('er-toolbar-title').parent('object-stroke-weight-setting');
+  divObjectStrokeWeightNumeral = createDiv().id('object-stroke-weight-setting-numeral').class('er-stroke-weight-setting__unit').parent('object-stroke-weight-setting');
+  divObjectStrokeWeightMinus = createDiv().id('object-stroke-weight-minus').class('er-stroke-weight-setting__button er-stroke-weight-setting__button--minus').parent('object-stroke-weight-setting-numeral').elt.addEventListener('click', function() {
+    inputObjectStrokeWeightNumeral.elt.value--;
+    updateObjectOption(targetObject, 'strokeWeight', inputObjectStrokeWeightNumeral.elt.value);
+  });
+  inputObjectStrokeWeightNumeral = createInput('1').id('object-stroke-weight-numeral').class('er-stroke-weight-setting__input').parent('object-stroke-weight-setting-numeral');
+  divObjectStrokeWeightPlus = createDiv().id('object-stroke-weight-plus').class('er-stroke-weight-setting__button er-stroke-weight-setting__button--plus').parent('object-stroke-weight-setting-numeral').elt.addEventListener('click', function() {
+    inputObjectStrokeWeightNumeral.elt.value++;
+    updateObjectOption(targetObject, 'strokeWeight', inputObjectStrokeWeightNumeral.elt.value);
+  });
+  inputObjectStrokeWeightNumeral.changed(function (){
+    updateObjectOption(targetObject, 'strokeWeight', this.elt.value);
+  })
+
+  divObjectExpansionSetting = createDiv().id('object-expansion-setting').class('er-expansion-setting').parent('object-options');
+  titleObjectExpansion = createElement('h2', 'Expansion').class('er-toolbar-title').parent('object-expansion-setting');
+  sliderObjectExpansion = createSlider(0.2, 5, 2, 0.01).id('object-expansion-slider').class('er-expansion-setting__slider').parent('object-expansion-setting');
+  sliderObjectExpansion.changed(function (){
+    updateObjectOption(targetObject, 'cornerVal', this.elt.value);
+  })
 }
 
 function draw() {
