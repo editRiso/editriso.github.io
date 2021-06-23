@@ -330,7 +330,7 @@ function setup() {
         } else {
           targetSlider.classList.remove('is-shown');
         }
-      });
+      })
     }
     sliderVertexTightness = createSlider(-10, 10, 0, 1).id('present-vertex-tightness-' + vertexTargets[target]).class('er-vertex-type-selector__slider').parent('present-vertex-type--' + vertexTargets[target]);
   }
@@ -344,30 +344,30 @@ function setup() {
     let target = document.getElementById('present-font-select');
     target.classList.add('is-shown');
     isSettingState = true;
-  });
+  })
   presentFontSelect = createDiv().id('present-font-select').class('er-font-selector__font-select').parent('present-font-display');
   presentFontSelectClose = createDiv().class('er-font-selector__close-button').parent('present-font-select').elt.addEventListener('click', function() {
     let target = document.getElementById('present-font-select');
     target.classList.remove('is-shown');
     isSettingState = false;
-  });
+  })
   presentFontList = createElement('ul').id('present-font-list').class('er-font-selector__list').parent('present-font-select');
   for (let font in fontsLoaded) {
     presentFontItem = createElement('li', fontsLoaded[font]).id('present-font-item-' + font).class('er-font-selector__item').style('font-family', fontsLoaded[font]).parent('present-font-list').elt.addEventListener('click', function() {
       selectedFont = fontsLoaded[font];
       presentFontDisplay.style('font-family', selectedFont);
       presentFontDisplay.elt.children[0].innerHTML = selectedFont;
-    });
+    })
   }
   divPresentFontSizeSetting = createDiv().id('present-font-size-setting').class('er-font-size-setting').parent('toolbar');
   divPresentFontSizeNumeral = createDiv().id('present-font-size-setting-numeral').class('er-font-size-setting__unit').parent('present-font-size-setting');
   divPresentFontSizeMinus = createDiv().id('present-font-size-minus').class('er-font-size-setting__button er-font-size-setting__button--minus').parent('present-font-size-setting-numeral').elt.addEventListener('click', function() {
     inputPresentFontSizeNumeral.elt.value--;
-  });
+  })
   inputPresentFontSizeNumeral = createInput('100').id('present-font-size-numeral').class('er-font-size-setting__input').parent('present-font-size-setting-numeral');
   divPresentFontSizePlus = createDiv().id('present-font-size-plus').class('er-font-size-setting__button er-font-size-setting__button--plus').parent('present-font-size-setting-numeral').elt.addEventListener('click', function() {
     inputPresentFontSizeNumeral.elt.value++;
-  });;
+  })
 
   // object options
   divObjectOptions = createDiv().id('object-options').class('er-object-options');
@@ -415,12 +415,12 @@ function setup() {
   divObjectStrokeWeightMinus = createDiv().id('object-stroke-weight-minus').class('er-stroke-weight-setting__button er-stroke-weight-setting__button--minus').parent('object-stroke-weight-setting-numeral').elt.addEventListener('click', function() {
     inputObjectStrokeWeightNumeral.elt.value--;
     updateObjectOption(targetObject, 'strokeWeight', inputObjectStrokeWeightNumeral.elt.value);
-  });
+  })
   inputObjectStrokeWeightNumeral = createInput('1').id('object-stroke-weight-numeral').class('er-stroke-weight-setting__input').parent('object-stroke-weight-setting-numeral');
   divObjectStrokeWeightPlus = createDiv().id('object-stroke-weight-plus').class('er-stroke-weight-setting__button er-stroke-weight-setting__button--plus').parent('object-stroke-weight-setting-numeral').elt.addEventListener('click', function() {
     inputObjectStrokeWeightNumeral.elt.value++;
     updateObjectOption(targetObject, 'strokeWeight', inputObjectStrokeWeightNumeral.elt.value);
-  });
+  })
   inputObjectStrokeWeightNumeral.changed(function (){
     updateObjectOption(targetObject, 'strokeWeight', this.elt.value);
   })
@@ -431,6 +431,34 @@ function setup() {
   sliderObjectExpansion.changed(function (){
     updateObjectOption(targetObject, 'cornerVal', this.elt.value);
   })
+
+  divObjectVertexTypeSetting = createDiv().id('object-vertex-type-setting').parent('object-options');
+  titleObjectVertexTypeOption = createElement('h2', 'Vertex type').class('er-toolbar-title').parent('object-vertex-type-setting');
+  for (let target in vertexTargets) {
+    divObjectVertexType = createDiv().id('object-vertex-type--' + vertexTargets[target]).class('er-vertex-type-selector').parent('object-vertex-type-setting');
+    titleObjectVertexType = createElement('h3', vertexTargets[target] + ':').class('er-toolbar-title er-toolbar-title--small').parent('object-vertex-type--' + vertexTargets[target]);
+    vertexTypeList = createElement('ul').id('object-vertex-type-list-' + vertexTargets[target]).class('er-vertex-type-selector__list').parent('object-vertex-type--' + vertexTargets[target]);
+    for (let type in vertexTypes) {
+      vertexTypeItem = createElement('li', vertexTypes[type]).id('object-vertex-type--' + vertexTargets[target] + '-' + vertexTypes[type]).class('er-vertex-type-selector__item').parent('object-vertex-type-list-' + vertexTargets[target]);
+      if (vertexTypes[type] == 'straight') {
+        vertexTypeItem.addClass('is-active');
+      }
+      vertexTypeItem.elt.addEventListener('click', function() {
+        handleActive('object-vertex-type-list-' + vertexTargets[target], this);
+        updateObjectOption(targetObject, 'vertexType' + vertexTargets[target], this.innerHTML);
+        let targetSlider = document.getElementById('object-vertex-tightness-' + vertexTargets[target]);
+        if (vertexTypes[type] == 'curve') {
+          targetSlider.classList.add('is-shown');
+        } else {
+          targetSlider.classList.remove('is-shown');
+        }
+      })
+    }
+    sliderVertexTightness = createSlider(-10, 10, 0, 1).id('object-vertex-tightness-' + vertexTargets[target]).class('er-vertex-type-selector__slider').parent('object-vertex-type--' + vertexTargets[target]);
+    sliderVertexTightness.changed(function (){
+      updateObjectOption(targetObject, 'tightness' + vertexTargets[target], this.elt.value);
+    })
+  }
 }
 
 function draw() {
@@ -1554,6 +1582,26 @@ function displayObjectOptions(id) {
   handleActive('ul-objectFill', objectFill);
   let objectStroke = document.getElementById('li-objectStroke-' + objects[id].inkStroke);
   handleActive('ul-objectStroke', objectStroke);
+  inputObjectStrokeWeightNumeral.elt.value = objects[id].strokeWeight;
+  sliderObjectExpansion.elt.value = objects[id].cornerVal;
+  let objectVertexTypeFill = document.getElementById('object-vertex-type--Fill-' + objects[id].vertexTypeFill);
+  handleActive('object-vertex-type-list-Fill', objectVertexTypeFill);
+  let objectVertexTightnessFill = document.getElementById('object-vertex-tightness-Fill');
+  if (objects[id].vertexTypeFill == 'curve') {
+    objectVertexTightnessFill.classList.add('is-shown');
+    objectVertexTightnessFill.value = objects[id].tightnessFill;
+  } else {
+    objectVertexTightnessFill.classList.remove('is-shown');
+  }
+  let objectVertexTypeStroke = document.getElementById('object-vertex-type--Stroke-' + objects[id].vertexTypeStroke);
+  handleActive('object-vertex-type-list-Stroke', objectVertexTypeStroke);
+  let objectVertexTightnessStroke = document.getElementById('object-vertex-tightness-Stroke');
+  if (objects[id].vertexTypeStroke == 'curve') {
+    objectVertexTightnessStroke.classList.add('is-shown');
+    objectVertexTightnessStroke.value = objects[id].tightnessStroke;
+  } else {
+    objectVertexTightnessStroke.classList.remove('is-shown');
+  }
 }
 
 function updateObjectOption(targetObject, option, value) {
