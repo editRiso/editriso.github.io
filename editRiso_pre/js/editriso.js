@@ -1232,10 +1232,10 @@ function generateBoundingbox(object) {
 let boundingBox = function(id, x, y, w, h, vertexesX, vertexesY) {
   this.id = id;
   this.type = objects[this.id].type;
-  this.x = x;
-  this.y = y;
-  this.w = w;
-  this.h = h;
+  this.posX = x;
+  this.posY = y;
+  this.width = w;
+  this.height = h;
   this.aspectRatio = w / h;
   this.rotate = 0;
   this.isDragged = false;
@@ -1265,9 +1265,9 @@ boundingBox.prototype.draw = function() {
   stroke(boundingStroke);
   strokeWeight(1);
   rectMode(CORNER);
-  translate(this.x + editorOutsideWidth, this.y + editorOutsideHeight);
+  translate(this.posX + editorOutsideWidth, this.posY + editorOutsideHeight);
   rotate(this.rotate / 10);
-  rect(-this.w / 2, -this.h / 2, this.w, this.h);
+  rect(-this.width / 2, -this.height / 2, this.width, this.height);
   pop();
   push();
   fill('rgba(255, 255, 255, 1)');
@@ -1282,64 +1282,60 @@ boundingBox.prototype.draw = function() {
       pop();
     }
   }
-  translate(this.x + editorOutsideWidth, this.y + editorOutsideHeight);
-  rotate(this.rotate / 10);
-  rect(-this.w / 2 - boundingCornerSize / 2, -this.h / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(this.w / 2 - boundingCornerSize / 2, this.h / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(this.w / 2 - boundingCornerSize / 2, -this.h / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(-this.w / 2 - boundingCornerSize / 2, this.h / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(-this.w / 2 - boundingCornerSize / 2, -boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(this.w / 2 - boundingCornerSize / 2, -boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(-boundingCornerSize / 2, -this.h / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(-boundingCornerSize / 2, this.h / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
+  translate(this.posX + editorOutsideWidth, this.posY + editorOutsideHeight);
+  rotate(this.rotate);
+  rect(-this.width / 2 - boundingCornerSize / 2, -this.height / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
+  rect(this.width / 2 - boundingCornerSize / 2, this.height / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
+  rect(this.width / 2 - boundingCornerSize / 2, -this.height / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
+  rect(-this.width / 2 - boundingCornerSize / 2, this.height / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
   pop();
 }
 boundingBox.prototype.hover = function() {
   fill('rgba(0, 255, 0, 0.75)');
   textSize(16);
   textFont(monoFont);
-  text('[' + this.id + ']' + this.type + '(' + this.x + ', ' + this.y + ') ' + this.w + ' x ' + this.h, this.x - this.w / 2 + editorOutsideWidth, this.y - this.h / 2 + editorOutsideHeight - 10);
+  text('[' + this.id + ']' + this.type + '(' + this.posX + ', ' + this.posY + ') ' + this.width + ' x ' + this.height, this.posX - this.width / 2 + editorOutsideWidth, this.posY - this.height / 2 + editorOutsideHeight - 10);
 }
 boundingBox.prototype.pressed = function() {
   // drag
-  if (this.x - this.w / 2 + editorOutsideWidth + boundingCornerSize / 2 <= mouseX && mouseX <= this.x + this.w / 2 + editorOutsideWidth - boundingCornerSize / 2 && this.y - this.h / 2 + editorOutsideHeight + boundingCornerSize / 2 <= mouseY && mouseY <= this.y + this.h / 2 + editorOutsideHeight - boundingCornerSize / 2) {
+  if (this.posX - this.width / 2 + editorOutsideWidth + boundingCornerSize / 2 <= mouseX && mouseX <= this.posX + this.width / 2 + editorOutsideWidth - boundingCornerSize / 2 && this.posY - this.height / 2 + editorOutsideHeight + boundingCornerSize / 2 <= mouseY && mouseY <= this.posY + this.height / 2 + editorOutsideHeight - boundingCornerSize / 2) {
     this.isDragged = true;
     return this.isDragged;
   } else {
     // resized
 
     // left top
-    if (this.x - this.w / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
-      mouseX <= this.x - this.w / 2 + editorOutsideWidth + boundingCornerSize / 2 &&
-      this.y - this.h / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
-      mouseY <= this.y - this.h / 2 + editorOutsideHeight + boundingCornerSize / 2) {
+    if (this.posX - this.width / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
+      mouseX <= this.posX - this.width / 2 + editorOutsideWidth + boundingCornerSize / 2 &&
+      this.posX - this.height / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
+      mouseY <= this.posY - this.height / 2 + editorOutsideHeight + boundingCornerSize / 2) {
       this.isResized = 'left top';
     }
     // right top
-    if (this.x + this.w / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
-      mouseX <= this.x + this.w / 2 + editorOutsideWidth + boundingCornerSize / 2 &&
-      this.y - this.h / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
-      mouseY <= this.y - this.h / 2 + editorOutsideHeight + boundingCornerSize / 2) {
+    if (this.posX + this.width / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
+      mouseX <= this.posX + this.width / 2 + editorOutsideWidth + boundingCornerSize / 2 &&
+      this.posY - this.height / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
+      mouseY <= this.posY - this.height / 2 + editorOutsideHeight + boundingCornerSize / 2) {
       this.isResized = 'right top';
     }
     // left bottom
-    if (this.x - this.w / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
-      mouseX <= this.x - this.w /2 + editorOutsideWidth + boundingCornerSize / 2 &&
-      this.y + this.h / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
-      mouseY <= this.y + this.h / 2 + editorOutsideHeight + boundingCornerSize / 2) {
+    if (this.posX - this.width / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
+      mouseX <= this.posX - this.width /2 + editorOutsideWidth + boundingCornerSize / 2 &&
+      this.posY + this.height / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
+      mouseY <= this.posY + this.height / 2 + editorOutsideHeight + boundingCornerSize / 2) {
       this.isResized = 'left bottom';
     }
     // right bottom
-    if (this.x + this.w / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
-      mouseX <= this.x + this.w / 2 + editorOutsideWidth + boundingCornerSize / 2 &&
-      this.y + this.h / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
-      mouseY <= this.y + this.h / 2 + editorOutsideHeight + boundingCornerSize / 2) {
+    if (this.posX + this.width / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
+      mouseX <= this.posX + this.width / 2 + editorOutsideWidth + boundingCornerSize / 2 &&
+      this.posY + this.height / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
+      mouseY <= this.posY + this.height / 2 + editorOutsideHeight + boundingCornerSize / 2) {
       this.isResized = 'right bottom';
     }
-    prePosX = this.x;
-    prePosY = this.y;
-    preW = this.w;
-    preH = this.h;
+    prePosX = this.posX;
+    prePosY = this.posY;
+    preW = this.width;
+    preH = this.height;
     if (objects[this.id].type == 'text') {
       preFontSize = objects[this.id].fontSize;
     }
@@ -1361,8 +1357,8 @@ boundingBox.prototype.drag = function() {
   if (this.isDragged) {
     draggedX = mouseX - pressedX;
     draggedY = mouseY - pressedY;
-    this.x += draggedX;
-    this.y += draggedY;
+    this.posX += draggedX;
+    this.posY += draggedY;
     if (this.type == 'polygon') {
       for (let v in this.vertexes) {
         this.vertexes[v].x += draggedX;
@@ -1517,20 +1513,20 @@ boundingBox.prototype.drag = function() {
     if (objects[this.id].type == 'text') {
       resizeFontSize = preFontSize * (resizeW / preW);
       let resizeTextBounds = fonts[objects[this.id].fontFace].textBounds(objects[this.id].content, resizePosX, resizePosY + resizeH / 2, resizeFontSize);
-      this.x = resizeTextBounds.x + resizeTextBounds.w / 2;
-      this.y = resizeTextBounds.y + resizeTextBounds.h / 2;
-      this.w = resizeTextBounds.w;
-      this.h = resizeTextBounds.h;
+      this.posX = resizeTextBounds.x + resizeTextBounds.w / 2;
+      this.posY = resizeTextBounds.y + resizeTextBounds.h / 2;
+      this.width = resizeTextBounds.w;
+      this.height = resizeTextBounds.h;
     } else {
-      this.x = resizePosX + resizeW / 2;
-      this.y = resizePosY + resizeH / 2;
-      this.w = resizeW;
-      this.h = resizeH;
+      this.posX = resizePosX + resizeW / 2;
+      this.posY = resizePosY + resizeH / 2;
+      this.width = resizeW;
+      this.height = resizeH;
     }
     if (objects[this.id].type == 'polygon') {
       for (let v in relativeVertexes) {
-        this.vertexes[v].x = this.x + (relativeVertexes[v].x * (this.w / 100));
-        this.vertexes[v].y = this.y + (relativeVertexes[v].y * (this.h / 100));
+        this.vertexes[v].x = this.posX + (relativeVertexes[v].x * (this.width / 100));
+        this.vertexes[v].y = this.posY + (relativeVertexes[v].y * (this.height / 100));
       }
     }
 
@@ -1539,17 +1535,17 @@ boundingBox.prototype.drag = function() {
       case 'rect':
       case 'ellipse':
       case 'superellipse':
-        objects[this.id].posX = this.x;
-        objects[this.id].posY = this.y;
-        objects[this.id].width = this.w;
-        objects[this.id].height = this.h;
+        objects[this.id].posX = this.posX;
+        objects[this.id].posY = this.posY;
+        objects[this.id].width = this.width;
+        objects[this.id].height = this.height;
         break;
       case 'text':
         objects[this.id].fontSize = resizeFontSize;
-        objects[this.id].posX = this.x;
-        objects[this.id].posY = this.y;
-        objects[this.id].width = this.w;
-        objects[this.id].height = this.h;
+        objects[this.id].posX = this.posX;
+        objects[this.id].posY = this.posY;
+        objects[this.id].width = this.width;
+        objects[this.id].height = this.height;
         break;
       case 'polygon':
         for (let v in this.vertexes) {
@@ -1606,6 +1602,8 @@ function displayObjectOptions(id) {
 
 function updateObjectOption(targetObject, option, value) {
   objects[targetObject][option] = value;
+  console.log('obj: ' + objects[targetObject][option] + ', bdb: ' + boundingBoxes[targetObject][option]);
+  boundingBoxes[targetObject][option] = value;
 }
 
 // vertex edit button
