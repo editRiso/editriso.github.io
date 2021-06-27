@@ -459,6 +459,40 @@ function setup() {
       updateObjectOption(targetObject, 'tightness' + vertexTargets[target], this.elt.value);
     })
   }
+
+  divObjectTextSetting = createDiv().id('object-text-setting').parent('object-options');
+  titleObjectTextSetting = createElement('h2', 'Text').class('er-toolbar-title').parent('object-text-setting');
+  inputObjectTextString = createInput('Text').id('object-text-string').class('er-text-string-input').parent('object-text-setting');
+  divObjectFontSelector = createDiv().id('object-font-selector').class('er-font-selector').parent('object-text-setting');
+  objectFontDisplay = createDiv('<span>' + selectedFont + '</span>').id('object-font-display').class('er-font-selector__font-display').style('font-family', selectedFont).parent('object-font-selector');
+  objectFontSwitchButton = createDiv().class('er-font-selector__switch-button').parent('object-font-display').elt.addEventListener('click', function() {
+    let target = document.getElementById('object-font-select');
+    target.classList.add('is-shown');
+    isSettingState = true;
+  })
+  objectFontSelect = createDiv().id('object-font-select').class('er-font-selector__font-select').parent('object-font-display');
+  objectFontSelectClose = createDiv().class('er-font-selector__close-button').parent('object-font-select').elt.addEventListener('click', function() {
+    let target = document.getElementById('object-font-select');
+    target.classList.remove('is-shown');
+    isSettingState = false;
+  })
+  objectFontList = createElement('ul').id('object-font-list').class('er-font-selector__list').parent('object-font-select');
+  for (let font in fontsLoaded) {
+    objectFontItem = createElement('li', fontsLoaded[font]).id('object-font-item-' + font).class('er-font-selector__item').style('font-family', fontsLoaded[font]).parent('object-font-list').elt.addEventListener('click', function() {
+      selectedFont = fontsLoaded[font];
+      objectFontDisplay.style('font-family', selectedFont);
+      objectFontDisplay.elt.children[0].innerHTML = selectedFont;
+    })
+  }
+  divObjectFontSizeSetting = createDiv().id('object-font-size-setting').class('er-font-size-setting').parent('object-text-setting');
+  divObjectFontSizeNumeral = createDiv().id('object-font-size-setting-numeral').class('er-font-size-setting__unit').parent('object-font-size-setting');
+  divObjectFontSizeMinus = createDiv().id('object-font-size-minus').class('er-font-size-setting__button er-font-size-setting__button--minus').parent('object-font-size-setting-numeral').elt.addEventListener('click', function() {
+    inputObjectFontSizeNumeral.elt.value--;
+  })
+  inputObjectFontSizeNumeral = createInput('100').id('object-font-size-numeral').class('er-font-size-setting__input').parent('object-font-size-setting-numeral');
+  divObjectFontSizePlus = createDiv().id('object-font-size-plus').class('er-font-size-setting__button er-font-size-setting__button--plus').parent('object-font-size-setting-numeral').elt.addEventListener('click', function() {
+    inputObjectFontSizeNumeral.elt.value++;
+  })
 }
 
 function draw() {
@@ -1567,7 +1601,8 @@ function displayObjectOptions(id) {
   if (objectOptions == false) {
     objectOptions = true;
   }
-  console.log(titleObjectOptions);
+  // objectのタイプでswitch
+
   titleObjectOptions.elt.innerHTML = 'Object [' + objects[id].id + ']';
   titleObjectTypeOption.elt.innerHTML = objects[id].type;
   inputObjectPosXOption.elt.value = objects[id].posX;
