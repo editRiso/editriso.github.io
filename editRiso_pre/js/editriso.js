@@ -463,6 +463,9 @@ function setup() {
   divObjectTextSetting = createDiv().id('object-text-setting').parent('object-options');
   titleObjectTextSetting = createElement('h2', 'Text').class('er-toolbar-title').parent('object-text-setting');
   inputObjectTextString = createInput('Text').id('object-text-string').class('er-text-string-input').parent('object-text-setting');
+  inputObjectTextString.changed(function (){
+    updateObjectOption(targetObject, 'content', this.elt.value);
+  })
   divObjectFontSelector = createDiv().id('object-font-selector').class('er-font-selector').parent('object-text-setting');
   objectFontDisplay = createDiv('<span>' + selectedFont + '</span>').id('object-font-display').class('er-font-selector__font-display').style('font-family', selectedFont).parent('object-font-selector');
   objectFontSwitchButton = createDiv().class('er-font-selector__switch-button').parent('object-font-display').elt.addEventListener('click', function() {
@@ -482,16 +485,22 @@ function setup() {
       selectedFont = fontsLoaded[font];
       objectFontDisplay.style('font-family', selectedFont);
       objectFontDisplay.elt.children[0].innerHTML = selectedFont;
+      objects[targetObject].fontFace = selectedFont;
     })
   }
   divObjectFontSizeSetting = createDiv().id('object-font-size-setting').class('er-font-size-setting').parent('object-text-setting');
   divObjectFontSizeNumeral = createDiv().id('object-font-size-setting-numeral').class('er-font-size-setting__unit').parent('object-font-size-setting');
   divObjectFontSizeMinus = createDiv().id('object-font-size-minus').class('er-font-size-setting__button er-font-size-setting__button--minus').parent('object-font-size-setting-numeral').elt.addEventListener('click', function() {
     inputObjectFontSizeNumeral.elt.value--;
+    objects[targetObject].fontSize--;
   })
   inputObjectFontSizeNumeral = createInput('100').id('object-font-size-numeral').class('er-font-size-setting__input').parent('object-font-size-setting-numeral');
+  inputObjectFontSizeNumeral.changed(function (){
+    updateObjectOption(targetObject, 'fontSize', this.elt.value);
+  })
   divObjectFontSizePlus = createDiv().id('object-font-size-plus').class('er-font-size-setting__button er-font-size-setting__button--plus').parent('object-font-size-setting-numeral').elt.addEventListener('click', function() {
     inputObjectFontSizeNumeral.elt.value++;
+    objects[targetObject].fontSize++;
   })
 }
 
@@ -1601,10 +1610,43 @@ function displayObjectOptions(id) {
   if (objectOptions == false) {
     objectOptions = true;
   }
-  // objectのタイプでswitch
-
   titleObjectOptions.elt.innerHTML = 'Object [' + objects[id].id + ']';
   titleObjectTypeOption.elt.innerHTML = objects[id].type;
+
+  switch(objects[id].type) {
+    case 'rect':
+    case 'ellipse':
+      break;
+    case 'superellipse':
+      sliderObjectExpansion.elt.value = objects[id].cornerVal;
+      break;
+    case 'polygon':
+      let objectVertexTypeFill = document.getElementById('object-vertex-type--Fill-' + objects[id].vertexTypeFill);
+      handleActive('object-vertex-type-list-Fill', objectVertexTypeFill);
+      let objectVertexTightnessFill = document.getElementById('object-vertex-tightness-Fill');
+      if (objects[id].vertexTypeFill == 'curve') {
+        objectVertexTightnessFill.classList.add('is-shown');
+        objectVertexTightnessFill.value = objects[id].tightnessFill;
+      } else {
+        objectVertexTightnessFill.classList.remove('is-shown');
+      }
+      let objectVertexTypeStroke = document.getElementById('object-vertex-type--Stroke-' + objects[id].vertexTypeStroke);
+      handleActive('object-vertex-type-list-Stroke', objectVertexTypeStroke);
+      let objectVertexTightnessStroke = document.getElementById('object-vertex-tightness-Stroke');
+      if (objects[id].vertexTypeStroke == 'curve') {
+        objectVertexTightnessStroke.classList.add('is-shown');
+        objectVertexTightnessStroke.value = objects[id].tightnessStroke;
+      } else {
+        objectVertexTightnessStroke.classList.remove('is-shown');
+      }
+      break;
+    case 'text':
+      inputObjectTextString.elt.value = objects[id].content;
+
+      break;
+    default:
+      break;
+  }
   inputObjectPosXOption.elt.value = objects[id].posX;
   inputObjectPosYOption.elt.value = objects[id].posY;
   inputObjectSizeWOption.elt.value = objects[id].width;
@@ -1614,25 +1656,6 @@ function displayObjectOptions(id) {
   let objectStroke = document.getElementById('li-objectStroke-' + objects[id].inkStroke);
   handleActive('ul-objectStroke', objectStroke);
   inputObjectStrokeWeightNumeral.elt.value = objects[id].strokeWeight;
-  sliderObjectExpansion.elt.value = objects[id].cornerVal;
-  let objectVertexTypeFill = document.getElementById('object-vertex-type--Fill-' + objects[id].vertexTypeFill);
-  handleActive('object-vertex-type-list-Fill', objectVertexTypeFill);
-  let objectVertexTightnessFill = document.getElementById('object-vertex-tightness-Fill');
-  if (objects[id].vertexTypeFill == 'curve') {
-    objectVertexTightnessFill.classList.add('is-shown');
-    objectVertexTightnessFill.value = objects[id].tightnessFill;
-  } else {
-    objectVertexTightnessFill.classList.remove('is-shown');
-  }
-  let objectVertexTypeStroke = document.getElementById('object-vertex-type--Stroke-' + objects[id].vertexTypeStroke);
-  handleActive('object-vertex-type-list-Stroke', objectVertexTypeStroke);
-  let objectVertexTightnessStroke = document.getElementById('object-vertex-tightness-Stroke');
-  if (objects[id].vertexTypeStroke == 'curve') {
-    objectVertexTightnessStroke.classList.add('is-shown');
-    objectVertexTightnessStroke.value = objects[id].tightnessStroke;
-  } else {
-    objectVertexTightnessStroke.classList.remove('is-shown');
-  }
 }
 
 function updateObjectOption(targetObject, option, value) {
