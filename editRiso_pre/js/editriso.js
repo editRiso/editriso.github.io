@@ -881,6 +881,12 @@ function generateColorSelector(id, parent, target) {
       case 'targetInkStroke':
         targetInkStroke = 'transparent';
         break;
+      case 'objectInkFill':
+        objects[targetObject].inkFill = 'transparent';
+        break;
+      case 'objectInkStroke':
+        objects[targetObject].inkStroke = 'transparent';
+        break;
     }
   });
 }
@@ -1613,9 +1619,14 @@ function displayObjectOptions(id) {
   titleObjectOptions.elt.innerHTML = 'Object [' + objects[id].id + ']';
   titleObjectTypeOption.elt.innerHTML = objects[id].type;
 
+  let objectPosX, objectPosY, objectWidth, objectHeight;
+  let objectVertexesX = [];
+  let objectVertexesY = [];
   switch(objects[id].type) {
     case 'rect':
     case 'ellipse':
+      objectPosX = objects[id].posX;
+      objectPosY = objects[id].posY;
       break;
     case 'superellipse':
       sliderObjectExpansion.elt.value = objects[id].cornerVal;
@@ -1639,16 +1650,21 @@ function displayObjectOptions(id) {
       } else {
         objectVertexTightnessStroke.classList.remove('is-shown');
       }
+      for (let i = 0;i < objects[id].vertexes.length;i++) {
+        objectVertexesX.push(objects[id].vertexes[i].x);
+        objectVertexesY.push(objects[id].vertexes[i].y);
+      }
+      objectPosX = min(objectVertexesX);
+      objectPosY = min(objectVertexesY);
       break;
     case 'text':
       inputObjectTextString.elt.value = objects[id].content;
-
       break;
     default:
       break;
   }
-  inputObjectPosXOption.elt.value = objects[id].posX;
-  inputObjectPosYOption.elt.value = objects[id].posY;
+  inputObjectPosXOption.elt.value = objectPosX;
+  inputObjectPosYOption.elt.value = objectPosY;
   inputObjectSizeWOption.elt.value = objects[id].width;
   inputObjectSizeHOption.elt.value = objects[id].height;
   let objectFill = document.getElementById('li-objectFill-' + objects[id].inkFill);
