@@ -330,7 +330,7 @@ function setup() {
         } else {
           targetSlider.classList.remove('is-shown');
         }
-      });
+      })
     }
     sliderVertexTightness = createSlider(-10, 10, 0, 1).id('present-vertex-tightness-' + vertexTargets[target]).class('er-vertex-type-selector__slider').parent('present-vertex-type--' + vertexTargets[target]);
   }
@@ -344,30 +344,30 @@ function setup() {
     let target = document.getElementById('present-font-select');
     target.classList.add('is-shown');
     isSettingState = true;
-  });
+  })
   presentFontSelect = createDiv().id('present-font-select').class('er-font-selector__font-select').parent('present-font-display');
   presentFontSelectClose = createDiv().class('er-font-selector__close-button').parent('present-font-select').elt.addEventListener('click', function() {
     let target = document.getElementById('present-font-select');
     target.classList.remove('is-shown');
     isSettingState = false;
-  });
+  })
   presentFontList = createElement('ul').id('present-font-list').class('er-font-selector__list').parent('present-font-select');
   for (let font in fontsLoaded) {
     presentFontItem = createElement('li', fontsLoaded[font]).id('present-font-item-' + font).class('er-font-selector__item').style('font-family', fontsLoaded[font]).parent('present-font-list').elt.addEventListener('click', function() {
       selectedFont = fontsLoaded[font];
       presentFontDisplay.style('font-family', selectedFont);
       presentFontDisplay.elt.children[0].innerHTML = selectedFont;
-    });
+    })
   }
   divPresentFontSizeSetting = createDiv().id('present-font-size-setting').class('er-font-size-setting').parent('toolbar');
   divPresentFontSizeNumeral = createDiv().id('present-font-size-setting-numeral').class('er-font-size-setting__unit').parent('present-font-size-setting');
   divPresentFontSizeMinus = createDiv().id('present-font-size-minus').class('er-font-size-setting__button er-font-size-setting__button--minus').parent('present-font-size-setting-numeral').elt.addEventListener('click', function() {
     inputPresentFontSizeNumeral.elt.value--;
-  });
+  })
   inputPresentFontSizeNumeral = createInput('100').id('present-font-size-numeral').class('er-font-size-setting__input').parent('present-font-size-setting-numeral');
   divPresentFontSizePlus = createDiv().id('present-font-size-plus').class('er-font-size-setting__button er-font-size-setting__button--plus').parent('present-font-size-setting-numeral').elt.addEventListener('click', function() {
     inputPresentFontSizeNumeral.elt.value++;
-  });;
+  })
 
   // object options
   divObjectOptions = createDiv().id('object-options').class('er-object-options');
@@ -377,20 +377,28 @@ function setup() {
   divObjectPositionOption = createDiv().id('object-option-position').class('er-object-options__block').parent('object-options');
   titleObjectPositionOption = createElement('h2', 'Position').class('er-toolbar-title').parent('object-option-position');
   titleObjectPosXOption = createElement('h3', 'X:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-position');
-  inputObjectPosXOption = createInput().id('object-option-posX').class('er-object-options__input').parent('object-option-position');
+  inputObjectPosXOption = createInput(0, 'number').id('object-option-posX').class('er-object-options__input').parent('object-option-position');
   inputObjectPosXOption.changed(function (){
-    console.log(this.elt.value);
     updateObjectOption(targetObject, 'posX', this.elt.value);
   })
   titleObjectPosYOption = createElement('h3', 'Y:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-position');
-  inputObjectPosYOption = createInput().id('object-option-posY').class('er-object-options__input').parent('object-option-position');
+  inputObjectPosYOption = createInput(0, 'number').id('object-option-posY').class('er-object-options__input').parent('object-option-position');
+  inputObjectPosYOption.changed(function (){
+    updateObjectOption(targetObject, 'posY', this.elt.value);
+  })
 
   divObjectSizeOption = createDiv().id('object-option-size').class('er-object-options__block').parent('object-options');
   titleObjectSizeOption = createElement('h2', 'Size').class('er-toolbar-title').parent('object-option-size');
   titleObjectSizeWOption = createElement('h3', 'Width:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-size');
-  inputObjectSizeWOption = createInput().id('object-option-width').class('er-object-options__input').parent('object-option-size');
+  inputObjectSizeWOption = createInput(0, 'number').id('object-option-width').class('er-object-options__input').parent('object-option-size');
+  inputObjectSizeWOption.changed(function (){
+    updateObjectOption(targetObject, 'width', this.elt.value);
+  })
   titleObjectSizeHOption = createElement('h3', 'Height:').class('er-toolbar-title er-toolbar-title--small').parent('object-option-size');
-  inputObjectSizeHOption = createInput().id('object-option-height').class('er-object-options__input').parent('object-option-size');
+  inputObjectSizeHOption = createInput(0, 'number').id('object-option-height').class('er-object-options__input').parent('object-option-size');
+  inputObjectSizeHOption.changed(function (){
+    updateObjectOption(targetObject, 'height', this.elt.value);
+  })
 
   divObjectColorOption =createDiv().id('object-option-color').class('er-object-options__block').parent('object-options');
   titleObjectColorOption = createElement('h2', 'Color').class('er-toolbar-title').parent('object-option-color');
@@ -400,6 +408,100 @@ function setup() {
   divObjectColorOptionStroke = createDiv().id('object-color-option--stroke').class('er-color-selector').parent('object-option-color');
   titleObjectColorOptionStroke = createElement('h3', 'Stroke:').class('er-toolbar-title er-toolbar-title--small').parent('object-color-option--stroke');
   generateColorSelector('objectStroke', 'object-color-option--stroke', 'objectInkStroke');
+
+  divObjectStrokeWeightOption = createDiv().id('object-stroke-weight-setting').class('er-stroke-weight-setting').parent('object-options');
+  titleObjectStrokeWeightOption = createElement('h2', 'Stroke weight').class('er-toolbar-title').parent('object-stroke-weight-setting');
+  divObjectStrokeWeightNumeral = createDiv().id('object-stroke-weight-setting-numeral').class('er-stroke-weight-setting__unit').parent('object-stroke-weight-setting');
+  divObjectStrokeWeightMinus = createDiv().id('object-stroke-weight-minus').class('er-stroke-weight-setting__button er-stroke-weight-setting__button--minus').parent('object-stroke-weight-setting-numeral').elt.addEventListener('click', function() {
+    inputObjectStrokeWeightNumeral.elt.value--;
+    updateObjectOption(targetObject, 'strokeWeight', inputObjectStrokeWeightNumeral.elt.value);
+  })
+  inputObjectStrokeWeightNumeral = createInput('1').id('object-stroke-weight-numeral').class('er-stroke-weight-setting__input').parent('object-stroke-weight-setting-numeral');
+  divObjectStrokeWeightPlus = createDiv().id('object-stroke-weight-plus').class('er-stroke-weight-setting__button er-stroke-weight-setting__button--plus').parent('object-stroke-weight-setting-numeral').elt.addEventListener('click', function() {
+    inputObjectStrokeWeightNumeral.elt.value++;
+    updateObjectOption(targetObject, 'strokeWeight', inputObjectStrokeWeightNumeral.elt.value);
+  })
+  inputObjectStrokeWeightNumeral.changed(function (){
+    updateObjectOption(targetObject, 'strokeWeight', this.elt.value);
+  })
+
+  divObjectExpansionSetting = createDiv().id('object-expansion-setting').class('er-expansion-setting').parent('object-options');
+  titleObjectExpansion = createElement('h2', 'Expansion').class('er-toolbar-title').parent('object-expansion-setting');
+  sliderObjectExpansion = createSlider(0.2, 5, 2, 0.01).id('object-expansion-slider').class('er-expansion-setting__slider').parent('object-expansion-setting');
+  sliderObjectExpansion.changed(function (){
+    updateObjectOption(targetObject, 'cornerVal', this.elt.value);
+  })
+
+  divObjectVertexTypeSetting = createDiv().id('object-vertex-type-setting').parent('object-options');
+  titleObjectVertexTypeOption = createElement('h2', 'Vertex type').class('er-toolbar-title').parent('object-vertex-type-setting');
+  for (let target in vertexTargets) {
+    divObjectVertexType = createDiv().id('object-vertex-type--' + vertexTargets[target]).class('er-vertex-type-selector').parent('object-vertex-type-setting');
+    titleObjectVertexType = createElement('h3', vertexTargets[target] + ':').class('er-toolbar-title er-toolbar-title--small').parent('object-vertex-type--' + vertexTargets[target]);
+    vertexTypeList = createElement('ul').id('object-vertex-type-list-' + vertexTargets[target]).class('er-vertex-type-selector__list').parent('object-vertex-type--' + vertexTargets[target]);
+    for (let type in vertexTypes) {
+      vertexTypeItem = createElement('li', vertexTypes[type]).id('object-vertex-type--' + vertexTargets[target] + '-' + vertexTypes[type]).class('er-vertex-type-selector__item').parent('object-vertex-type-list-' + vertexTargets[target]);
+      if (vertexTypes[type] == 'straight') {
+        vertexTypeItem.addClass('is-active');
+      }
+      vertexTypeItem.elt.addEventListener('click', function() {
+        handleActive('object-vertex-type-list-' + vertexTargets[target], this);
+        updateObjectOption(targetObject, 'vertexType' + vertexTargets[target], this.innerHTML);
+        let targetSlider = document.getElementById('object-vertex-tightness-' + vertexTargets[target]);
+        if (vertexTypes[type] == 'curve') {
+          targetSlider.classList.add('is-shown');
+        } else {
+          targetSlider.classList.remove('is-shown');
+        }
+      })
+    }
+    sliderVertexTightness = createSlider(-10, 10, 0, 1).id('object-vertex-tightness-' + vertexTargets[target]).class('er-vertex-type-selector__slider').parent('object-vertex-type--' + vertexTargets[target]);
+    sliderVertexTightness.changed(function (){
+      updateObjectOption(targetObject, 'tightness' + vertexTargets[target], this.elt.value);
+    })
+  }
+
+  divObjectTextSetting = createDiv().id('object-text-setting').parent('object-options');
+  titleObjectTextSetting = createElement('h2', 'Text').class('er-toolbar-title').parent('object-text-setting');
+  inputObjectTextString = createInput('Text').id('object-text-string').class('er-text-string-input').parent('object-text-setting');
+  inputObjectTextString.changed(function (){
+    updateObjectOption(targetObject, 'content', this.elt.value);
+  })
+  divObjectFontSelector = createDiv().id('object-font-selector').class('er-font-selector').parent('object-text-setting');
+  objectFontDisplay = createDiv('<span>' + selectedFont + '</span>').id('object-font-display').class('er-font-selector__font-display').style('font-family', selectedFont).parent('object-font-selector');
+  objectFontSwitchButton = createDiv().class('er-font-selector__switch-button').parent('object-font-display').elt.addEventListener('click', function() {
+    let target = document.getElementById('object-font-select');
+    target.classList.add('is-shown');
+    isSettingState = true;
+  })
+  objectFontSelect = createDiv().id('object-font-select').class('er-font-selector__font-select').parent('object-font-display');
+  objectFontSelectClose = createDiv().class('er-font-selector__close-button').parent('object-font-select').elt.addEventListener('click', function() {
+    let target = document.getElementById('object-font-select');
+    target.classList.remove('is-shown');
+    isSettingState = false;
+  })
+  objectFontList = createElement('ul').id('object-font-list').class('er-font-selector__list').parent('object-font-select');
+  for (let font in fontsLoaded) {
+    objectFontItem = createElement('li', fontsLoaded[font]).id('object-font-item-' + font).class('er-font-selector__item').style('font-family', fontsLoaded[font]).parent('object-font-list').elt.addEventListener('click', function() {
+      selectedFont = fontsLoaded[font];
+      objectFontDisplay.style('font-family', selectedFont);
+      objectFontDisplay.elt.children[0].innerHTML = selectedFont;
+      objects[targetObject].fontFace = selectedFont;
+    })
+  }
+  divObjectFontSizeSetting = createDiv().id('object-font-size-setting').class('er-font-size-setting').parent('object-text-setting');
+  divObjectFontSizeNumeral = createDiv().id('object-font-size-setting-numeral').class('er-font-size-setting__unit').parent('object-font-size-setting');
+  divObjectFontSizeMinus = createDiv().id('object-font-size-minus').class('er-font-size-setting__button er-font-size-setting__button--minus').parent('object-font-size-setting-numeral').elt.addEventListener('click', function() {
+    inputObjectFontSizeNumeral.elt.value--;
+    objects[targetObject].fontSize--;
+  })
+  inputObjectFontSizeNumeral = createInput('100').id('object-font-size-numeral').class('er-font-size-setting__input').parent('object-font-size-setting-numeral');
+  inputObjectFontSizeNumeral.changed(function (){
+    updateObjectOption(targetObject, 'fontSize', this.elt.value);
+  })
+  divObjectFontSizePlus = createDiv().id('object-font-size-plus').class('er-font-size-setting__button er-font-size-setting__button--plus').parent('object-font-size-setting-numeral').elt.addEventListener('click', function() {
+    inputObjectFontSizeNumeral.elt.value++;
+    objects[targetObject].fontSize++;
+  })
 }
 
 function draw() {
@@ -754,6 +856,12 @@ function generateColorSelector(id, parent, target) {
         case 'targetInkStroke':
           targetInkStroke = ink;
           break;
+        case 'objectInkFill':
+          objects[targetObject].inkFill = ink;
+          break;
+        case 'objectInkStroke':
+          objects[targetObject].inkStroke = ink;
+          break;
         default:
           break;
       }
@@ -772,6 +880,12 @@ function generateColorSelector(id, parent, target) {
         break;
       case 'targetInkStroke':
         targetInkStroke = 'transparent';
+        break;
+      case 'objectInkFill':
+        objects[targetObject].inkFill = 'transparent';
+        break;
+      case 'objectInkStroke':
+        objects[targetObject].inkStroke = 'transparent';
         break;
     }
   });
@@ -1167,10 +1281,10 @@ function generateBoundingbox(object) {
 let boundingBox = function(id, x, y, w, h, vertexesX, vertexesY) {
   this.id = id;
   this.type = objects[this.id].type;
-  this.x = x;
-  this.y = y;
-  this.w = w;
-  this.h = h;
+  this.posX = x;
+  this.posY = y;
+  this.width = w;
+  this.height = h;
   this.aspectRatio = w / h;
   this.rotate = 0;
   this.isDragged = false;
@@ -1200,9 +1314,9 @@ boundingBox.prototype.draw = function() {
   stroke(boundingStroke);
   strokeWeight(1);
   rectMode(CORNER);
-  translate(this.x + editorOutsideWidth, this.y + editorOutsideHeight);
+  translate(this.posX + editorOutsideWidth, this.posY + editorOutsideHeight);
   rotate(this.rotate / 10);
-  rect(-this.w / 2, -this.h / 2, this.w, this.h);
+  rect(-this.width / 2, -this.height / 2, this.width, this.height);
   pop();
   push();
   fill('rgba(255, 255, 255, 1)');
@@ -1217,64 +1331,60 @@ boundingBox.prototype.draw = function() {
       pop();
     }
   }
-  translate(this.x + editorOutsideWidth, this.y + editorOutsideHeight);
-  rotate(this.rotate / 10);
-  rect(-this.w / 2 - boundingCornerSize / 2, -this.h / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(this.w / 2 - boundingCornerSize / 2, this.h / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(this.w / 2 - boundingCornerSize / 2, -this.h / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(-this.w / 2 - boundingCornerSize / 2, this.h / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(-this.w / 2 - boundingCornerSize / 2, -boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(this.w / 2 - boundingCornerSize / 2, -boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(-boundingCornerSize / 2, -this.h / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
-  rect(-boundingCornerSize / 2, this.h / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
+  translate(this.posX + editorOutsideWidth, this.posY + editorOutsideHeight);
+  rotate(this.rotate);
+  rect(-this.width / 2 - boundingCornerSize / 2, -this.height / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
+  rect(this.width / 2 - boundingCornerSize / 2, this.height / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
+  rect(this.width / 2 - boundingCornerSize / 2, -this.height / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
+  rect(-this.width / 2 - boundingCornerSize / 2, this.height / 2 - boundingCornerSize / 2, boundingCornerSize, boundingCornerSize);
   pop();
 }
 boundingBox.prototype.hover = function() {
   fill('rgba(0, 255, 0, 0.75)');
   textSize(16);
   textFont(monoFont);
-  text('[' + this.id + ']' + this.type + '(' + this.x + ', ' + this.y + ') ' + this.w + ' x ' + this.h, this.x - this.w / 2 + editorOutsideWidth, this.y - this.h / 2 + editorOutsideHeight - 10);
+  text('[' + this.id + ']' + this.type + '(' + this.posX + ', ' + this.posY + ') ' + this.width + ' x ' + this.height, this.posX - this.width / 2 + editorOutsideWidth, this.posY - this.height / 2 + editorOutsideHeight - 10);
 }
 boundingBox.prototype.pressed = function() {
   // drag
-  if (this.x - this.w / 2 + editorOutsideWidth + boundingCornerSize / 2 <= mouseX && mouseX <= this.x + this.w / 2 + editorOutsideWidth - boundingCornerSize / 2 && this.y - this.h / 2 + editorOutsideHeight + boundingCornerSize / 2 <= mouseY && mouseY <= this.y + this.h / 2 + editorOutsideHeight - boundingCornerSize / 2) {
+  if (this.posX - this.width / 2 + editorOutsideWidth + boundingCornerSize / 2 <= mouseX && mouseX <= this.posX + this.width / 2 + editorOutsideWidth - boundingCornerSize / 2 && this.posY - this.height / 2 + editorOutsideHeight + boundingCornerSize / 2 <= mouseY && mouseY <= this.posY + this.height / 2 + editorOutsideHeight - boundingCornerSize / 2) {
     this.isDragged = true;
     return this.isDragged;
   } else {
     // resized
 
     // left top
-    if (this.x - this.w / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
-      mouseX <= this.x - this.w / 2 + editorOutsideWidth + boundingCornerSize / 2 &&
-      this.y - this.h / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
-      mouseY <= this.y - this.h / 2 + editorOutsideHeight + boundingCornerSize / 2) {
+    if (this.posX - this.width / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
+      mouseX <= this.posX - this.width / 2 + editorOutsideWidth + boundingCornerSize / 2 &&
+      this.posX - this.height / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
+      mouseY <= this.posY - this.height / 2 + editorOutsideHeight + boundingCornerSize / 2) {
       this.isResized = 'left top';
     }
     // right top
-    if (this.x + this.w / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
-      mouseX <= this.x + this.w / 2 + editorOutsideWidth + boundingCornerSize / 2 &&
-      this.y - this.h / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
-      mouseY <= this.y - this.h / 2 + editorOutsideHeight + boundingCornerSize / 2) {
+    if (this.posX + this.width / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
+      mouseX <= this.posX + this.width / 2 + editorOutsideWidth + boundingCornerSize / 2 &&
+      this.posY - this.height / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
+      mouseY <= this.posY - this.height / 2 + editorOutsideHeight + boundingCornerSize / 2) {
       this.isResized = 'right top';
     }
     // left bottom
-    if (this.x - this.w / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
-      mouseX <= this.x - this.w /2 + editorOutsideWidth + boundingCornerSize / 2 &&
-      this.y + this.h / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
-      mouseY <= this.y + this.h / 2 + editorOutsideHeight + boundingCornerSize / 2) {
+    if (this.posX - this.width / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
+      mouseX <= this.posX - this.width /2 + editorOutsideWidth + boundingCornerSize / 2 &&
+      this.posY + this.height / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
+      mouseY <= this.posY + this.height / 2 + editorOutsideHeight + boundingCornerSize / 2) {
       this.isResized = 'left bottom';
     }
     // right bottom
-    if (this.x + this.w / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
-      mouseX <= this.x + this.w / 2 + editorOutsideWidth + boundingCornerSize / 2 &&
-      this.y + this.h / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
-      mouseY <= this.y + this.h / 2 + editorOutsideHeight + boundingCornerSize / 2) {
+    if (this.posX + this.width / 2 + editorOutsideWidth - boundingCornerSize / 2 <= mouseX &&
+      mouseX <= this.posX + this.width / 2 + editorOutsideWidth + boundingCornerSize / 2 &&
+      this.posY + this.height / 2 + editorOutsideHeight - boundingCornerSize / 2 <= mouseY &&
+      mouseY <= this.posY + this.height / 2 + editorOutsideHeight + boundingCornerSize / 2) {
       this.isResized = 'right bottom';
     }
-    prePosX = this.x;
-    prePosY = this.y;
-    preW = this.w;
-    preH = this.h;
+    prePosX = this.posX;
+    prePosY = this.posY;
+    preW = this.width;
+    preH = this.height;
     if (objects[this.id].type == 'text') {
       preFontSize = objects[this.id].fontSize;
     }
@@ -1296,8 +1406,8 @@ boundingBox.prototype.drag = function() {
   if (this.isDragged) {
     draggedX = mouseX - pressedX;
     draggedY = mouseY - pressedY;
-    this.x += draggedX;
-    this.y += draggedY;
+    this.posX += draggedX;
+    this.posY += draggedY;
     if (this.type == 'polygon') {
       for (let v in this.vertexes) {
         this.vertexes[v].x += draggedX;
@@ -1452,20 +1562,20 @@ boundingBox.prototype.drag = function() {
     if (objects[this.id].type == 'text') {
       resizeFontSize = preFontSize * (resizeW / preW);
       let resizeTextBounds = fonts[objects[this.id].fontFace].textBounds(objects[this.id].content, resizePosX, resizePosY + resizeH / 2, resizeFontSize);
-      this.x = resizeTextBounds.x + resizeTextBounds.w / 2;
-      this.y = resizeTextBounds.y + resizeTextBounds.h / 2;
-      this.w = resizeTextBounds.w;
-      this.h = resizeTextBounds.h;
+      this.posX = resizeTextBounds.x + resizeTextBounds.w / 2;
+      this.posY = resizeTextBounds.y + resizeTextBounds.h / 2;
+      this.width = resizeTextBounds.w;
+      this.height = resizeTextBounds.h;
     } else {
-      this.x = resizePosX + resizeW / 2;
-      this.y = resizePosY + resizeH / 2;
-      this.w = resizeW;
-      this.h = resizeH;
+      this.posX = resizePosX + resizeW / 2;
+      this.posY = resizePosY + resizeH / 2;
+      this.width = resizeW;
+      this.height = resizeH;
     }
     if (objects[this.id].type == 'polygon') {
       for (let v in relativeVertexes) {
-        this.vertexes[v].x = this.x + (relativeVertexes[v].x * (this.w / 100));
-        this.vertexes[v].y = this.y + (relativeVertexes[v].y * (this.h / 100));
+        this.vertexes[v].x = this.posX + (relativeVertexes[v].x * (this.width / 100));
+        this.vertexes[v].y = this.posY + (relativeVertexes[v].y * (this.height / 100));
       }
     }
 
@@ -1474,17 +1584,17 @@ boundingBox.prototype.drag = function() {
       case 'rect':
       case 'ellipse':
       case 'superellipse':
-        objects[this.id].posX = this.x;
-        objects[this.id].posY = this.y;
-        objects[this.id].width = this.w;
-        objects[this.id].height = this.h;
+        objects[this.id].posX = this.posX;
+        objects[this.id].posY = this.posY;
+        objects[this.id].width = this.width;
+        objects[this.id].height = this.height;
         break;
       case 'text':
         objects[this.id].fontSize = resizeFontSize;
-        objects[this.id].posX = this.x;
-        objects[this.id].posY = this.y;
-        objects[this.id].width = this.w;
-        objects[this.id].height = this.h;
+        objects[this.id].posX = this.posX;
+        objects[this.id].posY = this.posY;
+        objects[this.id].width = this.width;
+        objects[this.id].height = this.height;
         break;
       case 'polygon':
         for (let v in this.vertexes) {
@@ -1506,21 +1616,68 @@ function displayObjectOptions(id) {
   if (objectOptions == false) {
     objectOptions = true;
   }
-  console.log(titleObjectOptions);
   titleObjectOptions.elt.innerHTML = 'Object [' + objects[id].id + ']';
   titleObjectTypeOption.elt.innerHTML = objects[id].type;
-  inputObjectPosXOption.elt.value = objects[id].posX;
-  inputObjectPosYOption.elt.value = objects[id].posY;
+
+  let objectPosX, objectPosY, objectWidth, objectHeight;
+  let objectVertexesX = [];
+  let objectVertexesY = [];
+  switch(objects[id].type) {
+    case 'rect':
+    case 'ellipse':
+      objectPosX = objects[id].posX;
+      objectPosY = objects[id].posY;
+      break;
+    case 'superellipse':
+      sliderObjectExpansion.elt.value = objects[id].cornerVal;
+      break;
+    case 'polygon':
+      let objectVertexTypeFill = document.getElementById('object-vertex-type--Fill-' + objects[id].vertexTypeFill);
+      handleActive('object-vertex-type-list-Fill', objectVertexTypeFill);
+      let objectVertexTightnessFill = document.getElementById('object-vertex-tightness-Fill');
+      if (objects[id].vertexTypeFill == 'curve') {
+        objectVertexTightnessFill.classList.add('is-shown');
+        objectVertexTightnessFill.value = objects[id].tightnessFill;
+      } else {
+        objectVertexTightnessFill.classList.remove('is-shown');
+      }
+      let objectVertexTypeStroke = document.getElementById('object-vertex-type--Stroke-' + objects[id].vertexTypeStroke);
+      handleActive('object-vertex-type-list-Stroke', objectVertexTypeStroke);
+      let objectVertexTightnessStroke = document.getElementById('object-vertex-tightness-Stroke');
+      if (objects[id].vertexTypeStroke == 'curve') {
+        objectVertexTightnessStroke.classList.add('is-shown');
+        objectVertexTightnessStroke.value = objects[id].tightnessStroke;
+      } else {
+        objectVertexTightnessStroke.classList.remove('is-shown');
+      }
+      for (let i = 0;i < objects[id].vertexes.length;i++) {
+        objectVertexesX.push(objects[id].vertexes[i].x);
+        objectVertexesY.push(objects[id].vertexes[i].y);
+      }
+      objectPosX = min(objectVertexesX);
+      objectPosY = min(objectVertexesY);
+      break;
+    case 'text':
+      inputObjectTextString.elt.value = objects[id].content;
+      break;
+    default:
+      break;
+  }
+  inputObjectPosXOption.elt.value = objectPosX;
+  inputObjectPosYOption.elt.value = objectPosY;
   inputObjectSizeWOption.elt.value = objects[id].width;
   inputObjectSizeHOption.elt.value = objects[id].height;
   let objectFill = document.getElementById('li-objectFill-' + objects[id].inkFill);
   handleActive('ul-objectFill', objectFill);
   let objectStroke = document.getElementById('li-objectStroke-' + objects[id].inkStroke);
   handleActive('ul-objectStroke', objectStroke);
+  inputObjectStrokeWeightNumeral.elt.value = objects[id].strokeWeight;
 }
 
 function updateObjectOption(targetObject, option, value) {
   objects[targetObject][option] = value;
+  console.log('obj: ' + objects[targetObject][option] + ', bdb: ' + boundingBoxes[targetObject][option]);
+  boundingBoxes[targetObject][option] = value;
 }
 
 // vertex edit button
